@@ -1,6 +1,5 @@
-// src/app/index.tsx
-
 import React, { useState, useCallback } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
@@ -185,6 +184,7 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function MapScreen() {
+  const router = useRouter();
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
   const [sheetVisible, setSheetVisible] = useState(false);
 
@@ -198,11 +198,9 @@ export default function MapScreen() {
   }, []);
 
   const handleEnterZone = useCallback((zone: Zone) => {
-    // TODO: navigate into the zone screen
-    // router.push(`/zones/${zone.id}`)
     setSheetVisible(false);
-    console.log('Entering zone:', zone.id);
-  }, []);
+    router.push(`/zones/${zone.id}` as any);
+  }, [router]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
