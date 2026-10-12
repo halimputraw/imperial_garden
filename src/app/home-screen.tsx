@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Placeholder furniture / room items ───────────────────────────────────────
 // Each item has a position in the room grid and an unlock status
@@ -43,12 +44,12 @@ const PLAYER = {
   avatar: '👴',
   coins: 128,
   homeLevel: 2,
-  homeName: '陳伯嘅溫馨小屋',
 };
 
 // ─── Room grid ────────────────────────────────────────────────────────────────
 
 function RoomGrid() {
+  const t = useStrings();
   return (
     <View style={styles.roomGrid}>
       {/* Room background — warm wallpaper feel */}
@@ -76,7 +77,7 @@ function RoomGrid() {
                     item
                       ? item.unlocked
                         ? item.label
-                        : `${item.label} 未解鎖`
+                        : `${item.label} ${t.homeLocked}`
                       : '空格'
                   }
                 >
@@ -135,6 +136,7 @@ function StatBadge({ emoji, value, label }: StatBadgeProps) {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function HomeScreen() {
+  const t = useStrings();
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView
@@ -146,10 +148,8 @@ export default function HomeScreen() {
           <View style={styles.headerLeft}>
             <Text style={styles.avatarEmoji}>{PLAYER.avatar}</Text>
             <View>
-              <Text style={styles.homeName}>{PLAYER.homeName}</Text>
-              <Text style={styles.homeLevel}>
-                🏠 等級 {PLAYER.homeLevel}
-              </Text>
+              <Text style={styles.homeName}>{PLAYER.name}{t.homeTitle}</Text>
+              <Text style={styles.homeLevel}>{t.homeLevel} {PLAYER.homeLevel}</Text>
             </View>
           </View>
           <View style={styles.coinBadge}>
@@ -160,21 +160,19 @@ export default function HomeScreen() {
 
         {/* ── Stats row ── */}
         <View style={styles.statsRow}>
-          <StatBadge emoji="🛋️" value="6" label="家具" />
-          <StatBadge emoji="🔒" value="3" label="未解鎖" />
-          <StatBadge emoji="⭐" value="240" label="積分" />
+          <StatBadge emoji="🛋️" value="6" label={t.homeFurniture} />
+          <StatBadge emoji="🔒" value="3" label={t.homeLocked} />
+          <StatBadge emoji="⭐" value="240" label={t.homeScore} />
         </View>
 
         {/* ── Room ── */}
-        <Text style={styles.sectionTitle}>我嘅房間</Text>
+        <Text style={styles.sectionTitle}>{t.homeMyRoom}</Text>
         <RoomGrid />
 
         {/* ── Hint ── */}
         <View style={styles.hintBox}>
           <Text style={styles.hintEmoji}>💡</Text>
-          <Text style={styles.hintText}>
-            完成遊戲同任務可以獲得積分，用嚟解鎖更多家具！
-          </Text>
+          <Text style={styles.hintText}>{t.homeHint}</Text>
         </View>
 
         {/* ── Decorate button ── */}
@@ -186,7 +184,7 @@ export default function HomeScreen() {
           accessibilityRole="button"
           accessibilityLabel="裝飾我的家"
         >
-          <Text style={styles.decorateButtonText}>🎨 裝飾我的家</Text>
+          <Text style={styles.decorateButtonText}>{t.homeDecorate}</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

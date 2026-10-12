@@ -52,6 +52,13 @@ const TABS: TabItem[] = [
     emoji: '👥',
     href: '/friends',
   },
+  {
+    name: 'settings',
+    labelCantonese: '設定',
+    labelEnglish: 'Settings',
+    emoji: '⚙️',
+    href: '/settings',
+  },
 ];
 
 // ─── Single tab button ────────────────────────────────────────────────────────
@@ -193,6 +200,7 @@ export default function AppTabs() {
       <Tabs.Screen name="home-screen" />
       <Tabs.Screen name="games" />
       <Tabs.Screen name="friends" />
+      <Tabs.Screen name="settings" />
     </Tabs>
   );
 }

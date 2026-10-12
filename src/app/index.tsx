@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { PixelMap } from '@/components/map/pixel-map';
 import { Zone } from '@/components/map/neighbourhood-zone';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Placeholder player data ──────────────────────────────────────────────────
 // Will be replaced by registration + auth system later
@@ -24,34 +25,10 @@ const PLAYER = {
   level: 3,
 };
 
-// ─── Zone detail content ──────────────────────────────────────────────────────
-// When a zone is tapped, a bottom sheet shows its description + enter button
-
-const ZONE_DETAILS: Record<
-  string,
-  { description: string; activities: string[] }
-> = {
-  park: {
-    description: '維多利亞公園係一個充滿生氣嘅地方，可以見到好多街坊朋友。',
-    activities: ['🌸 晨運', '🎭 睇表演', '♟️ 下棋', '👥 見朋友'],
-  },
-  estate: {
-    description: '公共屋邨係香港人嘅家，充滿溫馨同回憶。',
-    activities: ['🏠 探訪鄰居', '🛗 搭電梯', '🌿 花圃', '📮 信箱'],
-  },
-  market: {
-    description: '街市係香港嘅心臟，新鮮食材同熱鬧氣氛令人精神爽利。',
-    activities: ['🥬 買菜', '🐟 買魚', '🗣️ 傾偈', '🛍️ 執平貨'],
-  },
-  cafe: {
-    description: '茶餐廳係香港獨有嘅文化，一杯奶茶令你精神百倍。',
-    activities: ['☕ 飲奶茶', '🍞 食多士', '📰 睇報紙', '💬 聊天'],
-  },
-};
-
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
 function TopBar() {
+  const t = useStrings();
   return (
     <View style={styles.topBar}>
       {/* Player info — left side */}
@@ -61,7 +38,7 @@ function TopBar() {
         </View>
         <View style={styles.playerText}>
           <Text style={styles.playerName}>{PLAYER.name}</Text>
-          <Text style={styles.playerLevel}>等級 {PLAYER.level}</Text>
+          <Text style={styles.playerLevel}>{t.level} {PLAYER.level}</Text>
         </View>
       </View>
 
@@ -84,6 +61,7 @@ interface ZoneSheetProps {
 }
 
 function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
+  const t = useStrings();
   const slideAnim = React.useRef(new Animated.Value(300)).current;
 
   React.useEffect(() => {
@@ -104,7 +82,13 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
   }, [visible, slideAnim]);
 
   if (!zone) return null;
-  const detail = ZONE_DETAILS[zone.id];
+  const zoneDetails: Record<string, { description: string; activities: string[] }> = {
+    park:   { description: t.zoneParkDesc,   activities: t.zoneParkActivities },
+    estate: { description: t.zoneEstateDesc, activities: t.zoneEstateActivities },
+    market: { description: t.zoneMarketDesc, activities: t.zoneMarketActivities },
+    cafe:   { description: t.zoneCafeDesc,   activities: t.zoneCafeActivities },
+  };
+  const detail = zoneDetails[zone.id];
 
   return (
     <Modal
@@ -137,7 +121,7 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
           <Pressable
             onPress={onClose}
             style={styles.closeButton}
-            accessibilityLabel="關閉"
+            accessibilityLabel={t.close}
             accessibilityRole="button"
           >
             <Text style={styles.closeButtonText}>✕</Text>
@@ -148,7 +132,7 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
         <Text style={styles.sheetDescription}>{detail.description}</Text>
 
         {/* Activities */}
-        <Text style={styles.activitiesTitle}>可以做咩？</Text>
+        <Text style={styles.activitiesTitle}>{t.mapActivities}</Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -170,10 +154,10 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
           ]}
           onPress={() => onEnter(zone)}
           accessibilityRole="button"
-          accessibilityLabel={`進入 ${zone.labelCantonese}`}
+          accessibilityLabel={`${t.mapEnterZone} ${zone.labelCantonese}`}
         >
           <Text style={styles.enterButtonText}>
-            進入 {zone.labelCantonese} →
+            {t.mapEnterZone} {zone.labelCantonese} →
           </Text>
         </Pressable>
       </Animated.View>
@@ -184,6 +168,7 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function MapScreen() {
+  const t = useStrings();
   const router = useRouter();
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
   const [sheetVisible, setSheetVisible] = useState(false);
@@ -212,7 +197,7 @@ export default function MapScreen() {
       <View style={styles.questBanner}>
         <Text style={styles.questEmoji}>📋</Text>
         <Text style={styles.questText}>
-          今日任務：去街市買 5 樣嘢！
+          {t.mapDailyQuestDesc}
         </Text>
         <Text style={styles.questArrow}>›</Text>
       </View>
