@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Placeholder data ─────────────────────────────────────────────────────────
 
@@ -112,12 +113,13 @@ interface TabSelectorProps {
 }
 
 function TabSelector({ active, onChange }: TabSelectorProps) {
+  const t = useStrings();
   return (
     <View style={styles.tabSelector}>
       {(
         [
-          { key: 'friends', label: '👥 朋友' },
-          { key: 'events', label: '🎉 社區活動' },
+          { key: 'friends', label: t.friendsTabFriends },
+          { key: 'events', label: t.friendsTabEvents },
         ] as { key: TabType; label: string }[]
       ).map((tab) => (
         <Pressable
@@ -147,6 +149,7 @@ function TabSelector({ active, onChange }: TabSelectorProps) {
 // ─── Friend card ──────────────────────────────────────────────────────────────
 
 function FriendCard({ friend }: { friend: Friend }) {
+  const t = useStrings();
   return (
     <View style={styles.friendCard}>
       {/* Avatar + online dot */}
@@ -179,7 +182,7 @@ function FriendCard({ friend }: { friend: Friend }) {
           📍 {friend.currentZone}
         </Text>
         <Text style={styles.friendLastSeen}>
-          {friend.isOnline ? '🟢 而家喺度' : `⚪ ${friend.lastSeen}`}
+          {friend.isOnline ? t.friendsNowHere : `⚪ ${friend.lastSeen}`}
         </Text>
       </View>
 
@@ -188,16 +191,16 @@ function FriendCard({ friend }: { friend: Friend }) {
         <Pressable
           style={styles.visitButton}
           accessibilityRole="button"
-          accessibilityLabel={`探訪 ${friend.name}`}
+          accessibilityLabel={`${t.friendsVisit} ${friend.name}`}
         >
-          <Text style={styles.visitButtonText}>探訪</Text>
+          <Text style={styles.visitButtonText}>{t.friendsVisit}</Text>
         </Pressable>
         <Pressable
           style={styles.questButton}
           accessibilityRole="button"
-          accessibilityLabel={`同 ${friend.name} 做任務`}
+          accessibilityLabel={`${t.friendsQuest} ${friend.name}`}
         >
-          <Text style={styles.questButtonText}>任務</Text>
+          <Text style={styles.questButtonText}>{t.friendsQuest}</Text>
         </Pressable>
       </View>
     </View>
@@ -207,6 +210,7 @@ function FriendCard({ friend }: { friend: Friend }) {
 // ─── Event card ───────────────────────────────────────────────────────────────
 
 function EventCard({ event }: { event: CommunityEvent }) {
+  const t = useStrings();
   const isFull = event.participants >= event.maxParticipants;
   const fillPct = (event.participants / event.maxParticipants) * 100;
 
@@ -227,11 +231,11 @@ function EventCard({ event }: { event: CommunityEvent }) {
       {/* Participants progress bar */}
       <View style={styles.participantsRow}>
         <Text style={styles.participantsText}>
-          👥 {event.participants} / {event.maxParticipants} 人
+          👥 {event.participants} / {event.maxParticipants} {t.friendsEventsPeople}
         </Text>
         {isFull && (
           <View style={styles.fullBadge}>
-            <Text style={styles.fullBadgeText}>已滿</Text>
+            <Text style={styles.fullBadgeText}>{t.friendsEventsFull}</Text>
           </View>
         )}
       </View>
@@ -256,7 +260,7 @@ function EventCard({ event }: { event: CommunityEvent }) {
         ]}
         disabled={isFull}
         accessibilityRole="button"
-        accessibilityLabel={isFull ? '活動已滿' : `參加 ${event.title}`}
+        accessibilityLabel={isFull ? t.friendsEventsFull : `${t.friendsEventsJoin} ${event.title}`}
       >
         <Text
           style={[
@@ -264,7 +268,7 @@ function EventCard({ event }: { event: CommunityEvent }) {
             isFull && styles.joinButtonTextDisabled,
           ]}
         >
-          {isFull ? '活動已滿' : '參加活動 →'}
+          {isFull ? t.friendsEventsFull : t.friendsEventsJoin}
         </Text>
       </Pressable>
     </View>
@@ -274,6 +278,7 @@ function EventCard({ event }: { event: CommunityEvent }) {
 // ─── Friends list ─────────────────────────────────────────────────────────────
 
 function FriendsList() {
+  const t = useStrings();
   const online = FRIENDS.filter((f) => f.isOnline);
   const offline = FRIENDS.filter((f) => !f.isOnline);
 
@@ -281,7 +286,7 @@ function FriendsList() {
     <View style={styles.section}>
       {/* Online friends */}
       <Text style={styles.sectionTitle}>
-        🟢 而家喺度 ({online.length})
+        {t.friendsOnline} ({online.length})
       </Text>
       <View style={styles.cardList}>
         {online.map((f) => (
@@ -291,7 +296,7 @@ function FriendsList() {
 
       {/* Offline friends */}
       <Text style={[styles.sectionTitle, { marginTop: Spacing.four }]}>
-        ⚪ 最近喺度 ({offline.length})
+        {t.friendsOffline} ({offline.length})
       </Text>
       <View style={styles.cardList}>
         {offline.map((f) => (
@@ -303,9 +308,9 @@ function FriendsList() {
       <Pressable
         style={styles.addFriendButton}
         accessibilityRole="button"
-        accessibilityLabel="搵新朋友"
+        accessibilityLabel={t.friendsAddFriend}
       >
-        <Text style={styles.addFriendText}>＋ 搵新朋友</Text>
+        <Text style={styles.addFriendText}>{t.friendsAddFriend}</Text>
       </Pressable>
     </View>
   );
@@ -314,9 +319,10 @@ function FriendsList() {
 // ─── Events list ─────────────────────────────────────────────────────────────
 
 function EventsList() {
+  const t = useStrings();
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>即將舉行嘅活動</Text>
+      <Text style={styles.sectionTitle}>{t.friendsEventsUpcoming}</Text>
       <View style={styles.cardList}>
         {COMMUNITY_EVENTS.map((event) => (
           <EventCard key={event.id} event={event} />
@@ -329,14 +335,14 @@ function EventsList() {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function FriendsScreen() {
+  const t = useStrings();
   const [activeTab, setActiveTab] = useState<TabType>('friends');
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>👥 朋友</Text>
-        <Text style={styles.headerSubtitle}>Friends</Text>
+        <Text style={styles.headerTitle}>{t.friendsTitle}</Text>
       </View>
 
       {/* Tab selector */}

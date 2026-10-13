@@ -15,6 +15,7 @@ import {
   MoCADomain,
   MOCA_DOMAIN_INFO,
 } from '@/store/player-store';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Coin shower animation ────────────────────────────────────────────────────
 
@@ -94,6 +95,7 @@ function CoinShower({ count }: { count: number }) {
 // Simple visual score display — large number with label
 
 function ScoreRing({ score }: { score: number }) {
+  const t = useStrings();
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -114,7 +116,9 @@ function ScoreRing({ score }: { score: number }) {
       : Colors.error;
 
   const scoreLabel =
-    score >= 80 ? '非常好！' : score >= 60 ? '做得好！' : '繼續努力！';
+    score >= 80 ? t.rewardScoreLabelHigh
+    : score >= 60 ? t.rewardScoreLabelMid
+    : t.rewardScoreLabelLow;
 
   return (
     <Animated.View
@@ -124,7 +128,7 @@ function ScoreRing({ score }: { score: number }) {
         <Text style={[styles.scoreNumber, { color: scoreColor }]}>
           {score}
         </Text>
-        <Text style={styles.scoreUnit}>分</Text>
+        <Text style={styles.scoreUnit}>{t.scoreUnit}</Text>
         <Text style={[styles.scoreLabel, { color: scoreColor }]}>
           {scoreLabel}
         </Text>
@@ -144,6 +148,7 @@ function MoCAComparisonBar({
   currentScore: number;
   previousScore: number | null;
 }) {
+  const t = useStrings();
   const info = MOCA_DOMAIN_INFO[domain];
   const fillAnim = useRef(new Animated.Value(0)).current;
   const prevFillAnim = useRef(new Animated.Value(0)).current;
@@ -189,7 +194,14 @@ function MoCAComparisonBar({
       <View style={styles.trendHeader}>
         <Text style={styles.trendEmoji}>{info.emoji}</Text>
         <View style={styles.trendTitleBlock}>
-          <Text style={styles.trendDomain}>{info.labelCantonese}</Text>
+          <Text style={styles.trendDomain}>
+            {domain === 'memory' ? t.domainMemory
+            : domain === 'attention' ? t.domainAttention
+            : domain === 'language' ? t.domainLanguage
+            : domain === 'executive' ? t.domainExecutive
+            : domain === 'visuospatial' ? t.domainVisuospatial
+            : t.domainOrientation}
+          </Text>
           <Text style={styles.trendDomainEn}>{info.labelEnglish}</Text>
         </View>
         {trend !== null && (
@@ -204,7 +216,7 @@ function MoCAComparisonBar({
 
       {/* Current score bar */}
       <View style={styles.barRow}>
-        <Text style={styles.barLabel}>今次</Text>
+        <Text style={styles.barLabel}>{t.rewardThisTime}</Text>
         <View style={styles.barTrack}>
           <Animated.View
             style={[
@@ -225,7 +237,7 @@ function MoCAComparisonBar({
       {/* Previous score bar */}
       {previousScore !== null && (
         <View style={styles.barRow}>
-          <Text style={styles.barLabel}>上次</Text>
+          <Text style={styles.barLabel}>{t.rewardLastTime}</Text>
           <View style={styles.barTrack}>
             <Animated.View
               style={[
@@ -250,6 +262,7 @@ function MoCAComparisonBar({
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function RewardScreen() {
+  const t = useStrings();
   const router = useRouter();
   const params = useLocalSearchParams<{
     correctCount: string;
@@ -265,7 +278,7 @@ export default function RewardScreen() {
   const score = parseInt(params.score ?? '0');
   const coinsEarned = parseInt(params.coinsEarned ?? '0');
   const domain = (params.domain ?? 'memory') as MoCADomain;
-  const gameTitle = params.gameTitle ?? '遊戲';
+  const gameTitle = params.gameTitle ?? t.rewardGameDone;
 
   const coins = usePlayerStore((s) => s.coins);
   const getDomainTrend = usePlayerStore((s) => s.getDomainTrend);
@@ -318,7 +331,7 @@ export default function RewardScreen() {
         >
           {/* ── Header ── */}
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>🎉 遊戲完成！</Text>
+            <Text style={styles.headerTitle}>{t.rewardTitle}</Text>
             <Text style={styles.headerSubtitle}>{gameTitle}</Text>
           </View>
 
@@ -327,41 +340,40 @@ export default function RewardScreen() {
 
           {/* ── Result breakdown ── */}
           <View style={styles.resultCard}>
-            <Text style={styles.resultTitle}>今次結果</Text>
+            <Text style={styles.resultTitle}>{t.rewardGameDone}</Text>
 
             <View style={styles.resultRow}>
               <View style={[styles.resultBadge, { backgroundColor: Colors.success }]}>
                 <Text style={styles.resultBadgeEmoji}>✓</Text>
                 <Text style={styles.resultBadgeCount}>{correctCount}</Text>
-                <Text style={styles.resultBadgeLabel}>答啱</Text>
+                <Text style={styles.resultBadgeLabel}>{t.rewardCorrect}</Text>
               </View>
 
               <View style={[styles.resultBadge, { backgroundColor: Colors.error }]}>
                 <Text style={styles.resultBadgeEmoji}>✗</Text>
                 <Text style={styles.resultBadgeCount}>{wrongCount}</Text>
-                <Text style={styles.resultBadgeLabel}>答錯</Text>
+                <Text style={styles.resultBadgeLabel}>{t.rewardWrong}</Text>
               </View>
 
               <View style={[styles.resultBadge, { backgroundColor: Colors.gold }]}>
                 <Text style={styles.resultBadgeEmoji}>🪙</Text>
                 <Text style={styles.resultBadgeCount}>+{coinsEarned}</Text>
-                <Text style={styles.resultBadgeLabel}>積分</Text>
+                <Text style={styles.resultBadgeLabel}>{t.rewardCoins}</Text>
               </View>
             </View>
 
             {/* Total coins */}
             <View style={styles.totalCoinsRow}>
-              <Text style={styles.totalCoinsLabel}>總積分</Text>
+              <Text style={styles.totalCoinsLabel}>{t.rewardTotalCoins}</Text>
               <Text style={styles.totalCoinsValue}>🪙 {coins}</Text>
             </View>
           </View>
 
           {/* ── MoCA comparison ── */}
           <View style={styles.mocaSection}>
-            <Text style={styles.mocaSectionTitle}>🧠 認知能力追蹤</Text>
-            <Text style={styles.mocaSectionSubtitle}>
-              根據蒙特利爾認知評估（MoCA）
-            </Text>
+            <Text style={styles.mocaSectionTitle}>{t.rewardMoCATitle}</Text>
+            <Text style={styles.mocaSectionSubtitle}>{t.rewardMoCASubtitle}</Text>
+
             <MoCAComparisonBar
               domain={domain}
               currentScore={score}
@@ -376,10 +388,10 @@ export default function RewardScreen() {
             </Text>
             <Text style={styles.encouragementText}>
               {score >= 80
-                ? '你嘅記憶力非常好！繼續保持，每日練習對腦部健康好有益。'
+                ? t.rewardEncouragementHigh
                 : score >= 60
-                ? '做得不錯！記憶力需要定期練習，每日玩一次效果最好。'
-                : '唔緊要，熟能生巧！多練習幾次，記憶力一定會進步。'}
+                ? t.rewardEncouragementMid
+                : t.rewardEncouragementLow}
             </Text>
           </View>
 
@@ -392,9 +404,9 @@ export default function RewardScreen() {
               ]}
               onPress={handlePlayAgain}
               accessibilityRole="button"
-              accessibilityLabel="再玩一次"
+              accessibilityLabel={t.rewardPlayAgain}
             >
-              <Text style={styles.playAgainText}>🔄 再玩一次</Text>
+              <Text style={styles.playAgainText}>{t.rewardPlayAgain}</Text>
             </Pressable>
 
             <Pressable
@@ -404,9 +416,9 @@ export default function RewardScreen() {
               ]}
               onPress={handleContinue}
               accessibilityRole="button"
-              accessibilityLabel="返回地圖"
+              accessibilityLabel={t.rewardBackToMap}
             >
-              <Text style={styles.continueText}>返回地圖 🗺️</Text>
+              <Text style={styles.continueText}>{t.rewardBackToMap}</Text>
             </Pressable>
           </View>
         </Animated.View>

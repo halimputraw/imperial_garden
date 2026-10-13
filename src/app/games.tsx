@@ -1,5 +1,3 @@
-// src/app/games.tsx
-
 import React from 'react';
 import {
   View,
@@ -10,11 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
-
-// ─── Game definitions ─────────────────────────────────────────────────────────
-// Based on MoCA test domains:
-// Memory, Attention, Language, Executive function,
-// Visuospatial, Orientation
+import { useStrings } from '@/i18n/strings';
 
 interface Game {
   id: string;
@@ -29,14 +23,14 @@ interface Game {
   unlocked: boolean;
 }
 
-const GAMES: Game[] = [
+const getGames = (t: ReturnType<typeof useStrings>): Game[] => [
   {
     id: 'market-memory',
     emoji: '🥬',
-    titleCantonese: '街市記憶',
+    titleCantonese: t.gameTitleMarketMemory,
     titleEnglish: 'Market Memory',
-    descriptionCantonese: '記住街市入面嘅 5 樣嘢，考驗你嘅記憶力！',
-    domain: '記憶力',
+    descriptionCantonese: t.gameDescMarketMemory,
+    domain: t.domainMemory,
     domainColor: Colors.zonePark,
     difficulty: 1,
     coins: 20,
@@ -45,10 +39,10 @@ const GAMES: Game[] = [
   {
     id: 'mahjong-pattern',
     emoji: '🀄',
-    titleCantonese: '麻雀配對',
+    titleCantonese: t.gameTitleMahjongMatch,
     titleEnglish: 'Mahjong Match',
-    descriptionCantonese: '係有限時間內搵出相同嘅麻雀牌！',
-    domain: '專注力',
+    descriptionCantonese: t.gameDescMahjongMatch,
+    domain: t.domainAttention,
     domainColor: Colors.zoneEstate,
     difficulty: 2,
     coins: 30,
@@ -57,10 +51,10 @@ const GAMES: Game[] = [
   {
     id: 'dim-sum-order',
     emoji: '🍡',
-    titleCantonese: '點心排序',
+    titleCantonese: t.gameTitleDimSumOrder,
     titleEnglish: 'Dim Sum Order',
-    descriptionCantonese: '按照正確次序排列點心，訓練你嘅執行能力！',
-    domain: '執行能力',
+    descriptionCantonese: t.gameDescDimSumOrder,
+    domain: t.domainExecutive,
     domainColor: Colors.zoneCafe,
     difficulty: 2,
     coins: 35,
@@ -69,10 +63,10 @@ const GAMES: Game[] = [
   {
     id: 'tram-route',
     emoji: '🚋',
-    titleCantonese: '電車路線',
+    titleCantonese: t.gameTitleTramRoute,
     titleEnglish: 'Tram Route',
-    descriptionCantonese: '搵出由上環去筲箕灣嘅最快路線！',
-    domain: '視空間',
+    descriptionCantonese: t.gameDescTramRoute,
+    domain: t.domainVisuospatial,
     domainColor: Colors.primary,
     difficulty: 2,
     coins: 35,
@@ -81,10 +75,10 @@ const GAMES: Game[] = [
   {
     id: 'news-words',
     emoji: '📰',
-    titleCantonese: '新聞填字',
+    titleCantonese: t.gameTitleNewsWords,
     titleEnglish: 'News Words',
-    descriptionCantonese: '完成今日新聞嘅填字遊戲，保持語言能力！',
-    domain: '語言能力',
+    descriptionCantonese: t.gameDescNewsWords,
+    domain: t.domainLanguage,
     domainColor: Colors.gold,
     difficulty: 3,
     coins: 50,
@@ -93,10 +87,10 @@ const GAMES: Game[] = [
   {
     id: 'calendar-quiz',
     emoji: '📅',
-    titleCantonese: '今日係幾號？',
+    titleCantonese: t.gameTitleCalendarQuiz,
     titleEnglish: 'Date Quiz',
-    descriptionCantonese: '回答關於今日日期、星期同節氣嘅問題！',
-    domain: '定向能力',
+    descriptionCantonese: t.gameDescCalendarQuiz,
+    domain: t.domainOrientation,
     domainColor: Colors.zoneMarket,
     difficulty: 1,
     coins: 15,
@@ -129,6 +123,7 @@ interface GameCardProps {
 }
 
 function GameCard({ game }: GameCardProps) {
+  const t = useStrings();
   return (
     <Pressable
       style={({ pressed }) => [
@@ -141,7 +136,7 @@ function GameCard({ game }: GameCardProps) {
       accessibilityLabel={
         game.unlocked
           ? `${game.titleCantonese} ${game.descriptionCantonese}`
-          : `${game.titleCantonese} 未解鎖`
+          : `${game.titleCantonese} ${t.gamesLocked}`
       }
       disabled={!game.unlocked}
     >
@@ -186,7 +181,7 @@ function GameCard({ game }: GameCardProps) {
           ]}
           numberOfLines={2}
         >
-          {game.unlocked ? game.descriptionCantonese : '完成更多遊戲解鎖'}
+          {game.unlocked ? game.descriptionCantonese : t.gamesUnlockHint}
         </Text>
         <DifficultyDots level={game.difficulty} />
       </View>
@@ -210,15 +205,14 @@ function GameCard({ game }: GameCardProps) {
 // ─── Daily challenge banner ───────────────────────────────────────────────────
 
 function DailyChallenge() {
+  const t = useStrings();
   return (
     <View style={styles.dailyBanner}>
       <View style={styles.dailyLeft}>
         <Text style={styles.dailyEmoji}>🌟</Text>
         <View>
-          <Text style={styles.dailyTitle}>今日挑戰</Text>
-          <Text style={styles.dailyDesc}>
-            完成 3 個遊戲，獲得額外 🪙 100！
-          </Text>
+          <Text style={styles.dailyTitle}>{t.gamesDailyChallenge}</Text>
+          <Text style={styles.dailyDesc}>{t.gamesDailyChallengeDesc}</Text>
         </View>
       </View>
       {/* Progress pills */}
@@ -240,12 +234,13 @@ function DailyChallenge() {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function GamesScreen() {
+  const t = useStrings();
+  const games = getGames(t); 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🎮 遊戲</Text>
-        <Text style={styles.headerSubtitle}>Games</Text>
+        <Text style={styles.headerTitle}>{t.gamesTitle}</Text>
       </View>
 
       <ScrollView
@@ -256,14 +251,12 @@ export default function GamesScreen() {
         <DailyChallenge />
 
         {/* Section label */}
-        <Text style={styles.sectionTitle}>所有遊戲</Text>
-        <Text style={styles.sectionSubtitle}>
-          每個遊戲訓練唔同嘅腦部能力
-        </Text>
+        <Text style={styles.sectionTitle}>{t.gamesAllGames}</Text>
+        <Text style={styles.sectionSubtitle}>{t.gamesAllGamesSubtitle}</Text>
 
         {/* Game cards */}
         <View style={styles.cardList}>
-          {GAMES.map((game) => (
+          {games.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
         </View>
@@ -271,9 +264,7 @@ export default function GamesScreen() {
         {/* Footer note */}
         <View style={styles.footerNote}>
           <Text style={styles.footerEmoji}>🧠</Text>
-          <Text style={styles.footerText}>
-            定期玩腦部遊戲有助保持認知能力，每日玩一次效果最好！
-          </Text>
+          <Text style={styles.footerText}>{t.gamesBrainTip}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

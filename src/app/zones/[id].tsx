@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { usePlayerStore } from '@/store/player-store';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Zone static data ─────────────────────────────────────────────────────────
 
@@ -36,22 +37,21 @@ interface ZoneData {
   npcs: { name: string; emoji: string; line: string }[];
 }
 
-const ZONES: Record<string, ZoneData> = {
+const getZones = (t: ReturnType<typeof useStrings>): Record<string, ZoneData> => ({
   market: {
     id: 'market',
     labelCantonese: '街市',
     labelEnglish: 'Wet Market',
     emoji: '🥬',
     color: Colors.zoneMarket,
-    descriptionCantonese:
-      '香港街市係充滿生氣嘅地方。新鮮蔬菜、魚類同肉類琳瑯滿目，街坊鄰里每日都嚟購物。',
+    descriptionCantonese: t.zoneMarketDesc,
     ambianceEmojis: ['🥬', '🐟', '🍗', '🥚', '🌽', '🍠', '🥕', '🧅'],
     games: [
       {
         id: 'market-memory',
         emoji: '🧠',
-        titleCantonese: '街市記憶',
-        domain: '記憶力',
+        titleCantonese: t.gameTitleMarketMemory,
+        domain: t.domainMemory,
         domainColor: Colors.zonePark,
         coins: 20,
         durationSeconds: 30,
@@ -77,8 +77,7 @@ const ZONES: Record<string, ZoneData> = {
     labelEnglish: 'Victoria Park',
     emoji: '🌳',
     color: Colors.zonePark,
-    descriptionCantonese:
-      '維多利亞公園係香港最大嘅公園之一，係街坊晨運、下棋同休閒嘅好地方。',
+    descriptionCantonese: t.zoneParkDesc,
     ambianceEmojis: ['🌸', '🌳', '♟️', '🌿', '🦋', '☀️', '🐦', '🌺'],
     games: [],
     npcs: [
@@ -95,8 +94,7 @@ const ZONES: Record<string, ZoneData> = {
     labelEnglish: 'Housing Estate',
     emoji: '🏢',
     color: Colors.zoneEstate,
-    descriptionCantonese:
-      '香港公共屋邨係好多人嘅家，充滿鄰里情。走廊、天台花園同公共空間都係街坊相聚嘅地方。',
+    descriptionCantonese: t.zoneEstateDesc,
     ambianceEmojis: ['🏢', '🌿', '📮', '🛗', '🪴', '👴', '👵', '🏠'],
     games: [],
     npcs: [
@@ -113,8 +111,7 @@ const ZONES: Record<string, ZoneData> = {
     labelEnglish: 'Cha Chaan Teng',
     emoji: '🍵',
     color: Colors.zoneCafe,
-    descriptionCantonese:
-      '茶餐廳係香港獨有嘅飲食文化，一杯絲襪奶茶同一份菠蘿油係港人嘅集體回憶。',
+    descriptionCantonese: t.zoneCafeDesc,
     ambianceEmojis: ['🍵', '🍞', '📰', '🥐', '☕', '🧋', '🍳', '🪑'],
     games: [],
     npcs: [
@@ -125,7 +122,7 @@ const ZONES: Record<string, ZoneData> = {
       },
     ],
   },
-};
+});
 
 // ─── NPC card ─────────────────────────────────────────────────────────────────
 
@@ -154,6 +151,7 @@ function ZoneGameCard({
   game: ZoneGame;
   onPress: (game: ZoneGame) => void;
 }) {
+  const t = useStrings();
   return (
     <Pressable
       style={({ pressed }) => [
@@ -163,7 +161,7 @@ function ZoneGameCard({
       onPress={() => onPress(game)}
       accessible
       accessibilityRole="button"
-      accessibilityLabel={`玩 ${game.titleCantonese}`}
+      accessibilityLabel={`${t.zoneGames} ${game.titleCantonese}`}
     >
       {/* Left emoji box */}
       <View style={[styles.gameEmojiBox, { backgroundColor: game.domainColor }]}>
@@ -178,7 +176,7 @@ function ZoneGameCard({
             <Text style={styles.domainText}>{game.domain}</Text>
           </View>
           <Text style={styles.gameDuration}>
-            ⏱ 約 {game.durationSeconds} 秒
+            ⏱ {t.gamesDuration} {game.durationSeconds} {t.seconds}
           </Text>
         </View>
       </View>
@@ -196,12 +194,11 @@ function ZoneGameCard({
 // ─── Coming soon placeholder ──────────────────────────────────────────────────
 
 function ComingSoon() {
+  const t = useStrings();
   return (
     <View style={styles.comingSoon}>
       <Text style={styles.comingSoonEmoji}>🔨</Text>
-      <Text style={styles.comingSoonText}>
-        更多遊戲即將推出！
-      </Text>
+      <Text style={styles.comingSoonText}>{t.zoneNoGames}</Text>
     </View>
   );
 }
@@ -209,19 +206,22 @@ function ComingSoon() {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function ZoneScreen() {
+  const t = useStrings();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const zones = getZones(t);
+  const zone = zones[id ?? 'market'];
+
+
   const router = useRouter();
   const coins = usePlayerStore((s) => s.coins);
   const name = usePlayerStore((s) => s.name);
   const avatar = usePlayerStore((s) => s.avatar);
 
-  const zone = ZONES[id ?? 'market'];
-
   // Fallback if unknown zone id
   if (!zone) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>揾唔到呢個地區 🤔</Text>
+        <Text style={styles.errorText}>{t.zoneNotFound}</Text>
       </SafeAreaView>
     );
   }
@@ -242,9 +242,9 @@ export default function ZoneScreen() {
           onPress={handleBack}
           style={styles.backButton}
           accessibilityRole="button"
-          accessibilityLabel="返回地圖"
+          accessibilityLabel={t.back}
         >
-          <Text style={styles.backButtonText}>‹ 返回</Text>
+          <Text style={styles.backButtonText}>{t.back}</Text>
         </Pressable>
 
         <View style={styles.headerCenter}>
@@ -281,7 +281,7 @@ export default function ZoneScreen() {
         </View>
 
         {/* ── NPCs ── */}
-        <Text style={styles.sectionTitle}>街坊</Text>
+        <Text style={styles.sectionTitle}>{t.zoneNeighbours}</Text>
         <View style={styles.npcList}>
           {zone.npcs.map((npc, i) => (
             <NPCCard key={i} npc={npc} />
@@ -289,7 +289,7 @@ export default function ZoneScreen() {
         </View>
 
         {/* ── Games ── */}
-        <Text style={styles.sectionTitle}>可以玩嘅遊戲</Text>
+        <Text style={styles.sectionTitle}>{t.zoneGames}</Text>
         {zone.games.length > 0 ? (
           <View style={styles.gameList}>
             {zone.games.map((game) => (
@@ -308,7 +308,7 @@ export default function ZoneScreen() {
         <View style={styles.playerBadge}>
           <Text style={styles.playerAvatar}>{avatar}</Text>
           <Text style={styles.playerBadgeText}>
-            {name} 而家喺 {zone.labelCantonese}
+            {name} {t.zoneNowAt} {zone.labelCantonese}
           </Text>
         </View>
       </ScrollView>

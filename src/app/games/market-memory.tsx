@@ -14,6 +14,7 @@ import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { CountdownTimer } from '@/components/games/countdown-timer';
 import { ItemGrid, MarketItem } from '@/components/games/item-grid';
 import { usePlayerStore } from '@/store/player-store';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Game configuration ───────────────────────────────────────────────────────
 
@@ -57,30 +58,23 @@ type Phase = 'intro' | 'memorise' | 'transition' | 'quiz' | 'done';
 // ─── Phase: Intro ─────────────────────────────────────────────────────────────
 
 function IntroPhase({ onStart }: { onStart: () => void }) {
+  const t = useStrings();
   return (
     <View style={styles.centeredPhase}>
       <Text style={styles.phaseEmoji}>🥬</Text>
-      <Text style={styles.phaseTitle}>街市記憶</Text>
-      <Text style={styles.phaseSubtitle}>Market Memory</Text>
+      <Text style={styles.phaseTitle}>{t.marketMemoryTitle}</Text>
+      <Text style={styles.phaseSubtitle}>{t.marketMemorySubtitle}</Text>
 
       <View style={styles.instructionBox}>
-        <Text style={styles.instructionTitle}>點樣玩？</Text>
-        <Text style={styles.instructionStep}>
-          1️⃣  睇住 5 樣街市貨品
-        </Text>
-        <Text style={styles.instructionStep}>
-          2️⃣  記低佢哋（得 5 秒！）
-        </Text>
-        <Text style={styles.instructionStep}>
-          3️⃣  答出你記得嘅貨品
-        </Text>
-        <Text style={styles.instructionStep}>
-          4️⃣  答啱越多，積分越高！
-        </Text>
+        <Text style={styles.instructionTitle}>{t.marketMemoryHowToPlay}</Text>
+        <Text style={styles.instructionStep}>{t.marketMemoryStep1}</Text>
+        <Text style={styles.instructionStep}>{t.marketMemoryStep2}</Text>
+        <Text style={styles.instructionStep}>{t.marketMemoryStep3}</Text>
+        <Text style={styles.instructionStep}>{t.marketMemoryStep4}</Text>
       </View>
 
       <View style={styles.rewardPreview}>
-        <Text style={styles.rewardPreviewText}>完成可獲得</Text>
+        <Text style={styles.rewardPreviewText}>{t.marketMemoryRewardPreview}</Text>
         <Text style={styles.rewardPreviewCoins}>🪙 {COIN_REWARD}</Text>
       </View>
 
@@ -91,9 +85,9 @@ function IntroPhase({ onStart }: { onStart: () => void }) {
         ]}
         onPress={onStart}
         accessibilityRole="button"
-        accessibilityLabel="開始遊戲"
+        accessibilityLabel={t.marketMemoryStart}
       >
-        <Text style={styles.primaryButtonText}>開始遊戲 →</Text>
+        <Text style={styles.primaryButtonText}>{t.marketMemoryStart}</Text>
       </Pressable>
     </View>
   );
@@ -108,13 +102,14 @@ function MemorisePhase({
   secondsLeft: number;
   onFinish: () => void;
 }) {
+  const t = useStrings();
   return (
     <View style={styles.memorisePhase}>
       {/* Header */}
       <View style={styles.memoriseHeader}>
         <View style={styles.memoriseHeaderText}>
-          <Text style={styles.phaseLabel}>記住呢 5 樣嘢！</Text>
-          <Text style={styles.phaseLabelSub}>記低佢哋，之後要答！</Text>
+          <Text style={styles.phaseLabel}>{t.marketMemoryMemorisePrompt}</Text>
+          <Text style={styles.phaseLabelSub}>{t.marketMemoryMemoriseSubPrompt}</Text>
         </View>
         <CountdownTimer
           totalSeconds={MEMORISE_SECONDS}
@@ -135,9 +130,7 @@ function MemorisePhase({
       {/* Tip */}
       <View style={styles.tipBox}>
         <Text style={styles.tipEmoji}>💡</Text>
-        <Text style={styles.tipText}>
-          試吓大聲讀出每樣嘢，幫助記憶！
-        </Text>
+        <Text style={styles.tipText}>{t.marketMemoryTip}</Text>
       </View>
     </View>
   );
@@ -146,6 +139,7 @@ function MemorisePhase({
 // ─── Phase: Transition ────────────────────────────────────────────────────────
 
 function TransitionPhase() {
+  const t = useStrings();
   const scaleAnim = useRef(new Animated.Value(0.5)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -176,10 +170,8 @@ function TransitionPhase() {
         }}
       >
         <Text style={styles.transitionEmoji}>🙈</Text>
-        <Text style={styles.phaseTitle}>貨品收起咗！</Text>
-        <Text style={styles.transitionSub}>
-          而家考考你嘅記憶力⋯
-        </Text>
+        <Text style={styles.phaseTitle}>{t.marketMemoryHidden}</Text>
+        <Text style={styles.transitionSub}>{t.marketMemoryHiddenSub}</Text>
       </Animated.View>
     </View>
   );
@@ -198,16 +190,15 @@ function QuizPhase({
   onItemPress: (item: MarketItem) => void;
   onSubmit: () => void;
 }) {
+  const t = useStrings();
   const selectedCount = selectedIds.size;
 
   return (
     <View style={styles.quizPhase}>
       {/* Header */}
       <View style={styles.quizHeader}>
-        <Text style={styles.phaseLabel}>你記得邊 5 樣？</Text>
-        <Text style={styles.phaseLabelSub}>
-          揀出你記得嘅貨品
-        </Text>
+        <Text style={styles.phaseLabel}>{t.marketMemoryQuizPrompt}</Text>
+        <Text style={styles.phaseLabelSub}>{t.marketMemoryQuizSubPrompt}</Text>
         {/* Selection counter */}
         <View style={styles.selectionCounter}>
           {[1, 2, 3, 4, 5].map((i) => (
@@ -251,7 +242,7 @@ function QuizPhase({
         onPress={onSubmit}
         disabled={selectedCount === 0}
         accessibilityRole="button"
-        accessibilityLabel="提交答案"
+        accessibilityLabel={t.marketMemorySubmit}
       >
         <Text
           style={[
@@ -259,7 +250,7 @@ function QuizPhase({
             selectedCount === 0 && styles.buttonDisabledText,
           ]}
         >
-          {selectedCount === 0 ? '揀選貨品先...' : '提交答案 →'}
+          {selectedCount === 0 ? t.marketMemorySelectFirst : t.marketMemorySubmit}
         </Text>
       </Pressable>
     </View>
@@ -269,6 +260,8 @@ function QuizPhase({
 // ─── Main game screen ─────────────────────────────────────────────────────────
 
 export default function MarketMemoryGame() {
+  const t = useStrings();
+
   const router = useRouter();
   const addCoins = usePlayerStore((s) => s.addCoins);
   const recordMoCASession = usePlayerStore((s) => s.recordMoCASession);
@@ -352,7 +345,7 @@ export default function MarketMemoryGame() {
         score: score.toString(),
         coinsEarned: coinsEarned.toString(),
         domain: 'memory',
-        gameTitle: '街市記憶',
+        gameTitle: t.marketMemoryTitle,
       },
     });
   }, [selectedIds, addCoins, recordMoCASession, router]);
@@ -369,11 +362,11 @@ export default function MarketMemoryGame() {
           onPress={handleBack}
           style={styles.backButton}
           accessibilityRole="button"
-          accessibilityLabel="返回"
+          accessibilityLabel={t.back}
         >
-          <Text style={styles.backButtonText}>‹ 返回</Text>
+          <Text style={styles.backButtonText}>{t.back}</Text>
         </Pressable>
-        <Text style={styles.topBarTitle}>🥬 街市記憶</Text>
+        <Text style={styles.topBarTitle}>🥬 {t.marketMemoryTitle}</Text>
         <View style={styles.topBarRight} />
       </View>
 
