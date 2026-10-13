@@ -75,80 +75,101 @@ export interface Strings {
   marketMemorySubmit: string;
   marketMemorySelectFirst: string;
 
-  // ── Reward screen ──
-  rewardTitle: string;
-  rewardCorrect: string;
-  rewardWrong: string;
-  rewardCoins: string;
-  rewardTotalCoins: string;
-  rewardMoCATitle: string;
-  rewardMoCASubtitle: string;
-  rewardThisTime: string;
-  rewardLastTime: string;
-  rewardEncouragementHigh: string;
-  rewardEncouragementMid: string;
-  rewardEncouragementLow: string;
-  rewardScoreLabelHigh: string;
-  rewardScoreLabelMid: string;
-  rewardScoreLabelLow: string;
-  rewardPlayAgain: string;
-  rewardBackToMap: string;
-  rewardGameDone: string;
-  scoreUnit: string;
+    // ── Mahjong match game ──
+    mahjongTitle: string;
+    mahjongSubtitle: string;
+    mahjongHowToPlay: string;
+    mahjongStep1: string;
+    mahjongStep2: string;
+    mahjongStep3: string;
+    mahjongStep4: string;
+    mahjongRewardPreview: string;
+    mahjongStart: string;
+    mahjongPreviewPrompt: string;
+    mahjongPreviewSub: string;
+    mahjongPlayPrompt: string;
+    mahjongPlaySub: string;
+    mahjongMoves: string;
+    mahjongTime: string;
+    mahjongComplete: string;
+    mahjongCompleteSub: string;
+    mahjongBestMoves: string;
+    mahjongTimeTaken: string;
 
-  // ── Zone screen ──
-  zoneNeighbours: string;
-  zoneGames: string;
-  zoneNowAt: string;
-  zoneNoGames: string;
-  zoneNotFound: string;
+    // ── Reward screen ──
+    rewardTitle: string;
+    rewardCorrect: string;
+    rewardWrong: string;
+    rewardCoins: string;
+    rewardTotalCoins: string;
+    rewardMoCATitle: string;
+    rewardMoCASubtitle: string;
+    rewardThisTime: string;
+    rewardLastTime: string;
+    rewardEncouragementHigh: string;
+    rewardEncouragementMid: string;
+    rewardEncouragementLow: string;
+    rewardScoreLabelHigh: string;
+    rewardScoreLabelMid: string;
+    rewardScoreLabelLow: string;
+    rewardPlayAgain: string;
+    rewardBackToMap: string;
+    rewardGameDone: string;
+    scoreUnit: string;
 
-  // ── Friends screen ──
-  friendsTitle: string;
-  friendsTabFriends: string;
-  friendsTabEvents: string;
-  friendsOnline: string;
-  friendsOffline: string;
-  friendsAddFriend: string;
-  friendsVisit: string;
-  friendsQuest: string;
-  friendsNowHere: string;
-  friendsHoursAgo: string;
-  friendsEventsFull: string;
-  friendsEventsJoin: string;
-  friendsEventsPeople: string;
-  friendsEventsUpcoming: string;
+    // ── Zone screen ──
+    zoneNeighbours: string;
+    zoneGames: string;
+    zoneNowAt: string;
+    zoneNoGames: string;
+    zoneNotFound: string;
 
-  // ── Settings screen ──
-  settingsTitle: string;
-  settingsLanguage: string;
-  settingsLanguageDesc: string;
-  settingsAccount: string;
-  settingsAccountDesc: string;
-  settingsAbout: string;
-  settingsAboutDesc: string;
-  settingsVersion: string;
-  settingsLanguagePickerTitle: string;
+    // ── Friends screen ──
+    friendsTitle: string;
+    friendsTabFriends: string;
+    friendsTabEvents: string;
+    friendsOnline: string;
+    friendsOffline: string;
+    friendsAddFriend: string;
+    friendsVisit: string;
+    friendsQuest: string;
+    friendsNowHere: string;
+    friendsHoursAgo: string;
+    friendsEventsFull: string;
+    friendsEventsJoin: string;
+    friendsEventsPeople: string;
+    friendsEventsUpcoming: string;
 
-  // ── MoCA domains ──
-  domainMemory: string;
-  domainAttention: string;
-  domainLanguage: string;
-  domainExecutive: string;
-  domainVisuospatial: string;
-  domainOrientation: string;
+    // ── Settings screen ──
+    settingsTitle: string;
+    settingsLanguage: string;
+    settingsLanguageDesc: string;
+    settingsAccount: string;
+    settingsAccountDesc: string;
+    settingsAbout: string;
+    settingsAboutDesc: string;
+    settingsVersion: string;
+    settingsLanguagePickerTitle: string;
 
-  // Zone descriptions
-  zoneMarketDesc: string;
-  zoneCafeDesc: string;
-  zoneEstateDesc: string;
-  zoneParkDesc: string;
+    // ── MoCA domains ──
+    domainMemory: string;
+    domainAttention: string;
+    domainLanguage: string;
+    domainExecutive: string;
+    domainVisuospatial: string;
+    domainOrientation: string;
 
-  // Zone activities (each zone has 4 activities)
-  zoneMarketActivities: string[];
-  zoneCafeActivities: string[];
-  zoneEstateActivities: string[];
-  zoneParkActivities: string[];
+    // Zone descriptions
+    zoneMarketDesc: string;
+    zoneCafeDesc: string;
+    zoneEstateDesc: string;
+    zoneParkDesc: string;
+
+    // Zone activities (each zone has 4 activities)
+    zoneMarketActivities: string[];
+    zoneCafeActivities: string[];
+    zoneEstateActivities: string[];
+    zoneParkActivities: string[];
 
     // ── Game titles, descriptions, domains ──
     gameTitleMarketMemory: string;
@@ -242,6 +263,27 @@ const en: Strings = {
     marketMemorySubmit: 'Submit Answers →',
     marketMemorySelectFirst: 'Select items first...',
 
+    // Mahjong match
+    mahjongTitle: 'Mahjong Match',
+    mahjongSubtitle: 'Attention Game',
+    mahjongHowToPlay: 'How to play?',
+    mahjongStep1: '1️⃣  All tiles are shown briefly',
+    mahjongStep2: '2️⃣  Tiles flip face down',
+    mahjongStep3: '3️⃣  Tap two tiles to flip them up',
+    mahjongStep4: '4️⃣  Find all 8 pairs — fewer moves wins!',
+    mahjongRewardPreview: 'Complete to earn',
+    mahjongStart: 'Start Game →',
+    mahjongPreviewPrompt: 'Remember the tiles!',
+    mahjongPreviewSub: 'They will flip face down soon...',
+    mahjongPlayPrompt: 'Find all matching pairs!',
+    mahjongPlaySub: 'Tap two tiles to flip them',
+    mahjongMoves: 'Moves',
+    mahjongTime: 'Time',
+    mahjongComplete: '🎉 All pairs found!',
+    mahjongCompleteSub: 'Well done!',
+    mahjongBestMoves: 'Best possible: 8 moves',
+    mahjongTimeTaken: 'Time taken',
+
     // Reward screen
     rewardTitle: '🎉 Game Complete!',
     rewardCorrect: 'Correct',
@@ -328,7 +370,7 @@ const en: Strings = {
 
     // Game descriptions
     gameDescMarketMemory: 'Remember 5 items from the wet market and test your memory!',
-    gameDescMahjongMatch: 'Find matching mahjong tiles within the time limit!',
+    gameDescMahjongMatch: 'Flip tiles and find all matching mahjong pairs!',
     gameDescDimSumOrder: 'Arrange the dim sum in the correct order to train your executive skills!',
     gameDescTramRoute: 'Find the fastest tram route from Sheung Wan to Shau Kei Wan!',
     gameDescNewsWords: 'Complete today\'s news crossword to keep your language skills sharp!',
@@ -408,6 +450,27 @@ const zhHK: Strings = {
     marketMemoryQuizSubPrompt: '揀出你記得嘅貨品',
     marketMemorySubmit: '提交答案 →',
     marketMemorySelectFirst: '揀選貨品先...',
+
+    // Mahjong match
+    mahjongTitle: '麻雀配對',
+    mahjongSubtitle: '專注力遊戲',
+    mahjongHowToPlay: '點樣玩？',
+    mahjongStep1: '1️⃣  所有牌短暫顯示',
+    mahjongStep2: '2️⃣  牌面向下翻轉',
+    mahjongStep3: '3️⃣  輕按兩張牌翻開',
+    mahjongStep4: '4️⃣  搵出所有 8 對牌 — 步數越少越好！',
+    mahjongRewardPreview: '完成可獲得',
+    mahjongStart: '開始遊戲 →',
+    mahjongPreviewPrompt: '記住啲牌！',
+    mahjongPreviewSub: '佢哋就快會翻轉...',
+    mahjongPlayPrompt: '搵出所有相同嘅牌！',
+    mahjongPlaySub: '輕按兩張牌嚟翻開',
+    mahjongMoves: '步數',
+    mahjongTime: '時間',
+    mahjongComplete: '🎉 全部配對完成！',
+    mahjongCompleteSub: '做得好！',
+    mahjongBestMoves: '最佳步數：8 步',
+    mahjongTimeTaken: '用咗時間',
 
     // Reward screen
     rewardTitle: '🎉 遊戲完成！',
@@ -493,7 +556,7 @@ const zhHK: Strings = {
 
     // Game descriptions
     gameDescMarketMemory: '記住街市入面嘅 5 樣嘢，考驗你嘅記憶力！',
-    gameDescMahjongMatch: '係有限時間內搵出相同嘅麻雀牌！',
+    gameDescMahjongMatch: '翻開麻雀牌，搵出所有相同嘅牌！',
     gameDescDimSumOrder: '按照正確次序排列點心，訓練你嘅執行能力！',
     gameDescTramRoute: '搵出由上環去筲箕灣嘅最快路線！',
     gameDescNewsWords: '完成今日新聞嘅填字遊戲，保持語言能力！',
@@ -573,6 +636,27 @@ const zhCN: Strings = {
     marketMemoryQuizSubPrompt: '选出你看到的货品',
     marketMemorySubmit: '提交答案 →',
     marketMemorySelectFirst: '请先选择货品...',
+
+    // Mahjong match
+    mahjongTitle: '麻将配对',
+    mahjongSubtitle: '专注力游戏',
+    mahjongHowToPlay: '怎么玩？',
+    mahjongStep1: '1️⃣  所有牌短暂显示',
+    mahjongStep2: '2️⃣  牌面向下翻转',
+    mahjongStep3: '3️⃣  轻按两张牌翻开',
+    mahjongStep4: '4️⃣  找出所有 8 对牌 — 步数越少越好！',
+    mahjongRewardPreview: '完成可获得',
+    mahjongStart: '开始游戏 →',
+    mahjongPreviewPrompt: '记住这些牌！',
+    mahjongPreviewSub: '它们即将翻转...',
+    mahjongPlayPrompt: '找出所有相同的牌！',
+    mahjongPlaySub: '轻按两张牌来翻开',
+    mahjongMoves: '步数',
+    mahjongTime: '时间',
+    mahjongComplete: '🎉 全部配对完成！',
+    mahjongCompleteSub: '做得好！',
+    mahjongBestMoves: '最佳步数：8 步',
+    mahjongTimeTaken: '用时',
 
     // Reward screen
     rewardTitle: '🎉 游戏完成！',
@@ -657,7 +741,7 @@ const zhCN: Strings = {
 
     // Game descriptions
     gameDescMarketMemory: '记住菜市场里的 5 样东西，考验你的记忆力！',
-    gameDescMahjongMatch: '在有限时间内找出相同的麻将牌！',
+    gameDescMahjongMatch: '翻开麻将牌，找出所有相同的牌！',
     gameDescDimSumOrder: '按照正确顺序排列点心，训练你的执行能力！',
     gameDescTramRoute: '找出从上环到筲箕湾的最快路线！',
     gameDescNewsWords: '完成今日新闻的填字游戏，保持语言能力！',
