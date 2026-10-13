@@ -96,6 +96,31 @@ export interface Strings {
     mahjongBestMoves: string;
     mahjongTimeTaken: string;
 
+    // ── Tram route game ──
+    tramTitle: string;
+    tramSubtitle: string;
+    tramHowToPlay: string;
+    tramStep1: string;
+    tramStep2: string;
+    tramStep3: string;
+    tramStep4: string;
+    tramRewardPreview: string;
+    tramStart: string;
+    tramRound: string;
+    tramOf: string;
+    tramPrompt: string;
+    tramPromptSub: string;
+    tramConfirm: string;
+    tramCorrect: string;
+    tramWrong: string;
+    tramShowAnswer: string;
+    tramNextRound: string;
+    tramComplete: string;
+    tramCompleteSub: string;
+    tramTotalScore: string;
+    tramPerfect: string;
+    tramAnswerWas: string;
+
     // ── Reward screen ──
     rewardTitle: string;
     rewardCorrect: string;
@@ -283,6 +308,31 @@ const en: Strings = {
     mahjongCompleteSub: 'Well done!',
     mahjongBestMoves: 'Best possible: 8 moves',
     mahjongTimeTaken: 'Time taken',
+
+    // Tram route
+    tramTitle: 'Tram Route',
+    tramSubtitle: 'Visuospatial Game',
+    tramHowToPlay: 'How to play?',
+    tramStep1: '1️⃣  Look at the tram map',
+    tramStep2: '2️⃣  Arrange the stops in the correct order',
+    tramStep3: '3️⃣  Drag stops left or right to reorder',
+    tramStep4: '4️⃣  5 rounds — gets harder each time!',
+    tramRewardPreview: 'Complete to earn',
+    tramStart: 'Start Game →',
+    tramRound: 'Round',
+    tramOf: 'of',
+    tramPrompt: 'Arrange the stops in order!',
+    tramPromptSub: 'Drag stops to rearrange — west to east',
+    tramConfirm: 'Confirm Order →',
+    tramCorrect: '✓ Correct!',
+    tramWrong: '✗ Wrong — try again!',
+    tramShowAnswer: 'Show Answer',
+    tramNextRound: 'Next Round →',
+    tramComplete: '🚋 All rounds complete!',
+    tramCompleteSub: 'You know HK tram routes well!',
+    tramTotalScore: 'Total Score',
+    tramPerfect: 'Perfect score!',
+    tramAnswerWas: 'Correct order was:',
 
     // Reward screen
     rewardTitle: '🎉 Game Complete!',
@@ -472,6 +522,31 @@ const zhHK: Strings = {
     mahjongBestMoves: '最佳步數：8 步',
     mahjongTimeTaken: '用咗時間',
 
+    // Tram route
+    tramTitle: '電車路線',
+    tramSubtitle: '視空間遊戲',
+    tramHowToPlay: '點樣玩？',
+    tramStep1: '1️⃣  睇吓電車路線圖',
+    tramStep2: '2️⃣  將站名排列成正確次序',
+    tramStep3: '3️⃣  拖動站名嚟重新排列',
+    tramStep4: '4️⃣  共 5 關 — 越嚟越難！',
+    tramRewardPreview: '完成可獲得',
+    tramStart: '開始遊戲 →',
+    tramRound: '第',
+    tramOf: '關',
+    tramPrompt: '將站名排成正確次序！',
+    tramPromptSub: '拖動站名重新排列 — 由西至東',
+    tramConfirm: '確認次序 →',
+    tramCorrect: '✓ 答啱！',
+    tramWrong: '✗ 答錯 — 再試一次！',
+    tramShowAnswer: '睇答案',
+    tramNextRound: '下一關 →',
+    tramComplete: '🚋 全部完成！',
+    tramCompleteSub: '你對香港電車路線好熟悉！',
+    tramTotalScore: '總分',
+    tramPerfect: '滿分！',
+    tramAnswerWas: '正確次序係：',
+
     // Reward screen
     rewardTitle: '🎉 遊戲完成！',
     rewardCorrect: '答啱',
@@ -657,6 +732,31 @@ const zhCN: Strings = {
     mahjongCompleteSub: '做得好！',
     mahjongBestMoves: '最佳步数：8 步',
     mahjongTimeTaken: '用时',
+
+    // Tram route
+    tramTitle: '电车路线',
+    tramSubtitle: '视空间游戏',
+    tramHowToPlay: '怎么玩？',
+    tramStep1: '1️⃣  看看电车路线图',
+    tramStep2: '2️⃣  将站名排列成正确顺序',
+    tramStep3: '3️⃣  拖动站名来重新排列',
+    tramStep4: '4️⃣  共 5 关 — 越来越难！',
+    tramRewardPreview: '完成可获得',
+    tramStart: '开始游戏 →',
+    tramRound: '第',
+    tramOf: '关',
+    tramPrompt: '将站名排成正确顺序！',
+    tramPromptSub: '拖动站名重新排列 — 由西至东',
+    tramConfirm: '确认顺序 →',
+    tramCorrect: '✓ 答对了！',
+    tramWrong: '✗ 答错了 — 再试一次！',
+    tramShowAnswer: '看答案',
+    tramNextRound: '下一关 →',
+    tramComplete: '🚋 全部完成！',
+    tramCompleteSub: '你对香港电车路线很熟悉！',
+    tramTotalScore: '总分',
+    tramPerfect: '满分！',
+    tramAnswerWas: '正确顺序是：',
 
     // Reward screen
     rewardTitle: '🎉 游戏完成！',

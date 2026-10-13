@@ -247,6 +247,8 @@ export default function GamesScreen() {
       router.push('/games/market-memory' as any);
     } else if (game.id === 'mahjong-pattern') {
       router.push('/games/mahjong-match' as any);
+    } else if (game.id === 'tram-route') {
+      router.push('/games/tram-route' as any);
     }
   };
 
