@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ─── Supported languages ──────────────────────────────────────────────────────
 
@@ -37,10 +39,18 @@ interface LanguageState {
   setLanguage: (lang: Language) => void;
 }
 
-export const useLanguageStore = create<LanguageState>((set) => ({
-  language: 'zh-HK', // Cantonese default
-  setLanguage: (lang) => set({ language: lang }),
-}));
+export const useLanguageStore = create<LanguageState>()(
+  persist(
+    (set) => ({
+      language: 'zh-HK',
+      setLanguage: (lang) => set({ language: lang }),
+    }),
+    {
+      name: 'language-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);
 
 // ─── Convenience hook ─────────────────────────────────────────────────────────
 // Returns current language code — import this anywhere you need to read strings
