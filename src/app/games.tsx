@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { useStrings } from '@/i18n/strings';
 import { useRouter } from 'expo-router';
+
+import { WagerPopup } from '@/components/games/wager-popup';
+import { useWagerStore, WagerAmount } from '@/store/wager-store';
+import { usePlayerStore } from '@/store/player-store';
 
 interface Game {
   id: string;
@@ -240,18 +244,47 @@ export default function GamesScreen() {
   const t = useStrings();
   const router = useRouter();
   const games = getGames(t); 
+  const placeWager = useWagerStore((s) => s.placeWager);
+  const cancelWager = useWagerStore((s) => s.cancelWager);
+  const coins = usePlayerStore((s) => s.coins);
+
+  const [wagerVisible, setWagerVisible] = useState(false);
+  const [pendingGame, setPendingGame] = useState<Game | null>(null);
+
+  const GAME_ROUTES: Record<string, string> = {
+    'market-memory':  '/games/market-memory',
+    'mahjong-pattern':'/games/mahjong-match',
+    'tram-route':     '/games/tram-route',
+    'dim-sum-order':  '/games/dim-sum-order',
+  };
 
   const handleGamePress = (game: Game) => {
     if (!game.unlocked) return;
-    if (game.id === 'market-memory') {
-      router.push('/games/market-memory' as any);
-    } else if (game.id === 'mahjong-pattern') {
-      router.push('/games/mahjong-match' as any);
-    } else if (game.id === 'tram-route') {
-      router.push('/games/tram-route' as any);
-    } else if (game.id === 'dim-sum-order') {
-      router.push('/games/dim-sum-order' as any);
-    }
+    const route = GAME_ROUTES[game.id];
+    if (!route) return;
+    // Show wager popup before navigating
+    setPendingGame(game);
+    setWagerVisible(true);
+  };
+
+  const handleWager = (amount: WagerAmount) => {
+    if (!pendingGame) return;
+    // Deduct coins immediately
+    placeWager(pendingGame.id, amount);
+    setWagerVisible(false);
+    // Deduct from player store
+    usePlayerStore.getState().addCoins(-amount);
+    // Navigate to game
+    router.push(GAME_ROUTES[pendingGame.id] as any);
+    setPendingGame(null);
+  };
+
+  const handleSkipWager = () => {
+    if (!pendingGame) return;
+    cancelWager();
+    setWagerVisible(false);
+    router.push(GAME_ROUTES[pendingGame.id] as any);
+    setPendingGame(null);
   };
 
   return (
@@ -289,6 +322,19 @@ export default function GamesScreen() {
           <Text style={styles.footerText}>{t.gamesBrainTip}</Text>
         </View>
       </ScrollView>
+
+      {pendingGame && (
+        <WagerPopup
+          visible={wagerVisible}
+          gameId={pendingGame.id}
+          gameTitle={pendingGame.titleCantonese}
+          gameEmoji={pendingGame.emoji}
+          onWager={handleWager}
+          onSkip={handleSkipWager}
+        />
+      )}
+
+      
     </SafeAreaView>
   );
 }

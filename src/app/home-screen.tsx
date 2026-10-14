@@ -1,6 +1,6 @@
 // src/app/home-screen.tsx
 
-import React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { useStrings } from '@/i18n/strings';
 import { usePlayerStore } from '@/store/player-store';
+import { useWagerStore } from '@/store/wager-store';
 
 interface RoomItem {
   id: string;
@@ -32,6 +33,19 @@ const ROOM_ITEMS: RoomItem[] = [
   { id: 'table',    emoji: '🍵', label: '茶几', unlocked: true,  gridCol: 1, gridRow: 3 },
   { id: 'cat',      emoji: '🐱', label: '貓咪', unlocked: false, gridCol: 2, gridRow: 3 },
   { id: 'lamp',     emoji: '🪔', label: '燈',  unlocked: false, gridCol: 3, gridRow: 3 },
+];
+
+const LEADERBOARD = [
+  { rank: 1,  name: '李婆婆', avatar: '👵', coins: 892, isYou: false },
+  { rank: 2,  name: '張師奶', avatar: '👩', coins: 756, isYou: false },
+  { rank: 3,  name: '陳伯',   avatar: '👴', coins: 0,   isYou: true  },
+  { rank: 4,  name: '王叔叔', avatar: '👴', coins: 634, isYou: false },
+  { rank: 5,  name: '黃太',   avatar: '👩', coins: 521, isYou: false },
+  { rank: 6,  name: '吳伯',   avatar: '👴', coins: 489, isYou: false },
+  { rank: 7,  name: '鄭師奶', avatar: '👵', coins: 412, isYou: false },
+  { rank: 8,  name: '劉叔叔', avatar: '👴', coins: 398, isYou: false },
+  { rank: 9,  name: '梁婆婆', avatar: '👵', coins: 276, isYou: false },
+  { rank: 10, name: '何大媽', avatar: '🧓', coins: 201, isYou: false },
 ];
 
 // ─── Room grid ────────────────────────────────────────────────────────────────
@@ -121,6 +135,96 @@ function StatBadge({ emoji, value, label }: StatBadgeProps) {
   );
 }
 
+function LeaderboardTab() {
+  const t = useStrings();
+  const coins = usePlayerStore((s) => s.coins);
+  const wagerNetTotal = useWagerStore((s) => s.getWagerNetTotal());
+
+  // Inject real coins for "You" row
+  const entries = LEADERBOARD.map((e) =>
+    e.isYou ? { ...e, coins } : e
+  ).sort((a, b) => b.coins - a.coins)
+   .map((e, i) => ({ ...e, rank: i + 1 }));
+
+  const rankEmoji = (rank: number) => {
+    if (rank === 1) return '🥇';
+    if (rank === 2) return '🥈';
+    if (rank === 3) return '🥉';
+    return `${rank}`;
+  };
+
+  return (
+    <ScrollView
+      contentContainerStyle={styles.leaderboardContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Title */}
+      <Text style={styles.leaderboardTitle}>{t.leaderboardWeekly}</Text>
+
+      {/* Wager net total */}
+      <View
+        style={[
+          styles.wagerNetCard,
+          {
+            borderColor: wagerNetTotal >= 0 ? Colors.success : Colors.error,
+            backgroundColor:
+              wagerNetTotal >= 0
+                ? `${Colors.success}18`
+                : `${Colors.error}18`,
+          },
+        ]}
+      >
+        <Text style={styles.wagerNetEmoji}>🎰</Text>
+        <View>
+          <Text style={styles.wagerNetLabel}>今週下注收益</Text>
+          <Text
+            style={[
+              styles.wagerNetValue,
+              { color: wagerNetTotal >= 0 ? Colors.success : Colors.error },
+            ]}
+          >
+            {wagerNetTotal >= 0 ? '+' : ''}{wagerNetTotal} 🪙
+          </Text>
+        </View>
+      </View>
+
+      {/* Leaderboard rows */}
+      <View style={styles.leaderboardList}>
+        {entries.map((entry) => (
+          <View
+            key={entry.rank}
+            style={[
+              styles.leaderboardRow,
+              entry.isYou && styles.leaderboardRowYou,
+            ]}
+          >
+            {/* Rank */}
+            <Text style={styles.leaderboardRank}>
+              {rankEmoji(entry.rank)}
+            </Text>
+
+            {/* Avatar + name */}
+            <Text style={styles.leaderboardAvatar}>{entry.avatar}</Text>
+            <View style={styles.leaderboardNameBlock}>
+              <Text style={styles.leaderboardName}>
+                {entry.name}
+                {entry.isYou && (
+                  <Text style={styles.youBadge}> ({t.leaderboardYou})</Text>
+                )}
+              </Text>
+            </View>
+
+            {/* Coins */}
+            <Text style={styles.leaderboardCoins}>
+              🪙 {entry.coins}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  );
+}
+
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function HomeScreen() {
@@ -130,56 +234,93 @@ export default function HomeScreen() {
   const avatar = usePlayerStore((s) => s.avatar);
   const coins = usePlayerStore((s) => s.coins);
   const level = usePlayerStore((s) => s.level);
+
+  const [activeTab, setActiveTab] = useState<'room' | 'leaderboard'>('room');
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* ── Header ── */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.avatarEmoji}>{avatar}</Text>
-            <View>
-              <Text style={styles.homeName}>{name}{t.homeTitle}</Text>
-              <Text style={styles.homeLevel}>{t.homeLevel} {level}</Text>
-            </View>
-          </View>
-          <View style={styles.coinBadge}>
-            <Text style={styles.coinEmoji}>🪙</Text>
-            <Text style={styles.coinCount}>{coins}</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.avatarEmoji}>{avatar}</Text>
+          <View>
+            <Text style={styles.homeName}>{name}{t.homeTitle}</Text>
+            <Text style={styles.homeLevel}>{t.homeLevel} {level}</Text>
           </View>
         </View>
-
-        {/* ── Stats row ── */}
-        <View style={styles.statsRow}>
-          <StatBadge emoji="🛋️" value="6" label={t.homeFurniture} />
-          <StatBadge emoji="🔒" value="3" label={t.homeLocked} />
-          <StatBadge emoji="⭐" value="240" label={t.homeScore} />
+        <View style={styles.coinBadge}>
+          <Text style={styles.coinEmoji}>🪙</Text>
+          <Text style={styles.coinCount}>{coins}</Text>
         </View>
+      </View>
 
-        {/* ── Room ── */}
-        <Text style={styles.sectionTitle}>{t.homeMyRoom}</Text>
-        <RoomGrid />
+      {/* Tab selector */}
+      <View style={styles.tabSelector}>
+        {(
+          [
+            { key: 'room',        label: t.homeTabRoom },
+            { key: 'leaderboard', label: t.homeTabLeaderboard },
+          ] as { key: 'room' | 'leaderboard'; label: string }[]
+        ).map((tab) => (
+          <Pressable
+            key={tab.key}
+            style={[
+              styles.tabItem,
+              activeTab === tab.key && styles.tabItemActive,
+            ]}
+            onPress={() => setActiveTab(tab.key)}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: activeTab === tab.key }}
+          >
+            <Text
+              style={[
+                styles.tabLabel,
+                activeTab === tab.key && styles.tabLabelActive,
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
 
-        {/* ── Hint ── */}
-        <View style={styles.hintBox}>
-          <Text style={styles.hintEmoji}>💡</Text>
-          <Text style={styles.hintText}>{t.homeHint}</Text>
-        </View>
-
-        {/* ── Decorate button ── */}
-        <Pressable
-          style={({ pressed }) => [
-            styles.decorateButton,
-            { backgroundColor: pressed ? Colors.primaryDark : Colors.primary },
-          ]}
-          accessibilityRole="button"
-          accessibilityLabel="裝飾我的家"
+      {/* Tab content */}
+      {activeTab === 'room' ? (
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.decorateButtonText}>{t.homeDecorate}</Text>
-        </Pressable>
-      </ScrollView>
+          {/* Stats row */}
+          <View style={styles.statsRow}>
+            <StatBadge emoji="🛋️" value="6" label={t.homeFurniture} />
+            <StatBadge emoji="🔒" value="3" label={t.homeLocked} />
+            <StatBadge emoji="⭐" value={coins.toString()} label={t.homeScore} />
+          </View>
+
+          {/* Room grid */}
+          <Text style={styles.sectionTitle}>{t.homeMyRoom}</Text>
+          <RoomGrid />
+
+          {/* Hint */}
+          <View style={styles.hintBox}>
+            <Text style={styles.hintEmoji}>💡</Text>
+            <Text style={styles.hintText}>{t.homeHint}</Text>
+          </View>
+
+          {/* Decorate button */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.decorateButton,
+              { backgroundColor: pressed ? Colors.primaryDark : Colors.primary },
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel={t.homeDecorate}
+          >
+            <Text style={styles.decorateButtonText}>{t.homeDecorate}</Text>
+          </Pressable>
+        </ScrollView>
+      ) : (
+        <LeaderboardTab />
+      )}
     </SafeAreaView>
   );
 }
@@ -378,5 +519,107 @@ const styles = StyleSheet.create({
     fontSize: FontSize.subtitle,
     fontWeight: '800',
     color: Colors.white,
+  },
+
+  // ── Tab selector ──
+  tabSelector: {
+    flexDirection: 'row',
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.surfaceDark,
+    paddingHorizontal: Spacing.four,
+  },
+  tabItem: {
+    paddingVertical: Spacing.three,
+    paddingHorizontal: Spacing.two,
+    borderBottomWidth: 3,
+    borderBottomColor: Colors.transparent,
+    marginRight: Spacing.two,
+  },
+  tabItemActive: {
+    borderBottomColor: Colors.primary,
+  },
+  tabLabel: {
+    fontSize: FontSize.body,
+    fontWeight: '700',
+    color: Colors.textSecondary,
+  },
+  tabLabelActive: {
+    color: Colors.primary,
+  },
+
+  // ── Leaderboard ──
+  leaderboardContent: {
+    paddingHorizontal: Spacing.four,
+    paddingTop: Spacing.four,
+    paddingBottom: Spacing.eight,
+    gap: Spacing.three,
+  },
+  leaderboardTitle: {
+    fontSize: FontSize.subtitle,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  wagerNetCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    borderRadius: Spacing.three,
+    borderWidth: 2,
+    padding: Spacing.three,
+  },
+  wagerNetEmoji: { fontSize: 28 },
+  wagerNetLabel: {
+    fontSize: FontSize.small,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+  },
+  wagerNetValue: {
+    fontSize: FontSize.subtitle,
+    fontWeight: '800',
+  },
+  leaderboardList: {
+    gap: Spacing.two,
+  },
+  leaderboardRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    borderRadius: Spacing.two,
+    borderWidth: 2,
+    borderColor: Colors.surfaceDark,
+    padding: Spacing.three,
+    gap: Spacing.two,
+  },
+  leaderboardRowYou: {
+    borderColor: Colors.primary,
+    backgroundColor: `${Colors.primary}11`,
+  },
+  leaderboardRank: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+    width: 36,
+    textAlign: 'center',
+  },
+  leaderboardAvatar: {
+    fontSize: 24,
+  },
+  leaderboardNameBlock: {
+    flex: 1,
+  },
+  leaderboardName: {
+    fontSize: FontSize.body,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+  },
+  youBadge: {
+    fontSize: FontSize.tiny,
+    color: Colors.primary,
+    fontWeight: '800',
+  },
+  leaderboardCoins: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+    color: Colors.gold,
   },
 });

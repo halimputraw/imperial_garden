@@ -4,76 +4,113 @@ import { Language } from '@/store/language-store';
 // Add new keys here first, then fill in all 3 languages below
 
 export interface Strings {
-  // ── General ──
-  appName: string;
-  loading: string;
-  back: string;
-  close: string;
-  confirm: string;
-  cancel: string;
-  comingSoon: string;
-  level: string;
-  seconds: string;
+    // ── General ──
+    appName: string;
+    loading: string;
+    back: string;
+    close: string;
+    confirm: string;
+    cancel: string;
+    comingSoon: string;
+    level: string;
+    seconds: string;
 
-  // ── Tab bar ──
-  tabMap: string;
-  tabHome: string;
-  tabGames: string;
-  tabFriends: string;
-  tabSettings: string;
+    // ── Tab bar ──
+    tabMap: string;
+    tabHome: string;
+    tabGames: string;
+    tabFriends: string;
+    tabSettings: string;
 
-  // ── Map screen ──
-  mapTitle: string;
-  mapDailyQuest: string;
-  mapDailyQuestDesc: string;
-  mapZoneMarket: string;
-  mapZoneCafe: string;
-  mapZoneEstate: string;
-  mapZonePark: string;
-  mapHarbour: string;
-  mapEnterZone: string;
-  mapActivities: string;
+    // ── Map screen ──
+    mapTitle: string;
+    mapDailyQuest: string;
+    mapDailyQuestDesc: string;
+    mapZoneMarket: string;
+    mapZoneCafe: string;
+    mapZoneEstate: string;
+    mapZonePark: string;
+    mapHarbour: string;
+    mapEnterZone: string;
+    mapActivities: string;
 
-  // ── Home screen ──
-  homeTitle: string;
-  homeLevel: string;
-  homeFurniture: string;
-  homeLocked: string;
-  homeScore: string;
-  homeMyRoom: string;
-  homeHint: string;
-  homeDecorate: string;
+    // ── Home screen ──
+    homeTitle: string;
+    homeLevel: string;
+    homeFurniture: string;
+    homeLocked: string;
+    homeScore: string;
+    homeMyRoom: string;
+    homeHint: string;
+    homeDecorate: string;
 
-  // ── Games screen ──
-  gamesTitle: string;
-  gamesDailyChallenge: string;
-  gamesDailyChallengeDesc: string;
-  gamesAllGames: string;
-  gamesAllGamesSubtitle: string;
-  gamesUnlockHint: string;
-  gamesBrainTip: string;
-  gamesDuration: string;
-  gamesLocked: string;
+    // ── Games screen ──
+    gamesTitle: string;
+    gamesDailyChallenge: string;
+    gamesDailyChallengeDesc: string;
+    gamesAllGames: string;
+    gamesAllGamesSubtitle: string;
+    gamesUnlockHint: string;
+    gamesBrainTip: string;
+    gamesDuration: string;
+    gamesLocked: string;
 
-  // ── Game: market memory ──
-  marketMemoryTitle: string;
-  marketMemorySubtitle: string;
-  marketMemoryHowToPlay: string;
-  marketMemoryStep1: string;
-  marketMemoryStep2: string;
-  marketMemoryStep3: string;
-  marketMemoryStep4: string;
-  marketMemoryRewardPreview: string;
-  marketMemoryStart: string;
-  marketMemoryMemorisePrompt: string;
-  marketMemoryMemoriseSubPrompt: string;
-  marketMemoryTip: string;
-  marketMemoryHidden: string;
-  marketMemoryHiddenSub: string;
-  marketMemoryQuizPrompt: string;
-  marketMemoryQuizSubPrompt: string;
-  marketMemorySubmit: string;
-  marketMemorySelectFirst: string;
+    // ── My Home shop ──
+    shopUnlock: string;
+    shopUnlockConfirm: string;
+    shopUnlockSuccess: string;
+    shopNotEnoughCoins: string;
+    shopCoinsNeeded: string;
+    shopAlreadyUnlocked: string;
+
+    // ── Leaderboard ──
+    leaderboardTitle: string;
+    leaderboardWeekly: string;
+    leaderboardRank: string;
+    leaderboardPlayer: string;
+    leaderboardCoins: string;
+    leaderboardYou: string;
+    leaderboardEmpty: string;
+
+    // ── Home tabs ──
+    homeTabRoom: string;
+    homeTabLeaderboard: string;
+
+    // ── Wager ──
+    wagerTitle: string;
+    wagerSubtitle: string;
+    wagerChooseAmount: string;
+    wagerWinCondition: string;
+    wagerPayout: string;
+    wagerSkip: string;
+    wagerConfirm: string;
+    wagerWon: string;
+    wagerLost: string;
+    wagerWonDesc: string;
+    wagerLostDesc: string;
+    wagerActive: string;
+    wagerCommunityAvg: string;
+    wagerInsufficientCoins: string;
+
+    // ── Game: market memory ──
+    marketMemoryTitle: string;
+    marketMemorySubtitle: string;
+    marketMemoryHowToPlay: string;
+    marketMemoryStep1: string;
+    marketMemoryStep2: string;
+    marketMemoryStep3: string;
+    marketMemoryStep4: string;
+    marketMemoryRewardPreview: string;
+    marketMemoryStart: string;
+    marketMemoryMemorisePrompt: string;
+    marketMemoryMemoriseSubPrompt: string;
+    marketMemoryTip: string;
+    marketMemoryHidden: string;
+    marketMemoryHiddenSub: string;
+    marketMemoryQuizPrompt: string;
+    marketMemoryQuizSubPrompt: string;
+    marketMemorySubmit: string;
+    marketMemorySelectFirst: string;
 
     // ── Mahjong match game ──
     mahjongTitle: string;
@@ -282,6 +319,43 @@ const en: Strings = {
     homeHint:
         'Complete games and quests to earn points and unlock more furniture!',
     homeDecorate: '🎨 Decorate My Home',
+
+    // My Home shop
+    shopUnlock: 'Unlock',
+    shopUnlockConfirm: 'Spend coins to unlock this item?',
+    shopUnlockSuccess: 'Unlocked! 🎉',
+    shopNotEnoughCoins: 'Not enough coins!',
+    shopCoinsNeeded: 'coins needed',
+    shopAlreadyUnlocked: 'Already unlocked',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 Leaderboard',
+    leaderboardWeekly: 'Weekly Rankings',
+    leaderboardRank: 'Rank',
+    leaderboardPlayer: 'Player',
+    leaderboardCoins: 'Coins',
+    leaderboardYou: 'You',
+    leaderboardEmpty: 'No players yet this week',
+
+    // Home tabs
+    homeTabRoom: '🏠 My Room',
+    homeTabLeaderboard: '🏆 Rankings',
+
+    // Wager
+    wagerTitle: '🎰 Place a Wager?',
+    wagerSubtitle: 'Beat the community average to win big!',
+    wagerChooseAmount: 'Choose your wager:',
+    wagerWinCondition: 'Win condition: beat community average score',
+    wagerPayout: '2.5x payout if you win',
+    wagerSkip: 'Skip, just play',
+    wagerConfirm: 'Place Wager →',
+    wagerWon: '🎉 Wager Won!',
+    wagerLost: '😔 Wager Lost',
+    wagerWonDesc: 'You beat the community average!',
+    wagerLostDesc: 'Better luck next time!',
+    wagerActive: '🎰 Wager Active',
+    wagerCommunityAvg: 'Community avg',
+    wagerInsufficientCoins: 'Not enough coins to wager',
 
     // Games screen
     gamesTitle: '🎮 Games',
@@ -524,6 +598,43 @@ const zhHK: Strings = {
     homeHint: '完成遊戲同任務可以獲得積分，用嚟解鎖更多家具！',
     homeDecorate: '🎨 裝飾我的家',
 
+    // My Home shop
+    shopUnlock: '解鎖',
+    shopUnlockConfirm: '花費積分解鎖呢件家具？',
+    shopUnlockSuccess: '解鎖成功！🎉',
+    shopNotEnoughCoins: '積分唔夠！',
+    shopCoinsNeeded: '積分',
+    shopAlreadyUnlocked: '已解鎖',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 排行榜',
+    leaderboardWeekly: '本週排名',
+    leaderboardRank: '排名',
+    leaderboardPlayer: '玩家',
+    leaderboardCoins: '積分',
+    leaderboardYou: '你',
+    leaderboardEmpty: '今週暫時未有玩家',
+
+    // Home tabs
+    homeTabRoom: '🏠 我的房間',
+    homeTabLeaderboard: '🏆 排行榜',
+
+    // Wager
+    wagerTitle: '🎰 想唔想下注？',
+    wagerSubtitle: '打敗社區平均分就可以贏取更多積分！',
+    wagerChooseAmount: '選擇下注金額：',
+    wagerWinCondition: '勝出條件：超越社區平均分',
+    wagerPayout: '贏咗獲得 2.5 倍回報',
+    wagerSkip: '唔下注，直接玩',
+    wagerConfirm: '確認下注 →',
+    wagerWon: '🎉 下注勝出！',
+    wagerLost: '😔 下注失敗',
+    wagerWonDesc: '你打敗咗社區平均分！',
+    wagerLostDesc: '下次再試！',
+    wagerActive: '🎰 下注進行中',
+    wagerCommunityAvg: '社區平均分',
+    wagerInsufficientCoins: '積分唔夠下注',
+
     // Games screen
     gamesTitle: '🎮 遊戲',
     gamesDailyChallenge: '今日挑戰',
@@ -761,6 +872,43 @@ const zhCN: Strings = {
     homeMyRoom: '我的房间',
     homeHint: '完成游戏和任务可以获得积分，用来解锁更多家具！',
     homeDecorate: '🎨 装饰我的家',
+
+    // My Home shop
+    shopUnlock: '解锁',
+    shopUnlockConfirm: '花费积分解锁这件家具？',
+    shopUnlockSuccess: '解锁成功！🎉',
+    shopNotEnoughCoins: '积分不够！',
+    shopCoinsNeeded: '积分',
+    shopAlreadyUnlocked: '已解锁',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 排行榜',
+    leaderboardWeekly: '本周排名',
+    leaderboardRank: '排名',
+    leaderboardPlayer: '玩家',
+    leaderboardCoins: '积分',
+    leaderboardYou: '你',
+    leaderboardEmpty: '本周暂时没有玩家',
+
+    // Home tabs
+    homeTabRoom: '🏠 我的房间',
+    homeTabLeaderboard: '🏆 排行榜',
+
+    // Wager
+    wagerTitle: '🎰 想下注吗？',
+    wagerSubtitle: '打败社区平均分就可以赢取更多积分！',
+    wagerChooseAmount: '选择下注金额：',
+    wagerWinCondition: '胜出条件：超越社区平均分',
+    wagerPayout: '赢了获得 2.5 倍回报',
+    wagerSkip: '不下注，直接玩',
+    wagerConfirm: '确认下注 →',
+    wagerWon: '🎉 下注胜出！',
+    wagerLost: '😔 下注失败',
+    wagerWonDesc: '你打败了社区平均分！',
+    wagerLostDesc: '下次再试！',
+    wagerActive: '🎰 下注进行中',
+    wagerCommunityAvg: '社区平均分',
+    wagerInsufficientCoins: '积分不够下注',
 
     // Games screen
     gamesTitle: '🎮 游戏',

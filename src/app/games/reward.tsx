@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import {
   MOCA_DOMAIN_INFO,
 } from '@/store/player-store';
 import { useStrings } from '@/i18n/strings';
+import { useWagerStore } from '@/store/wager-store';
 
 // ─── Coin shower animation ────────────────────────────────────────────────────
 
@@ -247,7 +248,7 @@ function MoCAComparisonBar({
                     inputRange: [0, 1],
                     outputRange: ['0%', '100%'],
                   }),
-                  backgroundColor: Colors.surfaceDark,
+                  backgroundColor: "#B0B0B0",
                 },
               ]}
             />
@@ -287,6 +288,21 @@ export default function RewardScreen() {
   // Entry animation
   const slideAnim = useRef(new Animated.Value(60)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  // ── Resolve wager ──────────────────────────────────────────────────────
+  const resolveWager = useWagerStore((s) => s.resolveWager);
+  const addCoins = usePlayerStore((s) => s.addCoins);
+  const wagerResult = useRef<ReturnType<typeof resolveWager>>(null);
+  const [wagerResolved, setWagerResolved] = useState(false);
+
+  useEffect(() => {
+    const result = resolveWager(score);
+    wagerResult.current = result;
+    if (result?.won && result.payout > 0) {
+      addCoins(result.payout);
+    }
+    setWagerResolved(true);
+  }, []);
 
   useEffect(() => {
     Animated.parallel([
@@ -359,15 +375,86 @@ export default function RewardScreen() {
                 <Text style={styles.resultBadgeEmoji}>🪙</Text>
                 <Text style={styles.resultBadgeCount}>+{coinsEarned}</Text>
                 <Text style={styles.resultBadgeLabel}>{t.rewardCoins}</Text>
+                {wagerResolved && wagerResult.current?.won && (
+                  <Text style={styles.resultBadgeWager}>
+                    +{wagerResult.current.payout} 🎰
+                  </Text>
+                )}
               </View>
             </View>
 
             {/* Total coins */}
             <View style={styles.totalCoinsRow}>
               <Text style={styles.totalCoinsLabel}>{t.rewardTotalCoins}</Text>
-              <Text style={styles.totalCoinsValue}>🪙 {coins}</Text>
+              <View style={{ alignItems: 'flex-end', gap: 2 }}>
+                {wagerResolved && wagerResult.current && (
+                  <Text style={{ fontSize: FontSize.tiny, color: Colors.textSecondary }}>
+                    {t.rewardCoins}: +{coinsEarned}
+                    {wagerResult.current.won
+                      ? `  🎰: +${wagerResult.current.payout}`
+                      : `  🎰: -${wagerResult.current.amount}`}
+                  </Text>
+                )}
+                <Text style={styles.totalCoinsValue}>🪙 {coins}</Text>
+              </View>
             </View>
           </View>
+
+          {/* ── Wager result ── */}
+          {wagerResult.current && (
+            <View
+              style={[
+                styles.wagerResultCard,
+                {
+                  backgroundColor: wagerResult.current.won
+                    ? `${Colors.success}22`
+                    : `${Colors.error}22`,
+                  borderColor: wagerResult.current.won
+                    ? Colors.success
+                    : Colors.error,
+                },
+              ]}
+            >
+              <Text style={styles.wagerResultEmoji}>
+                {wagerResult.current.won ? '🎉' : '😔'}
+              </Text>
+              <View style={styles.wagerResultInfo}>
+                <Text
+                  style={[
+                    styles.wagerResultTitle,
+                    { color: wagerResult.current.won ? Colors.success : Colors.error },
+                  ]}
+                >
+                  {wagerResult.current.won ? t.wagerWon : t.wagerLost}
+                </Text>
+                <Text style={styles.wagerResultDesc}>
+                  {wagerResult.current.won ? t.wagerWonDesc : t.wagerLostDesc}
+                </Text>
+                <Text style={styles.wagerResultScore}>
+                  {t.wagerCommunityAvg}: {wagerResult.current.communityAvgScore}
+                  {'  '}|{'  '}
+                  {t.rewardThisTime}: {wagerResult.current.playerScore}
+                </Text>
+              </View>
+              <View style={styles.wagerResultPayout}>
+                {wagerResult.current.won ? (
+                  <>
+                    <Text style={styles.wagerPayoutLabel}>獲得</Text>
+                    <Text style={[styles.wagerPayoutValue, { color: Colors.success }]}>
+                      +🪙{wagerResult.current.payout}
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.wagerPayoutLabel}>損失</Text>
+                    <Text style={[styles.wagerPayoutValue, { color: Colors.error }]}>
+                      -🪙{wagerResult.current.amount}
+                    </Text>
+                  </>
+                )}
+              </View>
+            </View>
+          )}
 
           {/* ── MoCA comparison ── */}
           <View style={styles.mocaSection}>
@@ -553,6 +640,12 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: '600',
   },
+  resultBadgeWager: {
+    fontSize: FontSize.tiny,
+    color: Colors.white,
+    fontWeight: '800',
+    opacity: 0.9,
+  },
   totalCoinsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -631,7 +724,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.tiny,
     fontWeight: '700',
     color: Colors.textSecondary,
-    width: 28,
+    width: 44,
   },
   barTrack: {
     flex: 1,
@@ -648,7 +741,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.small,
     fontWeight: '800',
     color: Colors.textPrimary,
-    width: 28,
+    width: 40,
     textAlign: 'right',
   },
 
@@ -702,5 +795,48 @@ const styles = StyleSheet.create({
     fontSize: FontSize.subtitle,
     fontWeight: '800',
     color: Colors.white,
+  },
+
+  // Wager Design
+  wagerResultCard: {
+    borderRadius: Spacing.three,
+    borderWidth: 2,
+    padding: Spacing.three,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+  },
+  wagerResultEmoji: {
+    fontSize: 32,
+  },
+  wagerResultInfo: {
+    flex: 1,
+    gap: 3,
+  },
+  wagerResultTitle: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+  },
+  wagerResultDesc: {
+    fontSize: FontSize.tiny,
+    color: Colors.textSecondary,
+  },
+  wagerResultScore: {
+    fontSize: FontSize.tiny,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+  },
+  wagerResultPayout: {
+    alignItems: 'center',
+    gap: 2,
+  },
+  wagerPayoutLabel: {
+    fontSize: FontSize.tiny,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+  },
+  wagerPayoutValue: {
+    fontSize: FontSize.subtitle,
+    fontWeight: '800',
   },
 });
