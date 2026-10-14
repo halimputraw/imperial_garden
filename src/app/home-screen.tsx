@@ -1,131 +1,358 @@
 // src/app/home-screen.tsx
 
-import {useState} from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   Pressable,
+  Modal,
+  Animated,
+  LayoutChangeEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
-import { useStrings } from '@/i18n/strings';
 import { usePlayerStore } from '@/store/player-store';
 import { useWagerStore } from '@/store/wager-store';
+import { useStrings } from '@/i18n/strings';
 
-interface RoomItem {
+// ─── Furniture definitions ────────────────────────────────────────────────────
+
+interface FurnitureItem {
   id: string;
   emoji: string;
   label: string;
-  unlocked: boolean;
-  gridCol: number; // 1–3
-  gridRow: number; // 1–3
+  price: number;
+  level: number;
+  // Position in room (percentage based)
+  // zone: 'wall' = top 40%, 'floor' = bottom 60%
+  zone: 'wall' | 'floor';
+  xPct: number;  // 0-100 left offset % of room width
+  yPct: number;  // 0-100 top offset % of zone height
 }
 
-const ROOM_ITEMS: RoomItem[] = [
-  { id: 'window',   emoji: '🪟', label: '窗', unlocked: true,  gridCol: 2, gridRow: 1 },
-  { id: 'plant',    emoji: '🪴', label: '植物', unlocked: true,  gridCol: 1, gridRow: 1 },
-  { id: 'clock',    emoji: '🕰️', label: '時鐘', unlocked: true,  gridCol: 3, gridRow: 1 },
-  { id: 'sofa',     emoji: '🛋️', label: '梳化', unlocked: true,  gridCol: 2, gridRow: 2 },
-  { id: 'tv',       emoji: '📺', label: '電視', unlocked: true,  gridCol: 1, gridRow: 2 },
-  { id: 'cabinet',  emoji: '🗄️', label: '櫃',  unlocked: false, gridCol: 3, gridRow: 2 },
-  { id: 'table',    emoji: '🍵', label: '茶几', unlocked: true,  gridCol: 1, gridRow: 3 },
-  { id: 'cat',      emoji: '🐱', label: '貓咪', unlocked: false, gridCol: 2, gridRow: 3 },
-  { id: 'lamp',     emoji: '🪔', label: '燈',  unlocked: false, gridCol: 3, gridRow: 3 },
+const FURNITURE_ITEMS: FurnitureItem[] = [
+  // Wall zone items (top 40% of room)
+  { id: 'painting', emoji: '🖼️',  label: '畫',   price: 30,  level: 1, zone: 'wall',  xPct: 10, yPct: 15 },
+  { id: 'clock',    emoji: '🕰️',  label: '時鐘', price: 30,  level: 1, zone: 'wall',  xPct: 50, yPct: 10 },
+  { id: 'window',   emoji: '🪟',  label: '窗',   price: 30,  level: 1, zone: 'wall',  xPct: 75, yPct: 12 },
+  // Floor zone items (bottom 60% of room)
+  { id: 'tv',       emoji: '📺',  label: '電視', price: 50,  level: 2, zone: 'floor', xPct: 5,  yPct: 10 },
+  { id: 'sofa',     emoji: '🛋️',  label: '梳化', price: 60,  level: 2, zone: 'floor', xPct: 38, yPct: 8  },
+  { id: 'cabinet',  emoji: '🗄️',  label: '櫃',   price: 60,  level: 2, zone: 'floor', xPct: 72, yPct: 10 },
+  { id: 'plant',    emoji: '🪴',  label: '植物', price: 80,  level: 3, zone: 'floor', xPct: 5,  yPct: 55 },
+  { id: 'cat',      emoji: '🐱',  label: '貓咪', price: 100, level: 3, zone: 'floor', xPct: 42, yPct: 58 },
+  { id: 'lamp',     emoji: '🪔',  label: '燈',   price: 120, level: 3, zone: 'floor', xPct: 78, yPct: 52 },
 ];
 
-const LEADERBOARD = [
-  { rank: 1,  name: '李婆婆', avatar: '👵', coins: 892, isYou: false },
-  { rank: 2,  name: '張師奶', avatar: '👩', coins: 756, isYou: false },
-  { rank: 3,  name: '陳伯',   avatar: '👴', coins: 0,   isYou: true  },
-  { rank: 4,  name: '王叔叔', avatar: '👴', coins: 634, isYou: false },
-  { rank: 5,  name: '黃太',   avatar: '👩', coins: 521, isYou: false },
-  { rank: 6,  name: '吳伯',   avatar: '👴', coins: 489, isYou: false },
-  { rank: 7,  name: '鄭師奶', avatar: '👵', coins: 412, isYou: false },
-  { rank: 8,  name: '劉叔叔', avatar: '👴', coins: 398, isYou: false },
-  { rank: 9,  name: '梁婆婆', avatar: '👵', coins: 276, isYou: false },
-  { rank: 10, name: '何大媽', avatar: '🧓', coins: 201, isYou: false },
+const INITIALLY_UNLOCKED: string[] = ['painting', 'clock'];
+const COIN_REWARD = 20;
+
+// ─── Leaderboard ──────────────────────────────────────────────────────────────
+
+const LEADERBOARD_BASE = [
+  { id: '1',  name: '李婆婆', avatar: '👵', coins: 892, isYou: false },
+  { id: '2',  name: '張師奶', avatar: '👩', coins: 756, isYou: false },
+  { id: '3',  name: '陳伯',   avatar: '👴', coins: 0,   isYou: true  },
+  { id: '4',  name: '王叔叔', avatar: '👴', coins: 634, isYou: false },
+  { id: '5',  name: '黃太',   avatar: '👩', coins: 521, isYou: false },
+  { id: '6',  name: '吳伯',   avatar: '👴', coins: 489, isYou: false },
+  { id: '7',  name: '鄭師奶', avatar: '👵', coins: 412, isYou: false },
+  { id: '8',  name: '劉叔叔', avatar: '👴', coins: 398, isYou: false },
+  { id: '9',  name: '梁婆婆', avatar: '👵', coins: 276, isYou: false },
+  { id: '10', name: '何大媽', avatar: '🧓', coins: 201, isYou: false },
 ];
 
-// ─── Room grid ────────────────────────────────────────────────────────────────
+// ─── Room component ───────────────────────────────────────────────────────────
 
-function RoomGrid() {
-  const t = useStrings();
+interface RoomProps {
+  unlockedIds: Set<string>;
+}
+
+function Room({ unlockedIds }: RoomProps) {
+  const [roomSize, setRoomSize] = useState({ width: 0, height: 0 });
+
+  const handleLayout = useCallback((e: LayoutChangeEvent) => {
+    const { width, height } = e.nativeEvent.layout;
+    setRoomSize({ width, height });
+  }, []);
+
+  const wallHeight = roomSize.height * 0.42;
+  const floorHeight = roomSize.height * 0.58;
+
+  const getPosition = (item: FurnitureItem) => {
+    if (item.zone === 'wall') {
+      return {
+        left: (item.xPct / 100) * roomSize.width,
+        top: (item.yPct / 100) * wallHeight,
+      };
+    } else {
+      return {
+        left: (item.xPct / 100) * roomSize.width,
+        top: wallHeight + (item.yPct / 100) * floorHeight,
+      };
+    }
+  };
+
   return (
-    <View style={styles.roomGrid}>
-      {/* Room background — warm wallpaper feel */}
-      <View style={styles.roomWall} />
-      <View style={styles.roomFloor} />
+    <View style={styles.room} onLayout={handleLayout}>
+      {/* ── Wall ── */}
+      <View style={[styles.roomWall, { height: wallHeight }]}>
+        {/* Wallpaper pattern dots */}
+        <View style={styles.wallpaperRow}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Text key={i} style={styles.wallpaperDot}>✦</Text>
+          ))}
+        </View>
+        {/* Skirting board */}
+        <View style={styles.skirtingBoard} />
+      </View>
 
-      {/* Grid of items */}
-      <View style={styles.grid}>
-        {[1, 2, 3].map((row) => (
-          <View key={row} style={styles.gridRow}>
-            {[1, 2, 3].map((col) => {
-              const item = ROOM_ITEMS.find(
-                (i) => i.gridCol === col && i.gridRow === row
-              );
-              return (
-                <Pressable
-                  key={col}
-                  style={({ pressed }) => [
-                    styles.gridCell,
-                    item?.unlocked && pressed && styles.gridCellPressed,
-                  ]}
-                  accessible
-                  accessibilityRole="button"
-                  accessibilityLabel={
-                    item
-                      ? item.unlocked
-                        ? item.label
-                        : `${item.label} ${t.homeLocked}`
-                      : '空格'
-                  }
-                >
-                  {item ? (
-                    <View style={styles.itemWrapper}>
-                      <Text
-                        style={[
-                          styles.itemEmoji,
-                          !item.unlocked && styles.itemLocked,
-                        ]}
-                      >
-                        {item.unlocked ? item.emoji : '🔒'}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.itemLabel,
-                          !item.unlocked && styles.itemLabelLocked,
-                        ]}
-                        numberOfLines={1}
-                      >
-                        {item.label}
-                      </Text>
-                    </View>
-                  ) : (
-                    // Empty cell — show a subtle + to invite decoration
-                    <Text style={styles.emptyCellPlus}>＋</Text>
-                  )}
-                </Pressable>
-              );
-            })}
-          </View>
+      {/* ── Floor ── */}
+      <View style={[styles.roomFloor, { height: floorHeight }]}>
+        {/* Floor planks — horizontal lines */}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <View key={i} style={[styles.floorPlank, { top: `${i * 20}%` as any }]} />
         ))}
       </View>
+
+      {/* ── Furniture items ── */}
+      {roomSize.width > 0 && FURNITURE_ITEMS.map((item) => {
+        const isUnlocked = unlockedIds.has(item.id);
+        const pos = getPosition(item);
+        const itemSize = item.zone === 'wall' ? 44 : 52;
+
+        return (
+          <View
+            key={item.id}
+            style={[
+              styles.furnitureItem,
+              {
+                left: pos.left,
+                top: pos.top,
+                width: itemSize,
+                height: itemSize + 16,
+              },
+            ]}
+          >
+            {isUnlocked ? (
+              <>
+                <Text style={{ fontSize: itemSize * 0.7 }}>{item.emoji}</Text>
+                <Text style={styles.furnitureLabel}>{item.label}</Text>
+              </>
+            ) : (
+              <>
+                <View style={styles.ghostItem}>
+                  <Text style={styles.ghostEmoji}>＋</Text>
+                </View>
+                <Text style={styles.furniturePriceLabel}>🪙{item.price}</Text>
+              </>
+            )}
+          </View>
+        );
+      })}
+
+      {/* ── Window light effect ── */}
+      <View style={styles.windowLight} />
     </View>
   );
 }
 
-// ─── Stats row ────────────────────────────────────────────────────────────────
+// ─── Shop overlay ─────────────────────────────────────────────────────────────
 
-interface StatBadgeProps {
+interface ShopOverlayProps {
+  visible: boolean;
+  unlockedIds: Set<string>;
+  coins: number;
+  onBuy: (item: FurnitureItem) => void;
+  onClose: () => void;
+}
+
+function ShopOverlay({
+  visible,
+  unlockedIds,
+  coins,
+  onBuy,
+  onClose,
+}: ShopOverlayProps) {
+  const t = useStrings();
+  const slideAnim = useRef(new Animated.Value(600)).current;
+  const [confirmItem, setConfirmItem] = useState<FurnitureItem | null>(null);
+
+  React.useEffect(() => {
+    if (visible) {
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        useNativeDriver: true,
+        speed: 16,
+        bounciness: 3,
+      }).start();
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 600,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+      setConfirmItem(null);
+    }
+  }, [visible, slideAnim]);
+
+  const handleItemPress = (item: FurnitureItem) => {
+    if (unlockedIds.has(item.id)) return;
+    setConfirmItem(item);
+  };
+
+  const handleConfirm = () => {
+    if (!confirmItem) return;
+    onBuy(confirmItem);
+    setConfirmItem(null);
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="none"
+      onRequestClose={onClose}
+    >
+      <Pressable style={styles.shopBackdrop} onPress={onClose} />
+      <Animated.View
+        style={[
+          styles.shopSheet,
+          { transform: [{ translateY: slideAnim }] },
+        ]}
+      >
+        {/* Handle */}
+        <View style={styles.shopHandle} />
+
+        {/* Header */}
+        <View style={styles.shopHeader}>
+          <Text style={styles.shopTitle}>🛍️ 家具商店</Text>
+          <View style={styles.shopCoinsBadge}>
+            <Text style={styles.shopCoinsEmoji}>🪙</Text>
+            <Text style={styles.shopCoinsValue}>{coins}</Text>
+          </View>
+          <Pressable
+            onPress={onClose}
+            style={styles.shopCloseBtn}
+            accessibilityRole="button"
+          >
+            <Text style={styles.shopCloseBtnText}>✕</Text>
+          </Pressable>
+        </View>
+
+        {/* Confirm banner */}
+        {confirmItem && (
+          <View style={styles.confirmBanner}>
+            <Text style={styles.confirmEmoji}>{confirmItem.emoji}</Text>
+            <View style={styles.confirmInfo}>
+              <Text style={styles.confirmName}>{confirmItem.label}</Text>
+              <Text style={styles.confirmPrice}>🪙 {confirmItem.price} {t.shopCoinsNeeded}</Text>
+            </View>
+            <View style={styles.confirmButtons}>
+              <Pressable
+                style={styles.confirmCancelBtn}
+                onPress={() => setConfirmItem(null)}
+              >
+                <Text style={styles.confirmCancelText}>{t.cancel}</Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.confirmBuyBtn,
+                  coins < confirmItem.price && styles.confirmBuyBtnDisabled,
+                ]}
+                onPress={coins >= confirmItem.price ? handleConfirm : undefined}
+                disabled={coins < confirmItem.price}
+              >
+                <Text style={[
+                  styles.confirmBuyText,
+                  coins < confirmItem.price && styles.confirmBuyTextDisabled,
+                ]}>
+                  {coins >= confirmItem.price ? `🔓 ${t.shopUnlock}` : t.shopNotEnoughCoins}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+
+        {/* Items grid */}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.shopGrid}
+        >
+          {/* Group by level */}
+          {[1, 2, 3].map((lvl) => (
+            <View key={lvl} style={styles.shopLevelGroup}>
+              <Text style={styles.shopLevelLabel}>
+                {'⭐'.repeat(lvl)} {t.level} {lvl}
+              </Text>
+              <View style={styles.shopLevelRow}>
+                {FURNITURE_ITEMS.filter((i) => i.level === lvl).map((item) => {
+                  const isUnlocked = unlockedIds.has(item.id);
+                  const isSelected = confirmItem?.id === item.id;
+                  const canAfford = coins >= item.price;
+
+                  return (
+                    <Pressable
+                      key={item.id}
+                      style={[
+                        styles.shopItem,
+                        isUnlocked && styles.shopItemUnlocked,
+                        isSelected && styles.shopItemSelected,
+                        !isUnlocked && !canAfford && styles.shopItemCantAfford,
+                      ]}
+                      onPress={() => handleItemPress(item)}
+                      disabled={isUnlocked}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        isUnlocked
+                          ? `${item.label} 已解鎖`
+                          : `${item.label} ${item.price} 積分`
+                      }
+                    >
+                      <Text style={styles.shopItemEmoji}>{item.emoji}</Text>
+                      <Text style={[
+                        styles.shopItemName,
+                        isUnlocked && styles.shopItemNameUnlocked,
+                      ]}>
+                        {item.label}
+                      </Text>
+                      {isUnlocked ? (
+                        <View style={styles.ownedBadge}>
+                          <Text style={styles.ownedBadgeText}>✓ 已有</Text>
+                        </View>
+                      ) : (
+                        <Text style={[
+                          styles.shopItemPrice,
+                          !canAfford && styles.shopItemPriceCantAfford,
+                        ]}>
+                          🪙 {item.price}
+                        </Text>
+                      )}
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </Animated.View>
+    </Modal>
+  );
+}
+
+// ─── Stat badge ───────────────────────────────────────────────────────────────
+
+function StatBadge({
+  emoji,
+  value,
+  label,
+}: {
   emoji: string;
   value: string;
   label: string;
-}
-
-function StatBadge({ emoji, value, label }: StatBadgeProps) {
+}) {
   return (
     <View style={styles.statBadge}>
       <Text style={styles.statEmoji}>{emoji}</Text>
@@ -135,75 +362,60 @@ function StatBadge({ emoji, value, label }: StatBadgeProps) {
   );
 }
 
+// ─── Leaderboard tab ──────────────────────────────────────────────────────────
+
 function LeaderboardTab() {
   const t = useStrings();
   const coins = usePlayerStore((s) => s.coins);
-  const wagerNetTotal = useWagerStore((s) => s.getWagerNetTotal());
+  const getWagerNetTotal = useWagerStore((s) => s.getWagerNetTotal);
+  const wagerNetTotal = getWagerNetTotal();
 
-  // Inject real coins for "You" row
-  const entries = LEADERBOARD.map((e) =>
-    e.isYou ? { ...e, coins } : e
-  ).sort((a, b) => b.coins - a.coins)
-   .map((e, i) => ({ ...e, rank: i + 1 }));
+  const entries = LEADERBOARD_BASE
+    .map((e) => e.isYou ? { ...e, coins } : e)
+    .sort((a, b) => b.coins - a.coins)
+    .map((e, i) => ({ ...e, rank: i + 1 }));
 
-  const rankEmoji = (rank: number) => {
-    if (rank === 1) return '🥇';
-    if (rank === 2) return '🥈';
-    if (rank === 3) return '🥉';
-    return `${rank}`;
-  };
+  const rankEmoji = (rank: number) =>
+    rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}`;
 
   return (
     <ScrollView
       contentContainerStyle={styles.leaderboardContent}
       showsVerticalScrollIndicator={false}
     >
-      {/* Title */}
       <Text style={styles.leaderboardTitle}>{t.leaderboardWeekly}</Text>
 
-      {/* Wager net total */}
-      <View
-        style={[
-          styles.wagerNetCard,
-          {
-            borderColor: wagerNetTotal >= 0 ? Colors.success : Colors.error,
-            backgroundColor:
-              wagerNetTotal >= 0
-                ? `${Colors.success}18`
-                : `${Colors.error}18`,
-          },
-        ]}
-      >
+      <View style={[
+        styles.wagerNetCard,
+        {
+          borderColor: wagerNetTotal >= 0 ? Colors.success : Colors.error,
+          backgroundColor: wagerNetTotal >= 0
+            ? `${Colors.success}18`
+            : `${Colors.error}18`,
+        },
+      ]}>
         <Text style={styles.wagerNetEmoji}>🎰</Text>
         <View>
           <Text style={styles.wagerNetLabel}>今週下注收益</Text>
-          <Text
-            style={[
-              styles.wagerNetValue,
-              { color: wagerNetTotal >= 0 ? Colors.success : Colors.error },
-            ]}
-          >
+          <Text style={[
+            styles.wagerNetValue,
+            { color: wagerNetTotal >= 0 ? Colors.success : Colors.error },
+          ]}>
             {wagerNetTotal >= 0 ? '+' : ''}{wagerNetTotal} 🪙
           </Text>
         </View>
       </View>
 
-      {/* Leaderboard rows */}
       <View style={styles.leaderboardList}>
         {entries.map((entry) => (
           <View
-            key={entry.rank}
+            key={entry.id}
             style={[
               styles.leaderboardRow,
               entry.isYou && styles.leaderboardRowYou,
             ]}
           >
-            {/* Rank */}
-            <Text style={styles.leaderboardRank}>
-              {rankEmoji(entry.rank)}
-            </Text>
-
-            {/* Avatar + name */}
+            <Text style={styles.leaderboardRank}>{rankEmoji(entry.rank)}</Text>
             <Text style={styles.leaderboardAvatar}>{entry.avatar}</Text>
             <View style={styles.leaderboardNameBlock}>
               <Text style={styles.leaderboardName}>
@@ -213,11 +425,7 @@ function LeaderboardTab() {
                 )}
               </Text>
             </View>
-
-            {/* Coins */}
-            <Text style={styles.leaderboardCoins}>
-              🪙 {entry.coins}
-            </Text>
+            <Text style={styles.leaderboardCoins}>🪙 {entry.coins}</Text>
           </View>
         ))}
       </View>
@@ -229,13 +437,31 @@ function LeaderboardTab() {
 
 export default function HomeScreen() {
   const t = useStrings();
-
   const name = usePlayerStore((s) => s.name);
   const avatar = usePlayerStore((s) => s.avatar);
   const coins = usePlayerStore((s) => s.coins);
   const level = usePlayerStore((s) => s.level);
+  const addCoins = usePlayerStore((s) => s.addCoins);
 
   const [activeTab, setActiveTab] = useState<'room' | 'leaderboard'>('room');
+  const [unlockedIds, setUnlockedIds] = useState<Set<string>>(
+    new Set(INITIALLY_UNLOCKED)
+  );
+  const [shopVisible, setShopVisible] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const unlockedCount = unlockedIds.size;
+  const lockedCount = FURNITURE_ITEMS.length - unlockedCount;
+
+  const handleBuy = useCallback((item: FurnitureItem) => {
+    if (coins < item.price) return;
+    addCoins(-item.price);
+    setUnlockedIds((prev) => new Set([...prev, item.id]));
+    setShopVisible(false);
+    setSuccessMessage(`${item.emoji} ${item.label} ${t.shopUnlockSuccess}`);
+    setTimeout(() => setSuccessMessage(null), 2500);
+  }, [coins, addCoins, t]);
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
@@ -269,58 +495,85 @@ export default function HomeScreen() {
             ]}
             onPress={() => setActiveTab(tab.key)}
             accessibilityRole="tab"
-            accessibilityState={{ selected: activeTab === tab.key }}
           >
-            <Text
-              style={[
-                styles.tabLabel,
-                activeTab === tab.key && styles.tabLabelActive,
-              ]}
-            >
+            <Text style={[
+              styles.tabLabel,
+              activeTab === tab.key && styles.tabLabelActive,
+            ]}>
               {tab.label}
             </Text>
           </Pressable>
         ))}
       </View>
 
-      {/* Tab content */}
+      {/* Success banner */}
+      {successMessage && (
+        <View style={styles.successBanner}>
+          <Text style={styles.successText}>{successMessage}</Text>
+        </View>
+      )}
+
       {activeTab === 'room' ? (
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Stats row */}
+          {/* Stats */}
           <View style={styles.statsRow}>
-            <StatBadge emoji="🛋️" value="6" label={t.homeFurniture} />
-            <StatBadge emoji="🔒" value="3" label={t.homeLocked} />
-            <StatBadge emoji="⭐" value={coins.toString()} label={t.homeScore} />
+            <StatBadge
+              emoji="🛋️"
+              value={unlockedCount.toString()}
+              label={t.homeFurniture}
+            />
+            <StatBadge
+              emoji="🔒"
+              value={lockedCount.toString()}
+              label={t.homeLocked}
+            />
+            <StatBadge
+              emoji="🪙"
+              value={coins.toString()}
+              label={t.homeScore}
+            />
           </View>
 
-          {/* Room grid */}
-          <Text style={styles.sectionTitle}>{t.homeMyRoom}</Text>
-          <RoomGrid />
+          {/* Room title + shop button */}
+          <View style={styles.roomTitleRow}>
+            <Text style={styles.sectionTitle}>{t.homeMyRoom}</Text>
+            <Pressable
+              style={({ pressed }) => [
+                styles.shopButton,
+                pressed && { backgroundColor: Colors.primaryDark },
+              ]}
+              onPress={() => setShopVisible(true)}
+              accessibilityRole="button"
+              accessibilityLabel="家具商店"
+            >
+              <Text style={styles.shopButtonText}>🛍️ 商店</Text>
+            </Pressable>
+          </View>
+
+          {/* Room */}
+          <Room unlockedIds={unlockedIds} />
 
           {/* Hint */}
           <View style={styles.hintBox}>
             <Text style={styles.hintEmoji}>💡</Text>
             <Text style={styles.hintText}>{t.homeHint}</Text>
           </View>
-
-          {/* Decorate button */}
-          <Pressable
-            style={({ pressed }) => [
-              styles.decorateButton,
-              { backgroundColor: pressed ? Colors.primaryDark : Colors.primary },
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel={t.homeDecorate}
-          >
-            <Text style={styles.decorateButtonText}>{t.homeDecorate}</Text>
-          </Pressable>
         </ScrollView>
       ) : (
         <LeaderboardTab />
       )}
+
+      {/* Shop overlay */}
+      <ShopOverlay
+        visible={shopVisible}
+        unlockedIds={unlockedIds}
+        coins={coins}
+        onBuy={handleBuy}
+        onClose={() => setShopVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -332,27 +585,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  scrollContent: {
-    paddingHorizontal: Spacing.four,
-    paddingBottom: Spacing.eight,
-    gap: Spacing.three,
-  },
 
   // ── Header ──
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: Spacing.four,
     paddingVertical: Spacing.three,
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.surfaceDark,
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
   },
-  avatarEmoji: {
-    fontSize: 44,
-  },
+  avatarEmoji: { fontSize: 44 },
   homeName: {
     fontSize: FontSize.subtitle,
     fontWeight: '800',
@@ -379,6 +629,54 @@ const styles = StyleSheet.create({
     fontSize: FontSize.body,
     fontWeight: '800',
     color: Colors.textPrimary,
+  },
+
+  // ── Tabs ──
+  tabSelector: {
+    flexDirection: 'row',
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.surfaceDark,
+    paddingHorizontal: Spacing.four,
+  },
+  tabItem: {
+    paddingVertical: Spacing.three,
+    paddingHorizontal: Spacing.two,
+    borderBottomWidth: 3,
+    borderBottomColor: Colors.transparent,
+    marginRight: Spacing.two,
+  },
+  tabItemActive: {
+    borderBottomColor: Colors.primary,
+  },
+  tabLabel: {
+    fontSize: FontSize.body,
+    fontWeight: '700',
+    color: Colors.textSecondary,
+  },
+  tabLabelActive: {
+    color: Colors.primary,
+  },
+
+  // ── Success ──
+  successBanner: {
+    backgroundColor: Colors.success,
+    paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.two,
+    alignItems: 'center',
+  },
+  successText: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+    color: Colors.white,
+  },
+
+  // ── Scroll ──
+  scrollContent: {
+    paddingHorizontal: Spacing.four,
+    paddingBottom: Spacing.eight,
+    gap: Spacing.three,
+    paddingTop: Spacing.three,
   },
 
   // ── Stats ──
@@ -408,83 +706,136 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // ── Room ──
+  // ── Room title row ──
+  roomTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   sectionTitle: {
     fontSize: FontSize.subtitle,
     fontWeight: '800',
     color: Colors.textPrimary,
-    marginTop: Spacing.two,
   },
-  roomGrid: {
+  shopButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+    borderRadius: Spacing.two,
+    borderBottomWidth: 3,
+    borderBottomColor: Colors.primaryDark,
+  },
+  shopButtonText: {
+    fontSize: FontSize.small,
+    fontWeight: '800',
+    color: Colors.white,
+  },
+
+  // ── Room ──
+  room: {
+    width: '100%',
+    aspectRatio: 1.2,
     borderRadius: Spacing.four,
     overflow: 'hidden',
     borderWidth: 3,
     borderColor: Colors.surfaceDark,
-    aspectRatio: 1,
+    backgroundColor: Colors.surface,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 3, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 0,
+    elevation: 6,
   },
   roomWall: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: '55%',
-    backgroundColor: '#F0E0C8', // warm beige wallpaper
+    backgroundColor: '#F5E6C8',
+    justifyContent: 'flex-start',
+    paddingTop: Spacing.three,
+  },
+  wallpaperRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: Spacing.four,
+    opacity: 0.2,
+  },
+  wallpaperDot: {
+    fontSize: 12,
+    color: Colors.textSecondary,
+  },
+  skirtingBoard: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 6,
+    backgroundColor: '#D4A870',
   },
   roomFloor: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: '45%',
-    backgroundColor: '#C8A87A', // warm timber floor
+    backgroundColor: '#C8955A',
+    overflow: 'hidden',
   },
-  grid: {
-    flex: 1,
-    padding: Spacing.two,
-    gap: Spacing.two,
+  floorPlank: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 1,
+    backgroundColor: '#B07840',
+    opacity: 0.4,
   },
-  gridRow: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: Spacing.two,
+  windowLight: {
+    position: 'absolute',
+    top: 0,
+    right: '15%',
+    width: '20%',
+    height: '35%',
+    backgroundColor: 'rgba(255, 240, 180, 0.25)',
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
   },
-  gridCell: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.35)',
-    borderRadius: Spacing.two,
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.08)',
+
+  // ── Furniture items ──
+  furnitureItem: {
+    position: 'absolute',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
-  gridCellPressed: {
-    backgroundColor: 'rgba(255,255,255,0.6)',
-  },
-  itemWrapper: {
-    alignItems: 'center',
-    gap: 2,
-  },
-  itemEmoji: {
-    fontSize: 28,
-  },
-  itemLocked: {
-    opacity: 0.5,
-  },
-  itemLabel: {
-    fontSize: FontSize.tiny,
+  furnitureLabel: {
+    fontSize: 10,
     fontWeight: '700',
     color: Colors.textPrimary,
     textAlign: 'center',
+    textShadowColor: 'rgba(255,255,255,0.8)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
-  itemLabelLocked: {
-    color: Colors.textSecondary,
-    opacity: 0.6,
+  ghostItem: {
+    width: 36,
+    height: 36,
+    borderRadius: Spacing.two,
+    borderWidth: 2,
+    borderColor: Colors.surfaceDark,
+    borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
-  emptyCellPlus: {
-    fontSize: FontSize.body,
+  ghostEmoji: {
+    fontSize: 16,
     color: Colors.textSecondary,
-    opacity: 0.3,
-    fontWeight: '300',
+    opacity: 0.5,
+  },
+  furniturePriceLabel: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: Colors.textSecondary,
+    textAlign: 'center',
   },
 
   // ── Hint ──
@@ -506,46 +857,220 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  // ── Decorate button ──
-  decorateButton: {
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.three,
-    alignItems: 'center',
-    borderBottomWidth: 4,
-    borderBottomColor: Colors.primaryDark,
-    marginTop: Spacing.two,
+  // ── Shop overlay ──
+  shopBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  decorateButtonText: {
-    fontSize: FontSize.subtitle,
-    fontWeight: '800',
-    color: Colors.white,
-  },
-
-  // ── Tab selector ──
-  tabSelector: {
-    flexDirection: 'row',
+  shopSheet: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: Colors.surface,
+    borderTopLeftRadius: Spacing.four,
+    borderTopRightRadius: Spacing.four,
+    borderTopWidth: 3,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    borderColor: Colors.surfaceDark,
+    paddingBottom: Spacing.eight,
+    maxHeight: '80%',
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 0,
+    elevation: 20,
+  },
+  shopHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: Colors.surfaceDark,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginTop: Spacing.two,
+    marginBottom: Spacing.two,
+  },
+  shopHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.four,
+    paddingBottom: Spacing.three,
     borderBottomWidth: 2,
     borderBottomColor: Colors.surfaceDark,
-    paddingHorizontal: Spacing.four,
+    gap: Spacing.two,
   },
-  tabItem: {
-    paddingVertical: Spacing.three,
+  shopTitle: {
+    flex: 1,
+    fontSize: FontSize.subtitle,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  shopCoinsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: Colors.surfaceDark,
     paddingHorizontal: Spacing.two,
-    borderBottomWidth: 3,
-    borderBottomColor: Colors.transparent,
-    marginRight: Spacing.two,
+    paddingVertical: Spacing.one,
+    borderRadius: Spacing.two,
+    borderWidth: 2,
+    borderColor: Colors.gold,
   },
-  tabItemActive: {
-    borderBottomColor: Colors.primary,
+  shopCoinsEmoji: { fontSize: 14 },
+  shopCoinsValue: {
+    fontSize: FontSize.small,
+    fontWeight: '800',
+    color: Colors.textPrimary,
   },
-  tabLabel: {
-    fontSize: FontSize.body,
+  shopCloseBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: Colors.surfaceDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  shopCloseBtnText: {
+    fontSize: FontSize.small,
     fontWeight: '700',
     color: Colors.textSecondary,
   },
-  tabLabelActive: {
-    color: Colors.primary,
+
+  // ── Confirm banner ──
+  confirmBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    backgroundColor: `${Colors.gold}22`,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.gold,
+    paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.three,
+  },
+  confirmEmoji: { fontSize: 28 },
+  confirmInfo: { flex: 1 },
+  confirmName: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  confirmPrice: {
+    fontSize: FontSize.small,
+    color: Colors.textSecondary,
+  },
+  confirmButtons: {
+    flexDirection: 'row',
+    gap: Spacing.one,
+  },
+  confirmCancelBtn: {
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one,
+    borderRadius: Spacing.one,
+    backgroundColor: Colors.surfaceDark,
+  },
+  confirmCancelText: {
+    fontSize: FontSize.tiny,
+    fontWeight: '700',
+    color: Colors.textSecondary,
+  },
+  confirmBuyBtn: {
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one,
+    borderRadius: Spacing.one,
+    backgroundColor: Colors.primary,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.primaryDark,
+  },
+  confirmBuyBtnDisabled: {
+    backgroundColor: Colors.surfaceDark,
+    borderBottomColor: Colors.surfaceDark,
+  },
+  confirmBuyText: {
+    fontSize: FontSize.tiny,
+    fontWeight: '800',
+    color: Colors.white,
+  },
+  confirmBuyTextDisabled: {
+    color: Colors.textSecondary,
+  },
+
+  // ── Shop grid ──
+  shopGrid: {
+    paddingHorizontal: Spacing.four,
+    paddingTop: Spacing.three,
+    paddingBottom: Spacing.four,
+    gap: Spacing.four,
+  },
+  shopLevelGroup: {
+    gap: Spacing.two,
+  },
+  shopLevelLabel: {
+    fontSize: FontSize.small,
+    fontWeight: '800',
+    color: Colors.textSecondary,
+  },
+  shopLevelRow: {
+    flexDirection: 'row',
+    gap: Spacing.two,
+  },
+  shopItem: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    borderRadius: Spacing.two,
+    borderWidth: 2,
+    borderColor: Colors.surfaceDark,
+    padding: Spacing.two,
+    alignItems: 'center',
+    gap: 4,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 0,
+    elevation: 2,
+  },
+  shopItemUnlocked: {
+    backgroundColor: `${Colors.success}18`,
+    borderColor: Colors.success,
+  },
+  shopItemSelected: {
+    borderColor: Colors.gold,
+    borderWidth: 3,
+    backgroundColor: `${Colors.gold}18`,
+  },
+  shopItemCantAfford: {
+    opacity: 0.55,
+  },
+  shopItemEmoji: {
+    fontSize: 32,
+  },
+  shopItemName: {
+    fontSize: FontSize.tiny,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    textAlign: 'center',
+  },
+  shopItemNameUnlocked: {
+    color: Colors.success,
+  },
+  shopItemPrice: {
+    fontSize: FontSize.tiny,
+    fontWeight: '800',
+    color: Colors.gold,
+  },
+  shopItemPriceCantAfford: {
+    color: Colors.error,
+  },
+  ownedBadge: {
+    backgroundColor: Colors.success,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    borderRadius: 4,
+  },
+  ownedBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: Colors.white,
   },
 
   // ── Leaderboard ──
@@ -578,9 +1103,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.subtitle,
     fontWeight: '800',
   },
-  leaderboardList: {
-    gap: Spacing.two,
-  },
+  leaderboardList: { gap: Spacing.two },
   leaderboardRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -601,12 +1124,8 @@ const styles = StyleSheet.create({
     width: 36,
     textAlign: 'center',
   },
-  leaderboardAvatar: {
-    fontSize: 24,
-  },
-  leaderboardNameBlock: {
-    flex: 1,
-  },
+  leaderboardAvatar: { fontSize: 24 },
+  leaderboardNameBlock: { flex: 1 },
   leaderboardName: {
     fontSize: FontSize.body,
     fontWeight: '700',
