@@ -21,7 +21,7 @@ export const FontSize = {
   tiny: 14,      // captions only, avoid where possible
   small: 18,     // minimum body text
   body: 20,      // default readable text
-  label: 22,     // tab bar labels, button text
+  label: 16,     // tab bar labels, button text
   subtitle: 26,  // section headings
   title: 32,     // screen titles
   hero: 40,      // splash / welcome
