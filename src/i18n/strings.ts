@@ -75,80 +75,153 @@ export interface Strings {
   marketMemorySubmit: string;
   marketMemorySelectFirst: string;
 
-  // ── Reward screen ──
-  rewardTitle: string;
-  rewardCorrect: string;
-  rewardWrong: string;
-  rewardCoins: string;
-  rewardTotalCoins: string;
-  rewardMoCATitle: string;
-  rewardMoCASubtitle: string;
-  rewardThisTime: string;
-  rewardLastTime: string;
-  rewardEncouragementHigh: string;
-  rewardEncouragementMid: string;
-  rewardEncouragementLow: string;
-  rewardScoreLabelHigh: string;
-  rewardScoreLabelMid: string;
-  rewardScoreLabelLow: string;
-  rewardPlayAgain: string;
-  rewardBackToMap: string;
-  rewardGameDone: string;
-  scoreUnit: string;
+    // ── Mahjong match game ──
+    mahjongTitle: string;
+    mahjongSubtitle: string;
+    mahjongHowToPlay: string;
+    mahjongStep1: string;
+    mahjongStep2: string;
+    mahjongStep3: string;
+    mahjongStep4: string;
+    mahjongRewardPreview: string;
+    mahjongStart: string;
+    mahjongPreviewPrompt: string;
+    mahjongPreviewSub: string;
+    mahjongPlayPrompt: string;
+    mahjongPlaySub: string;
+    mahjongMoves: string;
+    mahjongTime: string;
+    mahjongComplete: string;
+    mahjongCompleteSub: string;
+    mahjongBestMoves: string;
+    mahjongTimeTaken: string;
 
-  // ── Zone screen ──
-  zoneNeighbours: string;
-  zoneGames: string;
-  zoneNowAt: string;
-  zoneNoGames: string;
-  zoneNotFound: string;
+    // ── Dim sum order game ──
+    dimSumTitle: string;
+    dimSumSubtitle: string;
+    dimSumHowToPlay: string;
+    dimSumStep1: string;
+    dimSumStep2: string;
+    dimSumStep3: string;
+    dimSumStep4: string;
+    dimSumRewardPreview: string;
+    dimSumStart: string;
+    dimSumRound: string;
+    dimSumOf: string;
+    dimSumShowPrompt: string;
+    dimSumShowSub: string;
+    dimSumQuizPrompt: string;
+    dimSumQuizSub: string;
+    dimSumCorrectTap: string;
+    dimSumWrongTap: string;
+    dimSumRoundComplete: string;
+    dimSumNextRound: string;
+    dimSumComplete: string;
+    dimSumCompleteSub: string;
+    dimSumTotalScore: string;
+    dimSumPerfect: string;
+    dimSumAttempts: string;
+    dimSumProgress: string;
 
-  // ── Friends screen ──
-  friendsTitle: string;
-  friendsTabFriends: string;
-  friendsTabEvents: string;
-  friendsOnline: string;
-  friendsOffline: string;
-  friendsAddFriend: string;
-  friendsVisit: string;
-  friendsQuest: string;
-  friendsNowHere: string;
-  friendsHoursAgo: string;
-  friendsEventsFull: string;
-  friendsEventsJoin: string;
-  friendsEventsPeople: string;
-  friendsEventsUpcoming: string;
+    // ── Tram route game ──
+    tramTitle: string;
+    tramSubtitle: string;
+    tramHowToPlay: string;
+    tramStep1: string;
+    tramStep2: string;
+    tramStep3: string;
+    tramStep4: string;
+    tramRewardPreview: string;
+    tramStart: string;
+    tramRound: string;
+    tramOf: string;
+    tramPrompt: string;
+    tramPromptSub: string;
+    tramConfirm: string;
+    tramCorrect: string;
+    tramWrong: string;
+    tramShowAnswer: string;
+    tramNextRound: string;
+    tramComplete: string;
+    tramCompleteSub: string;
+    tramTotalScore: string;
+    tramPerfect: string;
+    tramAnswerWas: string;
 
-  // ── Settings screen ──
-  settingsTitle: string;
-  settingsLanguage: string;
-  settingsLanguageDesc: string;
-  settingsAccount: string;
-  settingsAccountDesc: string;
-  settingsAbout: string;
-  settingsAboutDesc: string;
-  settingsVersion: string;
-  settingsLanguagePickerTitle: string;
+    // ── Reward screen ──
+    rewardTitle: string;
+    rewardCorrect: string;
+    rewardWrong: string;
+    rewardCoins: string;
+    rewardTotalCoins: string;
+    rewardMoCATitle: string;
+    rewardMoCASubtitle: string;
+    rewardThisTime: string;
+    rewardLastTime: string;
+    rewardEncouragementHigh: string;
+    rewardEncouragementMid: string;
+    rewardEncouragementLow: string;
+    rewardScoreLabelHigh: string;
+    rewardScoreLabelMid: string;
+    rewardScoreLabelLow: string;
+    rewardPlayAgain: string;
+    rewardBackToMap: string;
+    rewardGameDone: string;
+    scoreUnit: string;
 
-  // ── MoCA domains ──
-  domainMemory: string;
-  domainAttention: string;
-  domainLanguage: string;
-  domainExecutive: string;
-  domainVisuospatial: string;
-  domainOrientation: string;
+    // ── Zone screen ──
+    zoneNeighbours: string;
+    zoneGames: string;
+    zoneNowAt: string;
+    zoneNoGames: string;
+    zoneNotFound: string;
 
-  // Zone descriptions
-  zoneMarketDesc: string;
-  zoneCafeDesc: string;
-  zoneEstateDesc: string;
-  zoneParkDesc: string;
+    // ── Friends screen ──
+    friendsTitle: string;
+    friendsTabFriends: string;
+    friendsTabEvents: string;
+    friendsOnline: string;
+    friendsOffline: string;
+    friendsAddFriend: string;
+    friendsVisit: string;
+    friendsQuest: string;
+    friendsNowHere: string;
+    friendsHoursAgo: string;
+    friendsEventsFull: string;
+    friendsEventsJoin: string;
+    friendsEventsPeople: string;
+    friendsEventsUpcoming: string;
 
-  // Zone activities (each zone has 4 activities)
-  zoneMarketActivities: string[];
-  zoneCafeActivities: string[];
-  zoneEstateActivities: string[];
-  zoneParkActivities: string[];
+    // ── Settings screen ──
+    settingsTitle: string;
+    settingsLanguage: string;
+    settingsLanguageDesc: string;
+    settingsAccount: string;
+    settingsAccountDesc: string;
+    settingsAbout: string;
+    settingsAboutDesc: string;
+    settingsVersion: string;
+    settingsLanguagePickerTitle: string;
+
+    // ── MoCA domains ──
+    domainMemory: string;
+    domainAttention: string;
+    domainLanguage: string;
+    domainExecutive: string;
+    domainVisuospatial: string;
+    domainOrientation: string;
+
+    // Zone descriptions
+    zoneMarketDesc: string;
+    zoneCafeDesc: string;
+    zoneEstateDesc: string;
+    zoneParkDesc: string;
+
+    // Zone activities (each zone has 4 activities)
+    zoneMarketActivities: string[];
+    zoneCafeActivities: string[];
+    zoneEstateActivities: string[];
+    zoneParkActivities: string[];
 
     // ── Game titles, descriptions, domains ──
     gameTitleMarketMemory: string;
@@ -242,6 +315,79 @@ const en: Strings = {
     marketMemorySubmit: 'Submit Answers →',
     marketMemorySelectFirst: 'Select items first...',
 
+    // Mahjong match
+    mahjongTitle: 'Mahjong Match',
+    mahjongSubtitle: 'Attention Game',
+    mahjongHowToPlay: 'How to play?',
+    mahjongStep1: '1️⃣  All tiles are shown briefly',
+    mahjongStep2: '2️⃣  Tiles flip face down',
+    mahjongStep3: '3️⃣  Tap two tiles to flip them up',
+    mahjongStep4: '4️⃣  Find all 8 pairs — fewer moves wins!',
+    mahjongRewardPreview: 'Complete to earn',
+    mahjongStart: 'Start Game →',
+    mahjongPreviewPrompt: 'Remember the tiles!',
+    mahjongPreviewSub: 'They will flip face down soon...',
+    mahjongPlayPrompt: 'Find all matching pairs!',
+    mahjongPlaySub: 'Tap two tiles to flip them',
+    mahjongMoves: 'Moves',
+    mahjongTime: 'Time',
+    mahjongComplete: '🎉 All pairs found!',
+    mahjongCompleteSub: 'Well done!',
+    mahjongBestMoves: 'Best possible: 8 moves',
+    mahjongTimeTaken: 'Time taken',
+
+    // Dim sum order
+    dimSumTitle: 'Dim Sum Order',
+    dimSumSubtitle: 'Executive Function Game',
+    dimSumHowToPlay: 'How to play?',
+    dimSumStep1: '1️⃣  Remember the order of the dishes shown',
+    dimSumStep2: '2️⃣  They will disappear after a few seconds',
+    dimSumStep3: '3️⃣  Tap the dishes in the correct order',
+    dimSumStep4: '4️⃣  Watch out for extra dishes to trick you!',
+    dimSumRewardPreview: 'Complete to earn',
+    dimSumStart: 'Start Game →',
+    dimSumRound: 'Round',
+    dimSumOf: 'of',
+    dimSumShowPrompt: 'Remember the order!',
+    dimSumShowSub: 'Dishes will disappear soon...',
+    dimSumQuizPrompt: 'Tap in the correct order!',
+    dimSumQuizSub: 'Tap the dishes in the order you saw them',
+    dimSumCorrectTap: '✓ Correct!',
+    dimSumWrongTap: '✗ Wrong! Try again from the start',
+    dimSumRoundComplete: '🎉 Round complete!',
+    dimSumNextRound: 'Next Round →',
+    dimSumComplete: '🍡 All rounds complete!',
+    dimSumCompleteSub: 'You have a great memory for dim sum!',
+    dimSumTotalScore: 'Total Score',
+    dimSumPerfect: 'Perfect!',
+    dimSumAttempts: 'Attempts',
+    dimSumProgress: 'Progress',
+
+    // Tram route
+    tramTitle: 'Tram Route',
+    tramSubtitle: 'Visuospatial Game',
+    tramHowToPlay: 'How to play?',
+    tramStep1: '1️⃣  Look at the tram map',
+    tramStep2: '2️⃣  Arrange the stops in the correct order',
+    tramStep3: '3️⃣  Drag stops left or right to reorder',
+    tramStep4: '4️⃣  5 rounds — gets harder each time!',
+    tramRewardPreview: 'Complete to earn',
+    tramStart: 'Start Game →',
+    tramRound: 'Round',
+    tramOf: 'of',
+    tramPrompt: 'Arrange the stops in order!',
+    tramPromptSub: 'Drag stops to rearrange — west to east',
+    tramConfirm: 'Confirm Order →',
+    tramCorrect: '✓ Correct!',
+    tramWrong: '✗ Wrong — try again!',
+    tramShowAnswer: 'Show Answer',
+    tramNextRound: 'Next Round →',
+    tramComplete: '🚋 All rounds complete!',
+    tramCompleteSub: 'You know HK tram routes well!',
+    tramTotalScore: 'Total Score',
+    tramPerfect: 'Perfect score!',
+    tramAnswerWas: 'Correct order was:',
+
     // Reward screen
     rewardTitle: '🎉 Game Complete!',
     rewardCorrect: 'Correct',
@@ -328,7 +474,7 @@ const en: Strings = {
 
     // Game descriptions
     gameDescMarketMemory: 'Remember 5 items from the wet market and test your memory!',
-    gameDescMahjongMatch: 'Find matching mahjong tiles within the time limit!',
+    gameDescMahjongMatch: 'Flip tiles and find all matching mahjong pairs!',
     gameDescDimSumOrder: 'Arrange the dim sum in the correct order to train your executive skills!',
     gameDescTramRoute: 'Find the fastest tram route from Sheung Wan to Shau Kei Wan!',
     gameDescNewsWords: 'Complete today\'s news crossword to keep your language skills sharp!',
@@ -408,6 +554,79 @@ const zhHK: Strings = {
     marketMemoryQuizSubPrompt: '揀出你記得嘅貨品',
     marketMemorySubmit: '提交答案 →',
     marketMemorySelectFirst: '揀選貨品先...',
+
+    // Mahjong match
+    mahjongTitle: '麻雀配對',
+    mahjongSubtitle: '專注力遊戲',
+    mahjongHowToPlay: '點樣玩？',
+    mahjongStep1: '1️⃣  所有牌短暫顯示',
+    mahjongStep2: '2️⃣  牌面向下翻轉',
+    mahjongStep3: '3️⃣  輕按兩張牌翻開',
+    mahjongStep4: '4️⃣  搵出所有 8 對牌 — 步數越少越好！',
+    mahjongRewardPreview: '完成可獲得',
+    mahjongStart: '開始遊戲 →',
+    mahjongPreviewPrompt: '記住啲牌！',
+    mahjongPreviewSub: '佢哋就快會翻轉...',
+    mahjongPlayPrompt: '搵出所有相同嘅牌！',
+    mahjongPlaySub: '輕按兩張牌嚟翻開',
+    mahjongMoves: '步數',
+    mahjongTime: '時間',
+    mahjongComplete: '🎉 全部配對完成！',
+    mahjongCompleteSub: '做得好！',
+    mahjongBestMoves: '最佳步數：8 步',
+    mahjongTimeTaken: '用咗時間',
+
+    // Dim sum order
+    dimSumTitle: '點心排序',
+    dimSumSubtitle: '執行能力遊戲',
+    dimSumHowToPlay: '點樣玩？',
+    dimSumStep1: '1️⃣  記住點心出現嘅次序',
+    dimSumStep2: '2️⃣  點心會喺幾秒後消失',
+    dimSumStep3: '3️⃣  按正確次序輕按點心',
+    dimSumStep4: '4️⃣  小心有多餘嘅點心混淆你！',
+    dimSumRewardPreview: '完成可獲得',
+    dimSumStart: '開始遊戲 →',
+    dimSumRound: '第',
+    dimSumOf: '關',
+    dimSumShowPrompt: '記住次序！',
+    dimSumShowSub: '點心就快會消失...',
+    dimSumQuizPrompt: '按正確次序輕按！',
+    dimSumQuizSub: '按你見到嘅次序輕按點心',
+    dimSumCorrectTap: '✓ 答啱！',
+    dimSumWrongTap: '✗ 答錯！由頭再試',
+    dimSumRoundComplete: '🎉 過關！',
+    dimSumNextRound: '下一關 →',
+    dimSumComplete: '🍡 全部完成！',
+    dimSumCompleteSub: '你對點心次序記憶力好好！',
+    dimSumTotalScore: '總分',
+    dimSumPerfect: '滿分！',
+    dimSumAttempts: '次數',
+    dimSumProgress: '進度',
+
+    // Tram route
+    tramTitle: '電車路線',
+    tramSubtitle: '視空間遊戲',
+    tramHowToPlay: '點樣玩？',
+    tramStep1: '1️⃣  睇吓電車路線圖',
+    tramStep2: '2️⃣  將站名排列成正確次序',
+    tramStep3: '3️⃣  拖動站名嚟重新排列',
+    tramStep4: '4️⃣  共 5 關 — 越嚟越難！',
+    tramRewardPreview: '完成可獲得',
+    tramStart: '開始遊戲 →',
+    tramRound: '第',
+    tramOf: '關',
+    tramPrompt: '將站名排成正確次序！',
+    tramPromptSub: '拖動站名重新排列 — 由西至東',
+    tramConfirm: '確認次序 →',
+    tramCorrect: '✓ 答啱！',
+    tramWrong: '✗ 答錯 — 再試一次！',
+    tramShowAnswer: '睇答案',
+    tramNextRound: '下一關 →',
+    tramComplete: '🚋 全部完成！',
+    tramCompleteSub: '你對香港電車路線好熟悉！',
+    tramTotalScore: '總分',
+    tramPerfect: '滿分！',
+    tramAnswerWas: '正確次序係：',
 
     // Reward screen
     rewardTitle: '🎉 遊戲完成！',
@@ -493,7 +712,7 @@ const zhHK: Strings = {
 
     // Game descriptions
     gameDescMarketMemory: '記住街市入面嘅 5 樣嘢，考驗你嘅記憶力！',
-    gameDescMahjongMatch: '係有限時間內搵出相同嘅麻雀牌！',
+    gameDescMahjongMatch: '翻開麻雀牌，搵出所有相同嘅牌！',
     gameDescDimSumOrder: '按照正確次序排列點心，訓練你嘅執行能力！',
     gameDescTramRoute: '搵出由上環去筲箕灣嘅最快路線！',
     gameDescNewsWords: '完成今日新聞嘅填字遊戲，保持語言能力！',
@@ -573,6 +792,79 @@ const zhCN: Strings = {
     marketMemoryQuizSubPrompt: '选出你看到的货品',
     marketMemorySubmit: '提交答案 →',
     marketMemorySelectFirst: '请先选择货品...',
+
+    // Mahjong match
+    mahjongTitle: '麻将配对',
+    mahjongSubtitle: '专注力游戏',
+    mahjongHowToPlay: '怎么玩？',
+    mahjongStep1: '1️⃣  所有牌短暂显示',
+    mahjongStep2: '2️⃣  牌面向下翻转',
+    mahjongStep3: '3️⃣  轻按两张牌翻开',
+    mahjongStep4: '4️⃣  找出所有 8 对牌 — 步数越少越好！',
+    mahjongRewardPreview: '完成可获得',
+    mahjongStart: '开始游戏 →',
+    mahjongPreviewPrompt: '记住这些牌！',
+    mahjongPreviewSub: '它们即将翻转...',
+    mahjongPlayPrompt: '找出所有相同的牌！',
+    mahjongPlaySub: '轻按两张牌来翻开',
+    mahjongMoves: '步数',
+    mahjongTime: '时间',
+    mahjongComplete: '🎉 全部配对完成！',
+    mahjongCompleteSub: '做得好！',
+    mahjongBestMoves: '最佳步数：8 步',
+    mahjongTimeTaken: '用时',
+
+    // Dim sum order
+    dimSumTitle: '点心排序',
+    dimSumSubtitle: '执行能力游戏',
+    dimSumHowToPlay: '怎么玩？',
+    dimSumStep1: '1️⃣  记住点心出现的顺序',
+    dimSumStep2: '2️⃣  点心会在几秒后消失',
+    dimSumStep3: '3️⃣  按正确顺序轻点点心',
+    dimSumStep4: '4️⃣  小心有多余的点心混淆你！',
+    dimSumRewardPreview: '完成可获得',
+    dimSumStart: '开始游戏 →',
+    dimSumRound: '第',
+    dimSumOf: '关',
+    dimSumShowPrompt: '记住顺序！',
+    dimSumShowSub: '点心即将消失...',
+    dimSumQuizPrompt: '按正确顺序轻点！',
+    dimSumQuizSub: '按你看到的顺序轻点点心',
+    dimSumCorrectTap: '✓ 答对了！',
+    dimSumWrongTap: '✗ 答错了！从头再试',
+    dimSumRoundComplete: '🎉 过关！',
+    dimSumNextRound: '下一关 →',
+    dimSumComplete: '🍡 全部完成！',
+    dimSumCompleteSub: '你对点心顺序记忆力很好！',
+    dimSumTotalScore: '总分',
+    dimSumPerfect: '满分！',
+    dimSumAttempts: '次数',
+    dimSumProgress: '进度',
+
+    // Tram route
+    tramTitle: '电车路线',
+    tramSubtitle: '视空间游戏',
+    tramHowToPlay: '怎么玩？',
+    tramStep1: '1️⃣  看看电车路线图',
+    tramStep2: '2️⃣  将站名排列成正确顺序',
+    tramStep3: '3️⃣  拖动站名来重新排列',
+    tramStep4: '4️⃣  共 5 关 — 越来越难！',
+    tramRewardPreview: '完成可获得',
+    tramStart: '开始游戏 →',
+    tramRound: '第',
+    tramOf: '关',
+    tramPrompt: '将站名排成正确顺序！',
+    tramPromptSub: '拖动站名重新排列 — 由西至东',
+    tramConfirm: '确认顺序 →',
+    tramCorrect: '✓ 答对了！',
+    tramWrong: '✗ 答错了 — 再试一次！',
+    tramShowAnswer: '看答案',
+    tramNextRound: '下一关 →',
+    tramComplete: '🚋 全部完成！',
+    tramCompleteSub: '你对香港电车路线很熟悉！',
+    tramTotalScore: '总分',
+    tramPerfect: '满分！',
+    tramAnswerWas: '正确顺序是：',
 
     // Reward screen
     rewardTitle: '🎉 游戏完成！',
@@ -657,7 +949,7 @@ const zhCN: Strings = {
 
     // Game descriptions
     gameDescMarketMemory: '记住菜市场里的 5 样东西，考验你的记忆力！',
-    gameDescMahjongMatch: '在有限时间内找出相同的麻将牌！',
+    gameDescMahjongMatch: '翻开麻将牌，找出所有相同的牌！',
     gameDescDimSumOrder: '按照正确顺序排列点心，训练你的执行能力！',
     gameDescTramRoute: '找出从上环到筲箕湾的最快路线！',
     gameDescNewsWords: '完成今日新闻的填字游戏，保持语言能力！',

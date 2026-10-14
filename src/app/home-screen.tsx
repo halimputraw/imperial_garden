@@ -11,10 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { useStrings } from '@/i18n/strings';
-
-// ─── Placeholder furniture / room items ───────────────────────────────────────
-// Each item has a position in the room grid and an unlock status
-// Will be replaced by real inventory system later
+import { usePlayerStore } from '@/store/player-store';
 
 interface RoomItem {
   id: string;
@@ -36,15 +33,6 @@ const ROOM_ITEMS: RoomItem[] = [
   { id: 'cat',      emoji: '🐱', label: '貓咪', unlocked: false, gridCol: 2, gridRow: 3 },
   { id: 'lamp',     emoji: '🪔', label: '燈',  unlocked: false, gridCol: 3, gridRow: 3 },
 ];
-
-// ─── Placeholder player data ──────────────────────────────────────────────────
-
-const PLAYER = {
-  name: '陳伯',
-  avatar: '👴',
-  coins: 128,
-  homeLevel: 2,
-};
 
 // ─── Room grid ────────────────────────────────────────────────────────────────
 
@@ -137,6 +125,11 @@ function StatBadge({ emoji, value, label }: StatBadgeProps) {
 
 export default function HomeScreen() {
   const t = useStrings();
+
+  const name = usePlayerStore((s) => s.name);
+  const avatar = usePlayerStore((s) => s.avatar);
+  const coins = usePlayerStore((s) => s.coins);
+  const level = usePlayerStore((s) => s.level);
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView
@@ -146,15 +139,15 @@ export default function HomeScreen() {
         {/* ── Header ── */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Text style={styles.avatarEmoji}>{PLAYER.avatar}</Text>
+            <Text style={styles.avatarEmoji}>{avatar}</Text>
             <View>
-              <Text style={styles.homeName}>{PLAYER.name}{t.homeTitle}</Text>
-              <Text style={styles.homeLevel}>{t.homeLevel} {PLAYER.homeLevel}</Text>
+              <Text style={styles.homeName}>{name}{t.homeTitle}</Text>
+              <Text style={styles.homeLevel}>{t.homeLevel} {level}</Text>
             </View>
           </View>
           <View style={styles.coinBadge}>
             <Text style={styles.coinEmoji}>🪙</Text>
-            <Text style={styles.coinCount}>{PLAYER.coins}</Text>
+            <Text style={styles.coinCount}>{coins}</Text>
           </View>
         </View>
 

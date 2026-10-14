@@ -280,7 +280,8 @@ export default function MarketMemoryGame() {
     if (phase !== 'memorise') return;
 
     if (secondsLeft <= 0) {
-      handleMemoriseFinish();
+      setPhase('transition');
+      setTimeout(() => setPhase('quiz'), 1800);
       return;
     }
 
@@ -294,12 +295,6 @@ export default function MarketMemoryGame() {
   const handleStart = useCallback(() => {
     setPhase('memorise');
     setSecondsLeft(MEMORISE_SECONDS);
-  }, []);
-
-  const handleMemoriseFinish = useCallback(() => {
-    setPhase('transition');
-    // Show transition screen briefly then go to quiz
-    setTimeout(() => setPhase('quiz'), 1800);
   }, []);
 
   const handleItemPress = useCallback((item: MarketItem) => {
@@ -378,7 +373,10 @@ export default function MarketMemoryGame() {
         {phase === 'memorise' && (
           <MemorisePhase
             secondsLeft={secondsLeft}
-            onFinish={handleMemoriseFinish}
+            onFinish={() => {
+              setPhase('transition');
+              setTimeout(() => setPhase('quiz'), 1800);
+            }}
           />
         )}
         {phase === 'transition' && <TransitionPhase />}

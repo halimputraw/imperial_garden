@@ -186,11 +186,13 @@ const styles = StyleSheet.create({
   cellWrapper: {
     flex: 1,
     minHeight: TouchTarget.comfortable,
+    alignItems: 'stretch',
   },
 
   // ── Memorise card ──
   memoriseCard: {
     flex: 1,
+    minHeight: TouchTarget.comfortable,
     backgroundColor: Colors.surface,
     borderRadius: Spacing.three,
     borderWidth: 2,
@@ -200,7 +202,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.three,
     paddingHorizontal: Spacing.two,
     gap: Spacing.one,
-    // Hard pixel shadow
     shadowColor: Colors.black,
     shadowOffset: { width: 2, height: 3 },
     shadowOpacity: 0.12,
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
   // ── Quiz card ──
   quizCard: {
     flex: 1,
+    minHeight: TouchTarget.comfortable,
     backgroundColor: Colors.surface,
     borderRadius: Spacing.three,
     borderWidth: 2,
@@ -252,13 +254,15 @@ const styles = StyleSheet.create({
 
   // Shared item content
   itemEmoji: {
-    fontSize: 36,
+    fontSize: 28,
+    textAlign: 'center',
   },
   itemLabel: {
-    fontSize: FontSize.small,
+    fontSize: FontSize.tiny,
     fontWeight: '700',
     color: Colors.textPrimary,
     textAlign: 'center',
+    flexShrink: 1,
   },
   itemLabelSelected: {
     color: Colors.primaryDark,

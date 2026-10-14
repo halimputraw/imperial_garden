@@ -14,38 +14,33 @@ import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { PixelMap } from '@/components/map/pixel-map';
 import { Zone } from '@/components/map/neighbourhood-zone';
 import { useStrings } from '@/i18n/strings';
-
-// ─── Placeholder player data ──────────────────────────────────────────────────
-// Will be replaced by registration + auth system later
-
-const PLAYER = {
-  name: '陳伯',
-  avatar: '👴',
-  coins: 128,
-  level: 3,
-};
+import { usePlayerStore } from '@/store/player-store';
 
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
 function TopBar() {
   const t = useStrings();
+  const name = usePlayerStore((s) => s.name);
+  const avatar = usePlayerStore((s) => s.avatar);
+  const coins = usePlayerStore((s) => s.coins);
+  const level = usePlayerStore((s) => s.level);
   return (
     <View style={styles.topBar}>
       {/* Player info — left side */}
       <View style={styles.playerInfo}>
         <View style={styles.avatarBadge}>
-          <Text style={styles.avatarEmoji}>{PLAYER.avatar}</Text>
+          <Text style={styles.avatarEmoji}>{avatar}</Text>
         </View>
         <View style={styles.playerText}>
-          <Text style={styles.playerName}>{PLAYER.name}</Text>
-          <Text style={styles.playerLevel}>{t.level} {PLAYER.level}</Text>
+          <Text style={styles.playerName}>{name}</Text>
+          <Text style={styles.playerLevel}>{t.level} {level}</Text>
         </View>
       </View>
 
       {/* Coin count — right side */}
       <View style={styles.coinBadge}>
         <Text style={styles.coinEmoji}>🪙</Text>
-        <Text style={styles.coinCount}>{PLAYER.coins}</Text>
+        <Text style={styles.coinCount}>{coins}</Text>
       </View>
     </View>
   );

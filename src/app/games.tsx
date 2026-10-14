@@ -9,6 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { useStrings } from '@/i18n/strings';
+import { useRouter } from 'expo-router';
 
 interface Game {
   id: string;
@@ -120,9 +121,10 @@ function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
 
 interface GameCardProps {
   game: Game;
+  onPress: (game: Game) => void;
 }
 
-function GameCard({ game }: GameCardProps) {
+function GameCard({ game, onPress }: GameCardProps) {
   const t = useStrings();
   return (
     <Pressable
@@ -131,6 +133,7 @@ function GameCard({ game }: GameCardProps) {
         !game.unlocked && styles.cardLocked,
         pressed && game.unlocked && styles.cardPressed,
       ]}
+      onPress={() => onPress(game)} 
       accessible
       accessibilityRole="button"
       accessibilityLabel={
@@ -235,7 +238,22 @@ function DailyChallenge() {
 
 export default function GamesScreen() {
   const t = useStrings();
+  const router = useRouter();
   const games = getGames(t); 
+
+  const handleGamePress = (game: Game) => {
+    if (!game.unlocked) return;
+    if (game.id === 'market-memory') {
+      router.push('/games/market-memory' as any);
+    } else if (game.id === 'mahjong-pattern') {
+      router.push('/games/mahjong-match' as any);
+    } else if (game.id === 'tram-route') {
+      router.push('/games/tram-route' as any);
+    } else if (game.id === 'dim-sum-order') {
+      router.push('/games/dim-sum-order' as any);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
@@ -257,7 +275,11 @@ export default function GamesScreen() {
         {/* Game cards */}
         <View style={styles.cardList}>
           {games.map((game) => (
-            <GameCard key={game.id} game={game} />
+            <GameCard
+              key={game.id}
+              game={game}
+              onPress={handleGamePress}
+            />
           ))}
         </View>
 
