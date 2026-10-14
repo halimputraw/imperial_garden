@@ -96,6 +96,33 @@ export interface Strings {
     mahjongBestMoves: string;
     mahjongTimeTaken: string;
 
+    // ── Dim sum order game ──
+    dimSumTitle: string;
+    dimSumSubtitle: string;
+    dimSumHowToPlay: string;
+    dimSumStep1: string;
+    dimSumStep2: string;
+    dimSumStep3: string;
+    dimSumStep4: string;
+    dimSumRewardPreview: string;
+    dimSumStart: string;
+    dimSumRound: string;
+    dimSumOf: string;
+    dimSumShowPrompt: string;
+    dimSumShowSub: string;
+    dimSumQuizPrompt: string;
+    dimSumQuizSub: string;
+    dimSumCorrectTap: string;
+    dimSumWrongTap: string;
+    dimSumRoundComplete: string;
+    dimSumNextRound: string;
+    dimSumComplete: string;
+    dimSumCompleteSub: string;
+    dimSumTotalScore: string;
+    dimSumPerfect: string;
+    dimSumAttempts: string;
+    dimSumProgress: string;
+
     // ── Tram route game ──
     tramTitle: string;
     tramSubtitle: string;
@@ -308,6 +335,33 @@ const en: Strings = {
     mahjongCompleteSub: 'Well done!',
     mahjongBestMoves: 'Best possible: 8 moves',
     mahjongTimeTaken: 'Time taken',
+
+    // Dim sum order
+    dimSumTitle: 'Dim Sum Order',
+    dimSumSubtitle: 'Executive Function Game',
+    dimSumHowToPlay: 'How to play?',
+    dimSumStep1: '1️⃣  Remember the order of the dishes shown',
+    dimSumStep2: '2️⃣  They will disappear after a few seconds',
+    dimSumStep3: '3️⃣  Tap the dishes in the correct order',
+    dimSumStep4: '4️⃣  Watch out for extra dishes to trick you!',
+    dimSumRewardPreview: 'Complete to earn',
+    dimSumStart: 'Start Game →',
+    dimSumRound: 'Round',
+    dimSumOf: 'of',
+    dimSumShowPrompt: 'Remember the order!',
+    dimSumShowSub: 'Dishes will disappear soon...',
+    dimSumQuizPrompt: 'Tap in the correct order!',
+    dimSumQuizSub: 'Tap the dishes in the order you saw them',
+    dimSumCorrectTap: '✓ Correct!',
+    dimSumWrongTap: '✗ Wrong! Try again from the start',
+    dimSumRoundComplete: '🎉 Round complete!',
+    dimSumNextRound: 'Next Round →',
+    dimSumComplete: '🍡 All rounds complete!',
+    dimSumCompleteSub: 'You have a great memory for dim sum!',
+    dimSumTotalScore: 'Total Score',
+    dimSumPerfect: 'Perfect!',
+    dimSumAttempts: 'Attempts',
+    dimSumProgress: 'Progress',
 
     // Tram route
     tramTitle: 'Tram Route',
@@ -522,6 +576,33 @@ const zhHK: Strings = {
     mahjongBestMoves: '最佳步數：8 步',
     mahjongTimeTaken: '用咗時間',
 
+    // Dim sum order
+    dimSumTitle: '點心排序',
+    dimSumSubtitle: '執行能力遊戲',
+    dimSumHowToPlay: '點樣玩？',
+    dimSumStep1: '1️⃣  記住點心出現嘅次序',
+    dimSumStep2: '2️⃣  點心會喺幾秒後消失',
+    dimSumStep3: '3️⃣  按正確次序輕按點心',
+    dimSumStep4: '4️⃣  小心有多餘嘅點心混淆你！',
+    dimSumRewardPreview: '完成可獲得',
+    dimSumStart: '開始遊戲 →',
+    dimSumRound: '第',
+    dimSumOf: '關',
+    dimSumShowPrompt: '記住次序！',
+    dimSumShowSub: '點心就快會消失...',
+    dimSumQuizPrompt: '按正確次序輕按！',
+    dimSumQuizSub: '按你見到嘅次序輕按點心',
+    dimSumCorrectTap: '✓ 答啱！',
+    dimSumWrongTap: '✗ 答錯！由頭再試',
+    dimSumRoundComplete: '🎉 過關！',
+    dimSumNextRound: '下一關 →',
+    dimSumComplete: '🍡 全部完成！',
+    dimSumCompleteSub: '你對點心次序記憶力好好！',
+    dimSumTotalScore: '總分',
+    dimSumPerfect: '滿分！',
+    dimSumAttempts: '次數',
+    dimSumProgress: '進度',
+
     // Tram route
     tramTitle: '電車路線',
     tramSubtitle: '視空間遊戲',
@@ -732,6 +813,33 @@ const zhCN: Strings = {
     mahjongCompleteSub: '做得好！',
     mahjongBestMoves: '最佳步数：8 步',
     mahjongTimeTaken: '用时',
+
+    // Dim sum order
+    dimSumTitle: '点心排序',
+    dimSumSubtitle: '执行能力游戏',
+    dimSumHowToPlay: '怎么玩？',
+    dimSumStep1: '1️⃣  记住点心出现的顺序',
+    dimSumStep2: '2️⃣  点心会在几秒后消失',
+    dimSumStep3: '3️⃣  按正确顺序轻点点心',
+    dimSumStep4: '4️⃣  小心有多余的点心混淆你！',
+    dimSumRewardPreview: '完成可获得',
+    dimSumStart: '开始游戏 →',
+    dimSumRound: '第',
+    dimSumOf: '关',
+    dimSumShowPrompt: '记住顺序！',
+    dimSumShowSub: '点心即将消失...',
+    dimSumQuizPrompt: '按正确顺序轻点！',
+    dimSumQuizSub: '按你看到的顺序轻点点心',
+    dimSumCorrectTap: '✓ 答对了！',
+    dimSumWrongTap: '✗ 答错了！从头再试',
+    dimSumRoundComplete: '🎉 过关！',
+    dimSumNextRound: '下一关 →',
+    dimSumComplete: '🍡 全部完成！',
+    dimSumCompleteSub: '你对点心顺序记忆力很好！',
+    dimSumTotalScore: '总分',
+    dimSumPerfect: '满分！',
+    dimSumAttempts: '次数',
+    dimSumProgress: '进度',
 
     // Tram route
     tramTitle: '电车路线',

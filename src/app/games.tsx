@@ -249,6 +249,8 @@ export default function GamesScreen() {
       router.push('/games/mahjong-match' as any);
     } else if (game.id === 'tram-route') {
       router.push('/games/tram-route' as any);
+    } else if (game.id === 'dim-sum-order') {
+      router.push('/games/dim-sum-order' as any);
     }
   };
 
