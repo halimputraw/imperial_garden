@@ -274,6 +274,67 @@ export interface Strings {
     gameDescTramRoute: string;
     gameDescNewsWords: string;
     gameDescCalendarQuiz: string;
+
+    // ── MoCA analysis tab ──
+    tabMoca: string;
+    mocaTitle: string;
+    mocaSubtitle: string;
+    mocaEstimatedScore: string;
+    mocaAreasMeasured: string;
+    mocaPoints: string;
+    mocaGamesPlayed: string;
+    mocaProjectedNote: string;
+    mocaBandNormal: string;
+    mocaBandNormalDesc: string;
+    mocaBandMild: string;
+    mocaBandMildDesc: string;
+    mocaBandLow: string;
+    mocaBandLowDesc: string;
+    mocaStrongest: string;
+    mocaNeedsPractice: string;
+    mocaDomainBreakdown: string;
+    mocaNotTested: string;
+    mocaPlays: string;
+    mocaPlayToTest: string;
+    mocaGameComingSoon: string;
+    mocaHistoryTitle: string;
+    mocaRecentTitle: string;
+    mocaEmptyTitle: string;
+    mocaEmptyDesc: string;
+    mocaDisclaimer: string;
+
+
+        // ── Calendar quiz (orientation) ──
+    calTitle: string;
+    calSubtitle: string;
+    calHowToPlay: string;
+    calStep1: string;
+    calStep2: string;
+    calStep3: string;
+    calRewardPreview: string;
+    calStart: string;
+    calNpcName: string;
+    calProgress: string;
+    calQDate: string;
+    calQMonth: string;
+    calQYear: string;
+    calQWeekday: string;
+    calQCity: string;
+    calQTimeOfDay: string;
+    calDateOption: string;
+    calYearOption: string;
+    calMonthNames: string[];
+    calWeekdayNames: string[];
+    calCityHongKong: string;
+    calCityMacau: string;
+    calCityShenzhen: string;
+    calCityGuangzhou: string;
+    calTimeMorning: string;
+    calTimeAfternoon: string;
+    calTimeEvening: string;
+    calTimeNight: string;
+    calCorrect: string;
+    calWrong: string;
 }
 
 // ─── English ──────────────────────────────────────────────────────────────────
@@ -552,7 +613,67 @@ const en: Strings = {
     gameDescDimSumOrder: 'Arrange the dim sum in the correct order to train your executive skills!',
     gameDescTramRoute: 'Find the fastest tram route from Sheung Wan to Shau Kei Wan!',
     gameDescNewsWords: 'Complete today\'s news crossword to keep your language skills sharp!',
-    gameDescCalendarQuiz: 'Answer questions about today\'s date, day and season!',
+    gameDescCalendarQuiz: 'Answer 6 questions about today\'s date, day, city and time!',
+
+        // MoCA analysis tab
+    tabMoca: 'MoCA',
+    mocaTitle: 'Brain Report',
+    mocaSubtitle: 'MoCA-style analysis of your games',
+    mocaEstimatedScore: 'Estimated MoCA score',
+    mocaAreasMeasured: 'areas measured',
+    mocaPoints: 'pts',
+    mocaGamesPlayed: 'games played',
+    mocaProjectedNote: 'Score is projected to 30 from the areas you have played so far.',
+    mocaBandNormal: 'Looking good',
+    mocaBandNormalDesc: 'Your results are in the typical range. Keep playing every day!',
+    mocaBandMild: 'Keep training',
+    mocaBandMildDesc: 'Some areas could use more practice. Try the games marked below.',
+    mocaBandLow: 'Let\'s check in',
+    mocaBandLowDesc: 'Your scores are lower than usual. It may help to talk to a doctor or family member.',
+    mocaStrongest: 'Strongest',
+    mocaNeedsPractice: 'Needs practice',
+    mocaDomainBreakdown: 'Brain areas',
+    mocaNotTested: 'Not tested yet',
+    mocaPlays: 'plays',
+    mocaPlayToTest: 'Go to Games',
+    mocaGameComingSoon: 'Game coming soon',
+    mocaHistoryTitle: 'Score history',
+    mocaRecentTitle: 'Recent games',
+    mocaEmptyTitle: 'No games played yet',
+    mocaEmptyDesc: 'Play a few brain games and your report will appear here.',
+    mocaDisclaimer: 'This is an estimate based on game scores, not a medical diagnosis. For a real MoCA test, please see a doctor.',
+
+        // Calendar quiz (orientation)
+    calTitle: 'What Day Is It?',
+    calSubtitle: 'Orientation Game',
+    calHowToPlay: 'How to play?',
+    calStep1: '1️⃣  Mrs Chan will ask you 6 questions',
+    calStep2: '2️⃣  Tap the right answer about today',
+    calStep3: '3️⃣  Watch the calendar fill in!',
+    calRewardPreview: 'Complete to earn',
+    calStart: 'Start Game →',
+    calNpcName: 'Mrs Chan',
+    calProgress: 'Question {n} of {total}',
+    calQDate: 'What is the date today?',
+    calQMonth: 'What month is it?',
+    calQYear: 'What year is it?',
+    calQWeekday: 'What day of the week is it?',
+    calQCity: 'Which city are we in?',
+    calQTimeOfDay: 'Is it morning, afternoon or evening?',
+    calDateOption: '{n}',
+    calYearOption: '{n}',
+    calMonthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    calWeekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    calCityHongKong: 'Hong Kong',
+    calCityMacau: 'Macau',
+    calCityShenzhen: 'Shenzhen',
+    calCityGuangzhou: 'Guangzhou',
+    calTimeMorning: 'Morning',
+    calTimeAfternoon: 'Afternoon',
+    calTimeEvening: 'Evening',
+    calTimeNight: 'Late night',
+    calCorrect: '✓ Correct!',
+    calWrong: '✗ The answer is',
 };
 
 // ─── Cantonese (Traditional Chinese) ─────────────────────────────────────────
@@ -827,7 +948,67 @@ const zhHK: Strings = {
     gameDescDimSumOrder: '按照正確次序排列點心，訓練你嘅執行能力！',
     gameDescTramRoute: '搵出由上環去筲箕灣嘅最快路線！',
     gameDescNewsWords: '完成今日新聞嘅填字遊戲，保持語言能力！',
-    gameDescCalendarQuiz: '回答關於今日日期、星期同節氣嘅問題！',
+    gameDescCalendarQuiz: '回答 6 條關於今日日期、星期、城市同時間嘅問題！',
+
+        // MoCA analysis tab
+    tabMoca: '分析',
+    mocaTitle: '腦力報告',
+    mocaSubtitle: '根據你玩過嘅遊戲做 MoCA 分析',
+    mocaEstimatedScore: '估計 MoCA 分數',
+    mocaAreasMeasured: '個範疇已測試',
+    mocaPoints: '分',
+    mocaGamesPlayed: '局遊戲',
+    mocaProjectedNote: '分數係根據你已經玩過嘅範疇推算到 30 分。',
+    mocaBandNormal: '表現唔錯',
+    mocaBandNormalDesc: '你嘅結果喺正常範圍，繼續每日玩啦！',
+    mocaBandMild: '繼續練習',
+    mocaBandMildDesc: '有啲範疇可以多啲練習，試吓下面嘅遊戲。',
+    mocaBandLow: '留意一下',
+    mocaBandLowDesc: '你嘅分數比平時低，可以同醫生或者屋企人傾吓。',
+    mocaStrongest: '最強項',
+    mocaNeedsPractice: '要多練',
+    mocaDomainBreakdown: '腦力範疇',
+    mocaNotTested: '未測試',
+    mocaPlays: '次',
+    mocaPlayToTest: '去玩遊戲',
+    mocaGameComingSoon: '遊戲即將推出',
+    mocaHistoryTitle: '分數紀錄',
+    mocaRecentTitle: '最近玩過',
+    mocaEmptyTitle: '仲未玩過遊戲',
+    mocaEmptyDesc: '玩幾局腦力遊戲，你嘅報告就會喺度出現。',
+    mocaDisclaimer: '呢個係根據遊戲分數嘅估計，唔係醫學診斷。如需正式 MoCA 測試，請見醫生。',
+
+        // Calendar quiz (orientation)
+    calTitle: '今日係幾號？',
+    calSubtitle: '定向能力遊戲',
+    calHowToPlay: '點樣玩？',
+    calStep1: '1️⃣  陳師奶會問你 6 條問題',
+    calStep2: '2️⃣  揀啱今日嘅答案',
+    calStep3: '3️⃣  睇住月曆慢慢填滿！',
+    calRewardPreview: '完成可獲得',
+    calStart: '開始遊戲 →',
+    calNpcName: '陳師奶',
+    calProgress: '第 {n} 題（共 {total} 題）',
+    calQDate: '今日係幾號？',
+    calQMonth: '而家係幾月？',
+    calQYear: '今年係邊年？',
+    calQWeekday: '今日星期幾？',
+    calQCity: '我哋而家喺邊個城市？',
+    calQTimeOfDay: '而家係朝早、下晝定夜晚？',
+    calDateOption: '{n}號',
+    calYearOption: '{n}年',
+    calMonthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    calWeekdayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    calCityHongKong: '香港',
+    calCityMacau: '澳門',
+    calCityShenzhen: '深圳',
+    calCityGuangzhou: '廣州',
+    calTimeMorning: '朝早',
+    calTimeAfternoon: '下晝',
+    calTimeEvening: '夜晚',
+    calTimeNight: '深夜',
+    calCorrect: '✓ 啱晒！',
+    calWrong: '✗ 答案係',
 };
 
 // ─── Simplified Chinese ───────────────────────────────────────────────────────
@@ -1101,7 +1282,67 @@ const zhCN: Strings = {
     gameDescDimSumOrder: '按照正确顺序排列点心，训练你的执行能力！',
     gameDescTramRoute: '找出从上环到筲箕湾的最快路线！',
     gameDescNewsWords: '完成今日新闻的填字游戏，保持语言能力！',
-    gameDescCalendarQuiz: '回答关于今日日期、星期和节气的问题！',
+    gameDescCalendarQuiz: '回答 6 个关于今天日期、星期、城市和时间的问题！',
+
+        // MoCA analysis tab
+    tabMoca: '分析',
+    mocaTitle: '脑力报告',
+    mocaSubtitle: '根据你玩过的游戏进行 MoCA 分析',
+    mocaEstimatedScore: '估计 MoCA 分数',
+    mocaAreasMeasured: '个范畴已测试',
+    mocaPoints: '分',
+    mocaGamesPlayed: '局游戏',
+    mocaProjectedNote: '分数是根据你已经玩过的范畴推算到 30 分。',
+    mocaBandNormal: '表现不错',
+    mocaBandNormalDesc: '你的结果在正常范围，继续每天玩吧！',
+    mocaBandMild: '继续练习',
+    mocaBandMildDesc: '有些范畴可以多练习，试试下面的游戏。',
+    mocaBandLow: '留意一下',
+    mocaBandLowDesc: '你的分数比平时低，可以和医生或家人聊聊。',
+    mocaStrongest: '最强项',
+    mocaNeedsPractice: '需要多练',
+    mocaDomainBreakdown: '脑力范畴',
+    mocaNotTested: '未测试',
+    mocaPlays: '次',
+    mocaPlayToTest: '去玩游戏',
+    mocaGameComingSoon: '游戏即将推出',
+    mocaHistoryTitle: '分数记录',
+    mocaRecentTitle: '最近玩过',
+    mocaEmptyTitle: '还没玩过游戏',
+    mocaEmptyDesc: '玩几局脑力游戏，你的报告就会在这里出现。',
+    mocaDisclaimer: '这是根据游戏分数的估计，不是医学诊断。如需正式 MoCA 测试，请看医生。',
+
+        // Calendar quiz (orientation)
+    calTitle: '今天几号？',
+    calSubtitle: '定向能力游戏',
+    calHowToPlay: '怎么玩？',
+    calStep1: '1️⃣  陈太太会问你 6 个问题',
+    calStep2: '2️⃣  选出今天的正确答案',
+    calStep3: '3️⃣  看着日历慢慢填满！',
+    calRewardPreview: '完成可获得',
+    calStart: '开始游戏 →',
+    calNpcName: '陈太太',
+    calProgress: '第 {n} 题（共 {total} 题）',
+    calQDate: '今天几号？',
+    calQMonth: '现在是几月？',
+    calQYear: '今年是哪一年？',
+    calQWeekday: '今天星期几？',
+    calQCity: '我们现在在哪个城市？',
+    calQTimeOfDay: '现在是早上、下午还是晚上？',
+    calDateOption: '{n}日',
+    calYearOption: '{n}年',
+    calMonthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    calWeekdayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    calCityHongKong: '香港',
+    calCityMacau: '澳门',
+    calCityShenzhen: '深圳',
+    calCityGuangzhou: '广州',
+    calTimeMorning: '早上',
+    calTimeAfternoon: '下午',
+    calTimeEvening: '晚上',
+    calTimeNight: '深夜',
+    calCorrect: '✓ 答对了！',
+    calWrong: '✗ 答案是',
 };
 
 // ─── Strings map + hook ───────────────────────────────────────────────────────

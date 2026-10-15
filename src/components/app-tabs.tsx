@@ -60,6 +60,13 @@ const TABS: TabItem[] = [
     emoji: '⚙️',
     href: '/settings',
   },
+  {
+    name: 'moca',
+    labelCantonese: '分析',
+    labelEnglish: 'MoCA',
+    emoji: '🧠',
+    href: '/moca',
+  }
 ];
 
 const TAB_LABELS: Record<string, (t: ReturnType<typeof useStrings>) => { cantonese: string; english: string }> = {
@@ -68,6 +75,7 @@ const TAB_LABELS: Record<string, (t: ReturnType<typeof useStrings>) => { cantone
   'games':        (t) => ({ cantonese: t.tabGames,    english: 'Games' }),
   'friends':      (t) => ({ cantonese: t.tabFriends,  english: 'Friends' }),
   'settings':     (t) => ({ cantonese: t.tabSettings, english: 'Settings' }),
+  'moca':         (t) => ({ cantonese: t.tabMoca,     english: 'MoCA' }),
 };
 
 // ─── Single tab button ────────────────────────────────────────────────────────
@@ -211,6 +219,7 @@ export default function AppTabs() {
       <Tabs.Screen name="games" />
       <Tabs.Screen name="friends" />
       <Tabs.Screen name="settings" />
+      <Tabs.Screen name="moca" />
     </Tabs>
   );
 }
@@ -280,7 +289,7 @@ const styles = StyleSheet.create({
 
   // Cantonese label
   tabLabel: {
-    fontSize: FontSize.label,
+    fontSize: 13.5,
     fontWeight: '700',
     color: Colors.textSecondary,
     textAlign: 'center',

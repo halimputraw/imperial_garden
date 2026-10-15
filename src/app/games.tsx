@@ -99,7 +99,7 @@ const getGames = (t: ReturnType<typeof useStrings>): Game[] => [
     domainColor: Colors.zoneMarket,
     difficulty: 1,
     coins: 15,
-    unlocked: false,
+    unlocked: true,
   },
 ];
 
@@ -256,6 +256,7 @@ export default function GamesScreen() {
     'mahjong-pattern':'/games/mahjong-match',
     'tram-route':     '/games/tram-route',
     'dim-sum-order':  '/games/dim-sum-order',
+    'calendar-quiz':  '/games/calendar-quiz',
   };
 
   const handleGamePress = (game: Game) => {
