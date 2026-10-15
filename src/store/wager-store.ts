@@ -29,6 +29,7 @@ export const COMMUNITY_AVG_SCORES: Record<string, number> = {
   'mahjong-pattern': 55, // moderate attention score
   'tram-route':     52,  // moderate visuospatial
   'dim-sum-order':  58,  // moderate executive function
+  'calendar-quiz':  83, 
 };
 
 // ─── Store ────────────────────────────────────────────────────────────────────

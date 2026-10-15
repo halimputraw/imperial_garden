@@ -326,7 +326,14 @@ export default function RewardScreen() {
   };
 
   const handlePlayAgain = () => {
-    router.replace('/games/market-memory' as any);
+    const PLAY_AGAIN_ROUTES: Partial<Record<MoCADomain, string>> = {
+      memory:       '/games/market-memory',
+      attention:    '/games/mahjong-match',
+      executive:    '/games/dim-sum-order',
+      visuospatial: '/games/tram-route',
+      orientation:  '/games/calendar-quiz',
+    };
+    router.replace((PLAY_AGAIN_ROUTES[domain] ?? '/games/market-memory') as any);
   };
 
   return (
