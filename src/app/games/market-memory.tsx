@@ -1,5 +1,3 @@
-// src/app/games/market-memory.tsx
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -7,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   Animated,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -16,32 +15,48 @@ import { ItemGrid, MarketItem } from '@/components/games/item-grid';
 import { usePlayerStore } from '@/store/player-store';
 import { useStrings } from '@/i18n/strings';
 
-// ─── Game configuration ───────────────────────────────────────────────────────
+// ─── Item pool ────────────────────────────────────────────────────────────────
+// All possible items — correct ones picked randomly each round
+
+const ALL_ITEMS: Omit<MarketItem, 'isCorrect'>[] = [
+  { id: 'cabbage',   emoji: '🥬', labelCantonese: '椰菜'   },
+  { id: 'fish',      emoji: '🐟', labelCantonese: '魚'     },
+  { id: 'chicken',   emoji: '🍗', labelCantonese: '雞'     },
+  { id: 'egg',       emoji: '🥚', labelCantonese: '雞蛋'   },
+  { id: 'corn',      emoji: '🌽', labelCantonese: '粟米'   },
+  { id: 'carrot',    emoji: '🥕', labelCantonese: '紅蘿蔔' },
+  { id: 'potato',    emoji: '🥔', labelCantonese: '薯仔'   },
+  { id: 'onion',     emoji: '🧅', labelCantonese: '洋蔥'   },
+  { id: 'broccoli',  emoji: '🥦', labelCantonese: '西蘭花' },
+  { id: 'mushroom',  emoji: '🍄', labelCantonese: '冬菇'   },
+  { id: 'tofu',      emoji: '🫙', labelCantonese: '豆腐'   },
+  { id: 'shrimp',    emoji: '🍤', labelCantonese: '蝦'     },
+  { id: 'pork',      emoji: '🥩', labelCantonese: '豬肉'   },
+  { id: 'lemon',     emoji: '🍋', labelCantonese: '檸檬'   },
+  { id: 'sweetpotato', emoji: '🍠', labelCantonese: '番薯' },
+];
+
+// ─── Round config ─────────────────────────────────────────────────────────────
+
+interface RoundConfig {
+  correctCount: number;   // items to memorise
+  distractorCount: number; // extra wrong items in quiz
+}
+
+const ROUND_CONFIGS: RoundConfig[] = [
+  { correctCount: 3, distractorCount: 3 },  // Round 1: remember 3, quiz 6
+  { correctCount: 4, distractorCount: 4 },  // Round 2: remember 4, quiz 8
+  { correctCount: 5, distractorCount: 5 },  // Round 3: remember 5, quiz 10
+  { correctCount: 6, distractorCount: 4 },  // Round 4: remember 6, quiz 10
+  { correctCount: 7, distractorCount: 5 },  // Round 5: remember 7, quiz 12
+];
 
 const MEMORISE_SECONDS = 5;
 const COIN_REWARD = 20;
+const TOTAL_ROUNDS = ROUND_CONFIGS.length;
 
-// 5 correct items the player must remember
-const CORRECT_ITEMS: MarketItem[] = [
-  { id: 'cabbage',  emoji: '🥬', labelCantonese: '椰菜',  isCorrect: true },
-  { id: 'fish',     emoji: '🐟', labelCantonese: '魚',    isCorrect: true },
-  { id: 'chicken',  emoji: '🍗', labelCantonese: '雞',    isCorrect: true },
-  { id: 'egg',      emoji: '🥚', labelCantonese: '雞蛋',  isCorrect: true },
-  { id: 'corn',     emoji: '🌽', labelCantonese: '粟米',  isCorrect: true },
-];
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-// 7 distractor items — plausible wet market items elderly would know
-const DISTRACTOR_ITEMS: MarketItem[] = [
-  { id: 'tofu',     emoji: '🫙', labelCantonese: '豆腐',  isCorrect: false },
-  { id: 'carrot',   emoji: '🥕', labelCantonese: '紅蘿蔔', isCorrect: false },
-  { id: 'pork',     emoji: '🥩', labelCantonese: '豬肉',  isCorrect: false },
-  { id: 'onion',    emoji: '🧅', labelCantonese: '洋蔥',  isCorrect: false },
-  { id: 'potato',   emoji: '🥔', labelCantonese: '薯仔',  isCorrect: false },
-  { id: 'shrimp',   emoji: '🍤', labelCantonese: '蝦',    isCorrect: false },
-  { id: 'mushroom', emoji: '🍄', labelCantonese: '冬菇',  isCorrect: false },
-];
-
-// Shuffle helper — Fisher-Yates
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -51,16 +66,34 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-// ─── Game phases ──────────────────────────────────────────────────────────────
+function buildRound(config: RoundConfig): {
+  correctItems: MarketItem[];
+  quizItems: MarketItem[];
+} {
+  const shuffled = shuffle(ALL_ITEMS);
+  const correctItems: MarketItem[] = shuffled
+    .slice(0, config.correctCount)
+    .map((item) => ({ ...item, isCorrect: true }));
+  const distractors: MarketItem[] = shuffled
+    .slice(config.correctCount, config.correctCount + config.distractorCount)
+    .map((item) => ({ ...item, isCorrect: false }));
+  const quizItems = shuffle([...correctItems, ...distractors]);
+  return { correctItems, quizItems };
+}
 
-type Phase = 'intro' | 'memorise' | 'transition' | 'quiz' | 'done';
+// ─── Phase types ──────────────────────────────────────────────────────────────
 
-// ─── Phase: Intro ─────────────────────────────────────────────────────────────
+type RoundPhase = 'memorise' | 'transition' | 'quiz';
+
+// ─── Intro ────────────────────────────────────────────────────────────────────
 
 function IntroPhase({ onStart }: { onStart: () => void }) {
   const t = useStrings();
   return (
-    <View style={styles.centeredPhase}>
+    <ScrollView
+      contentContainerStyle={styles.centeredPhase}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.phaseEmoji}>🥬</Text>
       <Text style={styles.phaseTitle}>{t.marketMemoryTitle}</Text>
       <Text style={styles.phaseSubtitle}>{t.marketMemorySubtitle}</Text>
@@ -89,54 +122,215 @@ function IntroPhase({ onStart }: { onStart: () => void }) {
       >
         <Text style={styles.primaryButtonText}>{t.marketMemoryStart}</Text>
       </Pressable>
+    </ScrollView>
+  );
+}
+
+// ─── Round screen ─────────────────────────────────────────────────────────────
+
+function RoundScreen({
+  roundIndex,
+  totalRounds,
+  onRoundComplete,
+}: {
+  roundIndex: number;
+  totalRounds: number;
+  onRoundComplete: (score: number) => void;
+}) {
+  const t = useStrings();
+  const config = ROUND_CONFIGS[roundIndex];
+  const [round] = useState(() => buildRound(config));
+  const [phase, setPhase] = useState<RoundPhase>('memorise');
+  const [secondsLeft, setSecondsLeft] = useState(MEMORISE_SECONDS);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  // Countdown tick
+  useEffect(() => {
+    if (phase !== 'memorise') return;
+    if (secondsLeft <= 0) {
+      setPhase('transition');
+      setTimeout(() => setPhase('quiz'), 1800);
+      return;
+    }
+    const timer = setTimeout(() => setSecondsLeft((s) => s - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [phase, secondsLeft]);
+
+  const handleItemPress = useCallback((item: MarketItem) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(item.id)) {
+        next.delete(item.id);
+      } else {
+        // Limit selection to correctCount
+        if (next.size >= config.correctCount) return prev;
+        next.add(item.id);
+      }
+      return next;
+    });
+  }, [config.correctCount]);
+
+  const handleSubmit = useCallback(() => {
+    const correctCount = [...selectedIds].filter(
+      (id) => round.correctItems.some((item) => item.id === id)
+    ).length;
+    const score = Math.round((correctCount / config.correctCount) * 20);
+    onRoundComplete(score);
+  }, [selectedIds, round, config, onRoundComplete]);
+
+  const selectedCount = selectedIds.size;
+
+  // ── Memorise phase ──
+  if (phase === 'memorise') {
+    return (
+      <View style={styles.roundContainer}>
+        {/* Round indicator */}
+        <RoundIndicator roundIndex={roundIndex} totalRounds={totalRounds} />
+
+        <View style={styles.memorisePhase}>
+          <View style={styles.memoriseHeader}>
+            <View style={styles.memoriseHeaderText}>
+              <Text style={styles.phaseLabel}>{t.marketMemoryMemorisePrompt}</Text>
+              <Text style={styles.phaseLabelSub}>
+                {t.marketMemoryMemoriseSubPrompt}
+              </Text>
+            </View>
+            <CountdownTimer
+              totalSeconds={MEMORISE_SECONDS}
+              currentSeconds={secondsLeft}
+              size={80}
+              onFinish={() => {
+                setPhase('transition');
+                setTimeout(() => setPhase('quiz'), 1800);
+              }}
+            />
+          </View>
+
+          <View style={styles.memoriseGrid}>
+            <ItemGrid items={round.correctItems} mode="memorise" />
+          </View>
+
+          <View style={styles.tipBox}>
+            <Text style={styles.tipEmoji}>💡</Text>
+            <Text style={styles.tipText}>{t.marketMemoryTip}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // ── Transition phase ──
+  if (phase === 'transition') {
+    return <TransitionPhase />;
+  }
+
+  // ── Quiz phase ──
+  return (
+    <View style={styles.roundContainer}>
+      {/* Round indicator */}
+      <RoundIndicator roundIndex={roundIndex} totalRounds={totalRounds} />
+
+      <View style={styles.quizPhase}>
+        <View style={styles.quizHeader}>
+          <Text style={styles.phaseLabel}>{t.marketMemoryQuizPrompt}</Text>
+          <Text style={styles.phaseLabelSub}>{t.marketMemoryQuizSubPrompt}</Text>
+          {/* Selection counter dots */}
+          <View style={styles.selectionCounter}>
+            {Array.from({ length: config.correctCount }).map((_, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.selectionDot,
+                  {
+                    backgroundColor:
+                      i < selectedCount ? Colors.primary : Colors.surfaceDark,
+                  },
+                ]}
+              />
+            ))}
+            <Text style={styles.selectionCountText}>
+              {selectedCount} / {config.correctCount}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.quizGrid}>
+          <ItemGrid
+            items={round.quizItems}
+            mode="quiz"
+            selectedIds={selectedIds}
+            onItemPress={handleItemPress}
+          />
+        </View>
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.primaryButton,
+            styles.submitButton,
+            selectedCount === 0 && styles.buttonDisabled,
+            pressed && selectedCount > 0 && {
+              backgroundColor: Colors.primaryDark,
+            },
+          ]}
+          onPress={handleSubmit}
+          disabled={selectedCount === 0}
+          accessibilityRole="button"
+          accessibilityLabel={t.marketMemorySubmit}
+        >
+          <Text
+            style={[
+              styles.primaryButtonText,
+              selectedCount === 0 && styles.buttonDisabledText,
+            ]}
+          >
+            {selectedCount === 0
+              ? t.marketMemorySelectFirst
+              : t.marketMemorySubmit}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
 
-// ─── Phase: Memorise ─────────────────────────────────────────────────────────
+// ─── Round indicator ──────────────────────────────────────────────────────────
 
-function MemorisePhase({
-  secondsLeft,
-  onFinish,
+function RoundIndicator({
+  roundIndex,
+  totalRounds,
 }: {
-  secondsLeft: number;
-  onFinish: () => void;
+  roundIndex: number;
+  totalRounds: number;
 }) {
   const t = useStrings();
   return (
-    <View style={styles.memorisePhase}>
-      {/* Header */}
-      <View style={styles.memoriseHeader}>
-        <View style={styles.memoriseHeaderText}>
-          <Text style={styles.phaseLabel}>{t.marketMemoryMemorisePrompt}</Text>
-          <Text style={styles.phaseLabelSub}>{t.marketMemoryMemoriseSubPrompt}</Text>
-        </View>
-        <CountdownTimer
-          totalSeconds={MEMORISE_SECONDS}
-          currentSeconds={secondsLeft}
-          size={88}
-          onFinish={onFinish}
-        />
-      </View>
-
-      {/* Items to memorise */}
-      <View style={styles.memoriseGrid}>
-        <ItemGrid
-          items={CORRECT_ITEMS}
-          mode="memorise"
-        />
-      </View>
-
-      {/* Tip */}
-      <View style={styles.tipBox}>
-        <Text style={styles.tipEmoji}>💡</Text>
-        <Text style={styles.tipText}>{t.marketMemoryTip}</Text>
+    <View style={styles.roundIndicatorRow}>
+      <Text style={styles.roundIndicatorText}>
+        {t.dimSumRound} {roundIndex + 1} {t.dimSumOf} {totalRounds}
+      </Text>
+      <View style={styles.roundDots}>
+        {Array.from({ length: totalRounds }).map((_, i) => (
+          <View
+            key={i}
+            style={[
+              styles.roundDot,
+              {
+                backgroundColor:
+                  i < roundIndex
+                    ? Colors.success
+                    : i === roundIndex
+                    ? Colors.primary
+                    : Colors.surfaceDark,
+              },
+            ]}
+          />
+        ))}
       </View>
     </View>
   );
 }
 
-// ─── Phase: Transition ────────────────────────────────────────────────────────
+// ─── Transition phase ─────────────────────────────────────────────────────────
 
 function TransitionPhase() {
   const t = useStrings();
@@ -177,173 +371,60 @@ function TransitionPhase() {
   );
 }
 
-// ─── Phase: Quiz ─────────────────────────────────────────────────────────────
-
-function QuizPhase({
-  quizItems,
-  selectedIds,
-  onItemPress,
-  onSubmit,
-}: {
-  quizItems: MarketItem[];
-  selectedIds: Set<string>;
-  onItemPress: (item: MarketItem) => void;
-  onSubmit: () => void;
-}) {
-  const t = useStrings();
-  const selectedCount = selectedIds.size;
-
-  return (
-    <View style={styles.quizPhase}>
-      {/* Header */}
-      <View style={styles.quizHeader}>
-        <Text style={styles.phaseLabel}>{t.marketMemoryQuizPrompt}</Text>
-        <Text style={styles.phaseLabelSub}>{t.marketMemoryQuizSubPrompt}</Text>
-        {/* Selection counter */}
-        <View style={styles.selectionCounter}>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <View
-              key={i}
-              style={[
-                styles.selectionDot,
-                {
-                  backgroundColor:
-                    i <= selectedCount ? Colors.primary : Colors.surfaceDark,
-                },
-              ]}
-            />
-          ))}
-          <Text style={styles.selectionCountText}>
-            {selectedCount} / 5
-          </Text>
-        </View>
-      </View>
-
-      {/* Quiz grid */}
-      <View style={styles.quizGrid}>
-        <ItemGrid
-          items={quizItems}
-          mode="quiz"
-          selectedIds={selectedIds}
-          onItemPress={onItemPress}
-        />
-      </View>
-
-      {/* Submit button */}
-      <Pressable
-        style={({ pressed }) => [
-          styles.primaryButton,
-          styles.submitButton,
-          selectedCount === 0 && styles.buttonDisabled,
-          pressed && selectedCount > 0 && {
-            backgroundColor: Colors.primaryDark,
-          },
-        ]}
-        onPress={onSubmit}
-        disabled={selectedCount === 0}
-        accessibilityRole="button"
-        accessibilityLabel={t.marketMemorySubmit}
-      >
-        <Text
-          style={[
-            styles.primaryButtonText,
-            selectedCount === 0 && styles.buttonDisabledText,
-          ]}
-        >
-          {selectedCount === 0 ? t.marketMemorySelectFirst : t.marketMemorySubmit}
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
-
 // ─── Main game screen ─────────────────────────────────────────────────────────
 
 export default function MarketMemoryGame() {
   const t = useStrings();
-
   const router = useRouter();
   const addCoins = usePlayerStore((s) => s.addCoins);
   const recordMoCASession = usePlayerStore((s) => s.recordMoCASession);
 
-  const [phase, setPhase] = useState<Phase>('intro');
-  const [secondsLeft, setSecondsLeft] = useState(MEMORISE_SECONDS);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-
-  // Shuffle quiz items once on mount so order is random every game
-  const quizItems = useRef<MarketItem[]>(
-    shuffle([...CORRECT_ITEMS, ...DISTRACTOR_ITEMS])
-  ).current;
-
-  // Countdown tick during memorise phase
-  useEffect(() => {
-    if (phase !== 'memorise') return;
-
-    if (secondsLeft <= 0) {
-      setPhase('transition');
-      setTimeout(() => setPhase('quiz'), 1800);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setSecondsLeft((s) => s - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [phase, secondsLeft]);
+  const [phase, setPhase] = useState<'intro' | 'playing' | 'complete'>('intro');
+  const [currentRound, setCurrentRound] = useState(0);
+  const [roundScores, setRoundScores] = useState<number[]>([]);
 
   const handleStart = useCallback(() => {
-    setPhase('memorise');
-    setSecondsLeft(MEMORISE_SECONDS);
+    setPhase('playing');
+    setCurrentRound(0);
+    setRoundScores([]);
   }, []);
 
-  const handleItemPress = useCallback((item: MarketItem) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(item.id)) {
-        next.delete(item.id);
+  const handleRoundComplete = useCallback(
+    (score: number) => {
+      const newScores = [...roundScores, score];
+      setRoundScores(newScores);
+
+      if (currentRound < TOTAL_ROUNDS - 1) {
+        setCurrentRound((r) => r + 1);
       } else {
-        next.add(item.id);
+        // All rounds done
+        const totalScore = newScores.reduce((a, b) => a + b, 0);
+        const coinsEarned = Math.round((totalScore / 100) * COIN_REWARD);
+
+        addCoins(coinsEarned);
+        recordMoCASession({
+          gameId: 'market-memory',
+          domain: 'memory',
+          score: totalScore,
+          correctCount: newScores.filter((s) => s > 0).length,
+          totalCount: TOTAL_ROUNDS,
+        });
+
+        router.replace({
+          pathname: '/games/reward' as any,
+          params: {
+            correctCount: newScores.filter((s) => s > 0).length.toString(),
+            wrongCount: newScores.filter((s) => s === 0).length.toString(),
+            score: totalScore.toString(),
+            coinsEarned: coinsEarned.toString(),
+            domain: 'memory',
+            gameTitle: t.marketMemoryTitle,
+          },
+        });
       }
-      return next;
-    });
-  }, []);
-
-  const handleSubmit = useCallback(() => {
-    // Calculate score
-    const correctCount = [...selectedIds].filter(
-      (id) => CORRECT_ITEMS.some((item) => item.id === id)
-    ).length;
-
-    const wrongCount = selectedIds.size - correctCount;
-    const score = Math.round((correctCount / CORRECT_ITEMS.length) * 100);
-
-    // Award coins — partial reward for partial score
-    const coinsEarned = Math.round((correctCount / CORRECT_ITEMS.length) * COIN_REWARD);
-    addCoins(coinsEarned);
-
-    // Record MoCA session
-    recordMoCASession({
-      gameId: 'market-memory',
-      domain: 'memory',
-      score,
-      correctCount,
-      totalCount: CORRECT_ITEMS.length,
-    });
-
-    // Navigate to reward screen with results
-    router.replace({
-      pathname: '/games/reward' as any,
-      params: {
-        correctCount: correctCount.toString(),
-        wrongCount: wrongCount.toString(),
-        score: score.toString(),
-        coinsEarned: coinsEarned.toString(),
-        domain: 'memory',
-        gameTitle: t.marketMemoryTitle,
-      },
-    });
-  }, [selectedIds, addCoins, recordMoCASession, router]);
+    },
+    [currentRound, roundScores, addCoins, recordMoCASession, router, t]
+  );
 
   const handleBack = useCallback(() => {
     router.back();
@@ -365,27 +446,14 @@ export default function MarketMemoryGame() {
         <View style={styles.topBarRight} />
       </View>
 
-      {/* Phase renderer */}
       <View style={styles.phaseContainer}>
-        {phase === 'intro' && (
-          <IntroPhase onStart={handleStart} />
-        )}
-        {phase === 'memorise' && (
-          <MemorisePhase
-            secondsLeft={secondsLeft}
-            onFinish={() => {
-              setPhase('transition');
-              setTimeout(() => setPhase('quiz'), 1800);
-            }}
-          />
-        )}
-        {phase === 'transition' && <TransitionPhase />}
-        {phase === 'quiz' && (
-          <QuizPhase
-            quizItems={quizItems}
-            selectedIds={selectedIds}
-            onItemPress={handleItemPress}
-            onSubmit={handleSubmit}
+        {phase === 'intro' && <IntroPhase onStart={handleStart} />}
+        {phase === 'playing' && (
+          <RoundScreen
+            key={currentRound}
+            roundIndex={currentRound}
+            totalRounds={TOTAL_ROUNDS}
+            onRoundComplete={handleRoundComplete}
           />
         )}
       </View>
@@ -400,8 +468,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-
-  // ── Top bar ──
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -429,17 +495,17 @@ const styles = StyleSheet.create({
   topBarRight: {
     minWidth: 60,
   },
-
   phaseContainer: {
     flex: 1,
   },
 
-  // ── Shared phase styles ──
+  // ── Shared ──
   centeredPhase: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.four,
     gap: Spacing.four,
   },
   phaseEmoji: {
@@ -467,8 +533,6 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginTop: 2,
   },
-
-  // ── Intro ──
   instructionBox: {
     backgroundColor: Colors.surface,
     borderRadius: Spacing.three,
@@ -510,13 +574,66 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: Colors.gold,
   },
+  primaryButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: Spacing.four,
+    borderRadius: Spacing.three,
+    alignItems: 'center',
+    borderBottomWidth: 4,
+    borderBottomColor: Colors.primaryDark,
+    alignSelf: 'stretch',
+  },
+  primaryButtonText: {
+    fontSize: FontSize.subtitle,
+    fontWeight: '800',
+    color: Colors.white,
+  },
+  submitButton: {
+    marginBottom: Spacing.four,
+  },
+  buttonDisabled: {
+    backgroundColor: Colors.surfaceDark,
+    borderBottomColor: Colors.surfaceDark,
+  },
+  buttonDisabledText: {
+    color: Colors.textSecondary,
+  },
+
+  // ── Round indicator ──
+  roundContainer: {
+    flex: 1,
+  },
+  roundIndicatorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.two,
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.surfaceDark,
+  },
+  roundIndicatorText: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  roundDots: {
+    flexDirection: 'row',
+    gap: Spacing.one,
+  },
+  roundDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+  },
 
   // ── Memorise ──
   memorisePhase: {
     flex: 1,
     paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.four,
-    gap: Spacing.four,
+    paddingTop: Spacing.three,
+    gap: Spacing.three,
   },
   memoriseHeader: {
     flexDirection: 'row',
@@ -564,7 +681,7 @@ const styles = StyleSheet.create({
   quizPhase: {
     flex: 1,
     paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.four,
+    paddingTop: Spacing.three,
     gap: Spacing.three,
   },
   quizHeader: {
@@ -590,30 +707,5 @@ const styles = StyleSheet.create({
   quizGrid: {
     flex: 1,
     justifyContent: 'center',
-  },
-
-  // ── Buttons ──
-  primaryButton: {
-    backgroundColor: Colors.primary,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.three,
-    alignItems: 'center',
-    borderBottomWidth: 4,
-    borderBottomColor: Colors.primaryDark,
-  },
-  primaryButtonText: {
-    fontSize: FontSize.subtitle,
-    fontWeight: '800',
-    color: Colors.white,
-  },
-  submitButton: {
-    marginBottom: Spacing.four,
-  },
-  buttonDisabled: {
-    backgroundColor: Colors.surfaceDark,
-    borderBottomColor: Colors.surfaceDark,
-  },
-  buttonDisabledText: {
-    color: Colors.textSecondary,
   },
 });

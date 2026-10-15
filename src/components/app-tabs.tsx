@@ -12,14 +12,15 @@ import {
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSize, Spacing, TabBar } from '@/constants/theme';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Tab definitions ──────────────────────────────────────────────────────────
 
 interface TabItem {
-  name: string;          // expo-router screen name
+  name: string;     
   labelCantonese: string;
   labelEnglish: string;
-  emoji: string;         // large icon — no icon library needed
+  emoji: string;  
   href: string;
 }
 
@@ -61,6 +62,14 @@ const TABS: TabItem[] = [
   },
 ];
 
+const TAB_LABELS: Record<string, (t: ReturnType<typeof useStrings>) => { cantonese: string; english: string }> = {
+  'index':        (t) => ({ cantonese: t.tabMap,      english: 'Map' }),
+  'home-screen':  (t) => ({ cantonese: t.tabHome,     english: 'My Home' }),
+  'games':        (t) => ({ cantonese: t.tabGames,    english: 'Games' }),
+  'friends':      (t) => ({ cantonese: t.tabFriends,  english: 'Friends' }),
+  'settings':     (t) => ({ cantonese: t.tabSettings, english: 'Settings' }),
+};
+
 // ─── Single tab button ────────────────────────────────────────────────────────
 
 interface TabButtonProps {
@@ -70,7 +79,13 @@ interface TabButtonProps {
 }
 
 function TabButton({ tab, isActive, onPress }: TabButtonProps) {
+  const t = useStrings();
   const scaleAnim = React.useRef(new Animated.Value(1)).current;
+
+  const labels = TAB_LABELS[tab.name]?.(t) ?? {
+    cantonese: tab.labelCantonese,
+    english: tab.labelEnglish,
+  };
 
   const handlePressIn = useCallback(() => {
     Animated.spring(scaleAnim, {
@@ -116,21 +131,16 @@ function TabButton({ tab, isActive, onPress }: TabButtonProps) {
           {tab.emoji}
         </Text>
 
-        {/* Cantonese label */}
-        <Text
-          style={[styles.tabLabel, isActive && styles.tabLabelActive]}
-          numberOfLines={1}
-        >
-          {tab.labelCantonese}
+        <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
+          {labels.cantonese}
         </Text>
 
-        {/* English sub-label */}
-        <Text
-          style={[styles.tabSubLabel, isActive && styles.tabSubLabelActive]}
-          numberOfLines={1}
-        >
-          {tab.labelEnglish}
-        </Text>
+        {/* Only show English sub-label when NOT in English mode */}
+        {labels.cantonese !== labels.english && (
+          <Text style={[styles.tabSubLabel, isActive && styles.tabSubLabelActive]}>
+            {labels.english}
+          </Text>
+        )}
       </Animated.View>
     </Pressable>
   );
@@ -239,7 +249,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.one,
-    paddingHorizontal: Spacing.two,
+    paddingHorizontal: Spacing.one,
     borderRadius: Spacing.two,
     width: '90%',
     gap: 1,
@@ -260,18 +270,18 @@ const styles = StyleSheet.create({
 
   // Emoji
   tabEmoji: {
-    fontSize: 24,
-    opacity: 0.55, // inactive — dimmed
+    fontSize: 22,
+    opacity: 0.55,
   },
   tabEmojiActive: {
     opacity: 1,
-    fontSize: 26, // slightly bigger when active
+    fontSize: 24,
   },
 
   // Cantonese label
   tabLabel: {
     fontSize: FontSize.label,
-    fontWeight: '600',
+    fontWeight: '700',
     color: Colors.textSecondary,
     textAlign: 'center',
   },

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { NeighbourhoodZone, Zone, ZoneId } from './neighbourhood-zone';
+import { useStrings } from '@/i18n/strings';
 
 // ─── Zone Definitions ─────────────────────────────────────────────────────────
 // All positions are % of map canvas — scales to any screen size
@@ -104,6 +105,7 @@ interface PixelMapProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function PixelMap({ onZonePress }: PixelMapProps) {
+  const t = useStrings();
   const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
   const [selectedZoneId, setSelectedZoneId] = useState<ZoneId | null>(null);
 
@@ -156,8 +158,7 @@ export function PixelMap({ onZonePress }: PixelMapProps) {
 
       {/* ── Harbour water (bottom strip) ────────────────────────────────── */}
       <Animated.View style={[styles.harbour, { opacity: waveOpacity }]}>
-        <Text style={styles.harbourLabel}>維多利亞港</Text>
-        <Text style={styles.harbourLabelEn}>Victoria Harbour</Text>
+        <Text style={styles.harbourLabel}>{t.mapHarbour}</Text>
       </Animated.View>
 
       {/* ── Road grid (simple cross) ─────────────────────────────────────── */}
@@ -204,7 +205,7 @@ export function PixelMap({ onZonePress }: PixelMapProps) {
 
       {/* ── Map title badge ──────────────────────────────────────────────── */}
       <View style={styles.mapTitleBadge}>
-        <Text style={styles.mapTitleText}>🗺 香港地圖</Text>
+        <Text style={styles.mapTitleText}>{t.mapTitle}</Text>
       </View>
     </View>
   );

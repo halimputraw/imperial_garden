@@ -4,76 +4,113 @@ import { Language } from '@/store/language-store';
 // Add new keys here first, then fill in all 3 languages below
 
 export interface Strings {
-  // ── General ──
-  appName: string;
-  loading: string;
-  back: string;
-  close: string;
-  confirm: string;
-  cancel: string;
-  comingSoon: string;
-  level: string;
-  seconds: string;
+    // ── General ──
+    appName: string;
+    loading: string;
+    back: string;
+    close: string;
+    confirm: string;
+    cancel: string;
+    comingSoon: string;
+    level: string;
+    seconds: string;
 
-  // ── Tab bar ──
-  tabMap: string;
-  tabHome: string;
-  tabGames: string;
-  tabFriends: string;
-  tabSettings: string;
+    // ── Tab bar ──
+    tabMap: string;
+    tabHome: string;
+    tabGames: string;
+    tabFriends: string;
+    tabSettings: string;
 
-  // ── Map screen ──
-  mapTitle: string;
-  mapDailyQuest: string;
-  mapDailyQuestDesc: string;
-  mapZoneMarket: string;
-  mapZoneCafe: string;
-  mapZoneEstate: string;
-  mapZonePark: string;
-  mapHarbour: string;
-  mapEnterZone: string;
-  mapActivities: string;
+    // ── Map screen ──
+    mapTitle: string;
+    mapDailyQuest: string;
+    mapDailyQuestDesc: string;
+    mapZoneMarket: string;
+    mapZoneCafe: string;
+    mapZoneEstate: string;
+    mapZonePark: string;
+    mapHarbour: string;
+    mapEnterZone: string;
+    mapActivities: string;
 
-  // ── Home screen ──
-  homeTitle: string;
-  homeLevel: string;
-  homeFurniture: string;
-  homeLocked: string;
-  homeScore: string;
-  homeMyRoom: string;
-  homeHint: string;
-  homeDecorate: string;
+    // ── Home screen ──
+    homeTitle: string;
+    homeLevel: string;
+    homeFurniture: string;
+    homeLocked: string;
+    homeScore: string;
+    homeMyRoom: string;
+    homeHint: string;
+    homeDecorate: string;
 
-  // ── Games screen ──
-  gamesTitle: string;
-  gamesDailyChallenge: string;
-  gamesDailyChallengeDesc: string;
-  gamesAllGames: string;
-  gamesAllGamesSubtitle: string;
-  gamesUnlockHint: string;
-  gamesBrainTip: string;
-  gamesDuration: string;
-  gamesLocked: string;
+    // ── Games screen ──
+    gamesTitle: string;
+    gamesDailyChallenge: string;
+    gamesDailyChallengeDesc: string;
+    gamesAllGames: string;
+    gamesAllGamesSubtitle: string;
+    gamesUnlockHint: string;
+    gamesBrainTip: string;
+    gamesDuration: string;
+    gamesLocked: string;
 
-  // ── Game: market memory ──
-  marketMemoryTitle: string;
-  marketMemorySubtitle: string;
-  marketMemoryHowToPlay: string;
-  marketMemoryStep1: string;
-  marketMemoryStep2: string;
-  marketMemoryStep3: string;
-  marketMemoryStep4: string;
-  marketMemoryRewardPreview: string;
-  marketMemoryStart: string;
-  marketMemoryMemorisePrompt: string;
-  marketMemoryMemoriseSubPrompt: string;
-  marketMemoryTip: string;
-  marketMemoryHidden: string;
-  marketMemoryHiddenSub: string;
-  marketMemoryQuizPrompt: string;
-  marketMemoryQuizSubPrompt: string;
-  marketMemorySubmit: string;
-  marketMemorySelectFirst: string;
+    // ── My Home shop ──
+    shopUnlock: string;
+    shopUnlockConfirm: string;
+    shopUnlockSuccess: string;
+    shopNotEnoughCoins: string;
+    shopCoinsNeeded: string;
+    shopAlreadyUnlocked: string;
+
+    // ── Leaderboard ──
+    leaderboardTitle: string;
+    leaderboardWeekly: string;
+    leaderboardRank: string;
+    leaderboardPlayer: string;
+    leaderboardCoins: string;
+    leaderboardYou: string;
+    leaderboardEmpty: string;
+
+    // ── Home tabs ──
+    homeTabRoom: string;
+    homeTabLeaderboard: string;
+
+    // ── Wager ──
+    wagerTitle: string;
+    wagerSubtitle: string;
+    wagerChooseAmount: string;
+    wagerWinCondition: string;
+    wagerPayout: string;
+    wagerSkip: string;
+    wagerConfirm: string;
+    wagerWon: string;
+    wagerLost: string;
+    wagerWonDesc: string;
+    wagerLostDesc: string;
+    wagerActive: string;
+    wagerCommunityAvg: string;
+    wagerInsufficientCoins: string;
+
+    // ── Game: market memory ──
+    marketMemoryTitle: string;
+    marketMemorySubtitle: string;
+    marketMemoryHowToPlay: string;
+    marketMemoryStep1: string;
+    marketMemoryStep2: string;
+    marketMemoryStep3: string;
+    marketMemoryStep4: string;
+    marketMemoryRewardPreview: string;
+    marketMemoryStart: string;
+    marketMemoryMemorisePrompt: string;
+    marketMemoryMemoriseSubPrompt: string;
+    marketMemoryTip: string;
+    marketMemoryHidden: string;
+    marketMemoryHiddenSub: string;
+    marketMemoryQuizPrompt: string;
+    marketMemoryQuizSubPrompt: string;
+    marketMemorySubmit: string;
+    marketMemorySelectFirst: string;
 
     // ── Mahjong match game ──
     mahjongTitle: string;
@@ -283,6 +320,43 @@ const en: Strings = {
         'Complete games and quests to earn points and unlock more furniture!',
     homeDecorate: '🎨 Decorate My Home',
 
+    // My Home shop
+    shopUnlock: 'Unlock',
+    shopUnlockConfirm: 'Spend coins to unlock this item?',
+    shopUnlockSuccess: 'Unlocked! 🎉',
+    shopNotEnoughCoins: 'Not enough coins!',
+    shopCoinsNeeded: 'coins needed',
+    shopAlreadyUnlocked: 'Already unlocked',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 Leaderboard',
+    leaderboardWeekly: 'Weekly Rankings',
+    leaderboardRank: 'Rank',
+    leaderboardPlayer: 'Player',
+    leaderboardCoins: 'Coins',
+    leaderboardYou: 'You',
+    leaderboardEmpty: 'No players yet this week',
+
+    // Home tabs
+    homeTabRoom: '🏠 My Room',
+    homeTabLeaderboard: '🏆 Rankings',
+
+    // Wager
+    wagerTitle: '🎰 Place a Wager?',
+    wagerSubtitle: 'Beat the community average to win big!',
+    wagerChooseAmount: 'Choose your wager:',
+    wagerWinCondition: 'Win condition: beat community average score',
+    wagerPayout: '2.5x payout if you win',
+    wagerSkip: 'Skip, just play',
+    wagerConfirm: 'Place Wager →',
+    wagerWon: '🎉 Wager Won!',
+    wagerLost: '😔 Wager Lost',
+    wagerWonDesc: 'You beat the community average!',
+    wagerLostDesc: 'Better luck next time!',
+    wagerActive: '🎰 Wager Active',
+    wagerCommunityAvg: 'Community avg',
+    wagerInsufficientCoins: 'Not enough coins to wager',
+
     // Games screen
     gamesTitle: '🎮 Games',
     gamesDailyChallenge: 'Daily Challenge',
@@ -299,18 +373,18 @@ const en: Strings = {
     marketMemoryTitle: 'Market Memory',
     marketMemorySubtitle: 'Memory Game',
     marketMemoryHowToPlay: 'How to play?',
-    marketMemoryStep1: '1️⃣  Look at 5 market items',
+    marketMemoryStep1: '1️⃣  Look at the market items carefully',
     marketMemoryStep2: '2️⃣  Remember them (only 5 seconds!)',
     marketMemoryStep3: '3️⃣  Pick the ones you remember',
     marketMemoryStep4: '4️⃣  More correct = more points!',
     marketMemoryRewardPreview: 'Complete to earn',
     marketMemoryStart: 'Start Game →',
-    marketMemoryMemorisePrompt: 'Remember these 5 items!',
+    marketMemoryMemorisePrompt: 'Remember these items!',
     marketMemoryMemoriseSubPrompt: 'Remember them — you will be tested!',
     marketMemoryTip: 'Try saying each item out loud to help you remember!',
     marketMemoryHidden: 'Items hidden!',
     marketMemoryHiddenSub: "Now let's test your memory...",
-    marketMemoryQuizPrompt: 'Which 5 items do you remember?',
+    marketMemoryQuizPrompt: 'Which items do you remember?',
     marketMemoryQuizSubPrompt: 'Tap the items you saw',
     marketMemorySubmit: 'Submit Answers →',
     marketMemorySelectFirst: 'Select items first...',
@@ -473,7 +547,7 @@ const en: Strings = {
     gameTitleCalendarQuiz: 'What Day Is It?',
 
     // Game descriptions
-    gameDescMarketMemory: 'Remember 5 items from the wet market and test your memory!',
+    gameDescMarketMemory: 'Remember market items and test your memory across 5 rounds!',
     gameDescMahjongMatch: 'Flip tiles and find all matching mahjong pairs!',
     gameDescDimSumOrder: 'Arrange the dim sum in the correct order to train your executive skills!',
     gameDescTramRoute: 'Find the fastest tram route from Sheung Wan to Shau Kei Wan!',
@@ -524,6 +598,43 @@ const zhHK: Strings = {
     homeHint: '完成遊戲同任務可以獲得積分，用嚟解鎖更多家具！',
     homeDecorate: '🎨 裝飾我的家',
 
+    // My Home shop
+    shopUnlock: '解鎖',
+    shopUnlockConfirm: '花費積分解鎖呢件家具？',
+    shopUnlockSuccess: '解鎖成功！🎉',
+    shopNotEnoughCoins: '積分唔夠！',
+    shopCoinsNeeded: '積分',
+    shopAlreadyUnlocked: '已解鎖',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 排行榜',
+    leaderboardWeekly: '本週排名',
+    leaderboardRank: '排名',
+    leaderboardPlayer: '玩家',
+    leaderboardCoins: '積分',
+    leaderboardYou: '你',
+    leaderboardEmpty: '今週暫時未有玩家',
+
+    // Home tabs
+    homeTabRoom: '🏠 我的房間',
+    homeTabLeaderboard: '🏆 排行榜',
+
+    // Wager
+    wagerTitle: '🎰 想唔想下注？',
+    wagerSubtitle: '打敗社區平均分就可以贏取更多積分！',
+    wagerChooseAmount: '選擇下注金額：',
+    wagerWinCondition: '勝出條件：超越社區平均分',
+    wagerPayout: '贏咗獲得 2.5 倍回報',
+    wagerSkip: '唔下注，直接玩',
+    wagerConfirm: '確認下注 →',
+    wagerWon: '🎉 下注勝出！',
+    wagerLost: '😔 下注失敗',
+    wagerWonDesc: '你打敗咗社區平均分！',
+    wagerLostDesc: '下次再試！',
+    wagerActive: '🎰 下注進行中',
+    wagerCommunityAvg: '社區平均分',
+    wagerInsufficientCoins: '積分唔夠下注',
+
     // Games screen
     gamesTitle: '🎮 遊戲',
     gamesDailyChallenge: '今日挑戰',
@@ -539,18 +650,18 @@ const zhHK: Strings = {
     marketMemoryTitle: '街市記憶',
     marketMemorySubtitle: 'Market Memory',
     marketMemoryHowToPlay: '點樣玩？',
-    marketMemoryStep1: '1️⃣  睇住 5 樣街市貨品',
+    marketMemoryStep1: '1️⃣  仔細睇住街市嘅貨品',
     marketMemoryStep2: '2️⃣  記低佢哋（得 5 秒！）',
     marketMemoryStep3: '3️⃣  答出你記得嘅貨品',
     marketMemoryStep4: '4️⃣  答啱越多，積分越高！',
     marketMemoryRewardPreview: '完成可獲得',
     marketMemoryStart: '開始遊戲 →',
-    marketMemoryMemorisePrompt: '記住呢 5 樣嘢！',
+    marketMemoryMemorisePrompt: '記住呢啲嘢！',
     marketMemoryMemoriseSubPrompt: '記低佢哋，之後要答！',
     marketMemoryTip: '試吓大聲讀出每樣嘢，幫助記憶！',
     marketMemoryHidden: '貨品收起咗！',
     marketMemoryHiddenSub: '而家考考你嘅記憶力⋯',
-    marketMemoryQuizPrompt: '你記得邊 5 樣？',
+    marketMemoryQuizPrompt: '揀出你記得嘅貨品',
     marketMemoryQuizSubPrompt: '揀出你記得嘅貨品',
     marketMemorySubmit: '提交答案 →',
     marketMemorySelectFirst: '揀選貨品先...',
@@ -711,7 +822,7 @@ const zhHK: Strings = {
     gameTitleCalendarQuiz: '今日係幾號？',
 
     // Game descriptions
-    gameDescMarketMemory: '記住街市入面嘅 5 樣嘢，考驗你嘅記憶力！',
+    gameDescMarketMemory: '記住街市嘅貨品，5 關挑戰你嘅記憶力！',
     gameDescMahjongMatch: '翻開麻雀牌，搵出所有相同嘅牌！',
     gameDescDimSumOrder: '按照正確次序排列點心，訓練你嘅執行能力！',
     gameDescTramRoute: '搵出由上環去筲箕灣嘅最快路線！',
@@ -762,6 +873,43 @@ const zhCN: Strings = {
     homeHint: '完成游戏和任务可以获得积分，用来解锁更多家具！',
     homeDecorate: '🎨 装饰我的家',
 
+    // My Home shop
+    shopUnlock: '解锁',
+    shopUnlockConfirm: '花费积分解锁这件家具？',
+    shopUnlockSuccess: '解锁成功！🎉',
+    shopNotEnoughCoins: '积分不够！',
+    shopCoinsNeeded: '积分',
+    shopAlreadyUnlocked: '已解锁',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 排行榜',
+    leaderboardWeekly: '本周排名',
+    leaderboardRank: '排名',
+    leaderboardPlayer: '玩家',
+    leaderboardCoins: '积分',
+    leaderboardYou: '你',
+    leaderboardEmpty: '本周暂时没有玩家',
+
+    // Home tabs
+    homeTabRoom: '🏠 我的房间',
+    homeTabLeaderboard: '🏆 排行榜',
+
+    // Wager
+    wagerTitle: '🎰 想下注吗？',
+    wagerSubtitle: '打败社区平均分就可以赢取更多积分！',
+    wagerChooseAmount: '选择下注金额：',
+    wagerWinCondition: '胜出条件：超越社区平均分',
+    wagerPayout: '赢了获得 2.5 倍回报',
+    wagerSkip: '不下注，直接玩',
+    wagerConfirm: '确认下注 →',
+    wagerWon: '🎉 下注胜出！',
+    wagerLost: '😔 下注失败',
+    wagerWonDesc: '你打败了社区平均分！',
+    wagerLostDesc: '下次再试！',
+    wagerActive: '🎰 下注进行中',
+    wagerCommunityAvg: '社区平均分',
+    wagerInsufficientCoins: '积分不够下注',
+
     // Games screen
     gamesTitle: '🎮 游戏',
     gamesDailyChallenge: '今日挑战',
@@ -777,18 +925,18 @@ const zhCN: Strings = {
     marketMemoryTitle: '菜市场记忆',
     marketMemorySubtitle: 'Market Memory',
     marketMemoryHowToPlay: '怎么玩？',
-    marketMemoryStep1: '1️⃣  看 5 样菜市场货品',
+    marketMemoryStep1: '1️⃣  仔细看菜市场的货品',
     marketMemoryStep2: '2️⃣  记住它们（只有 5 秒！）',
     marketMemoryStep3: '3️⃣  选出你记得的货品',
     marketMemoryStep4: '4️⃣  答对越多，积分越高！',
     marketMemoryRewardPreview: '完成可获得',
     marketMemoryStart: '开始游戏 →',
-    marketMemoryMemorisePrompt: '记住这 5 样东西！',
+    marketMemoryMemorisePrompt: '记住这些东西！',
     marketMemoryMemoriseSubPrompt: '记住它们，之后要回答！',
     marketMemoryTip: '试着大声读出每样东西，帮助记忆！',
     marketMemoryHidden: '货品已隐藏！',
     marketMemoryHiddenSub: '现在考考你的记忆力⋯',
-    marketMemoryQuizPrompt: '你记得哪 5 样？',
+    marketMemoryQuizPrompt: '选出你记得的货品',
     marketMemoryQuizSubPrompt: '选出你看到的货品',
     marketMemorySubmit: '提交答案 →',
     marketMemorySelectFirst: '请先选择货品...',
@@ -948,7 +1096,7 @@ const zhCN: Strings = {
     gameTitleCalendarQuiz: '今天是几号？',
 
     // Game descriptions
-    gameDescMarketMemory: '记住菜市场里的 5 样东西，考验你的记忆力！',
+    gameDescMarketMemory: '记住菜市场的货品，5 关挑战你的记忆力！',
     gameDescMahjongMatch: '翻开麻将牌，找出所有相同的牌！',
     gameDescDimSumOrder: '按照正确顺序排列点心，训练你的执行能力！',
     gameDescTramRoute: '找出从上环到筲箕湾的最快路线！',
