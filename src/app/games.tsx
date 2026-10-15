@@ -99,7 +99,7 @@ const getGames = (t: ReturnType<typeof useStrings>): Game[] => [
     domainColor: Colors.zoneMarket,
     difficulty: 1,
     coins: 15,
-    unlocked: false,
+    unlocked: true,
   },
 ];
 
@@ -217,7 +217,7 @@ function DailyChallenge() {
     <View style={styles.dailyBanner}>
       <View style={styles.dailyLeft}>
         <Text style={styles.dailyEmoji}>🌟</Text>
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.dailyTitle}>{t.gamesDailyChallenge}</Text>
           <Text style={styles.dailyDesc}>{t.gamesDailyChallengeDesc}</Text>
         </View>
@@ -229,7 +229,7 @@ function DailyChallenge() {
             key={i}
             style={[
               styles.progressPill,
-              { backgroundColor: i <= 1 ? Colors.gold : Colors.surfaceDark },
+              { backgroundColor: Colors.surfaceDark },
             ]}
           />
         ))}
@@ -256,6 +256,7 @@ export default function GamesScreen() {
     'mahjong-pattern':'/games/mahjong-match',
     'tram-route':     '/games/tram-route',
     'dim-sum-order':  '/games/dim-sum-order',
+    'calendar-quiz':  '/games/calendar-quiz',
   };
 
   const handleGamePress = (game: Game) => {

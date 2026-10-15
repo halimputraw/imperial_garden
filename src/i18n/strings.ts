@@ -274,6 +274,98 @@ export interface Strings {
     gameDescTramRoute: string;
     gameDescNewsWords: string;
     gameDescCalendarQuiz: string;
+
+    // ── MoCA analysis tab ──
+    tabMoca: string;
+    mocaTitle: string;
+    mocaSubtitle: string;
+    mocaEstimatedScore: string;
+    mocaAreasMeasured: string;
+    mocaPoints: string;
+    mocaGamesPlayed: string;
+    mocaProjectedNote: string;
+    mocaBandNormal: string;
+    mocaBandNormalDesc: string;
+    mocaBandMild: string;
+    mocaBandMildDesc: string;
+    mocaBandLow: string;
+    mocaBandLowDesc: string;
+    mocaStrongest: string;
+    mocaNeedsPractice: string;
+    mocaDomainBreakdown: string;
+    mocaNotTested: string;
+    mocaPlays: string;
+    mocaPlayToTest: string;
+    mocaGameComingSoon: string;
+    mocaHistoryTitle: string;
+    mocaRecentTitle: string;
+    mocaEmptyTitle: string;
+    mocaEmptyDesc: string;
+    mocaDisclaimer: string;
+
+
+    // ── Calendar quiz (orientation) ──
+    calTitle: string;
+    calSubtitle: string;
+    calHowToPlay: string;
+    calStep1: string;
+    calStep2: string;
+    calStep3: string;
+    calRewardPreview: string;
+    calStart: string;
+    calNpcName: string;
+    calProgress: string;
+    calQDate: string;
+    calQMonth: string;
+    calQYear: string;
+    calQWeekday: string;
+    calQCity: string;
+    calQTimeOfDay: string;
+    calDateOption: string;
+    calYearOption: string;
+    calMonthNames: string[];
+    calWeekdayNames: string[];
+    calCityHongKong: string;
+    calCityMacau: string;
+    calCityShenzhen: string;
+    calCityGuangzhou: string;
+    calTimeMorning: string;
+    calTimeAfternoon: string;
+    calTimeEvening: string;
+    calTimeNight: string;
+    calCorrect: string;
+    calWrong: string;
+
+    // ── Onboarding ──
+    onboardingWelcome: string;
+    onboardingTagline: string;
+    onboardingGetStarted: string;
+    onboardingSelectLanguage: string;
+    onboardingSelectLanguageSub: string;
+    onboardingSelectRegion: string;
+    onboardingSelectRegionSub: string;
+    onboardingVerifyId: string;
+    onboardingVerifyIdSub: string;
+    onboardingIdNumber: string;
+    onboardingIdPlaceholder: string;
+    onboardingTakeIdPhoto: string;
+    onboardingTakeIdPhotoSub: string;
+    onboardingTakeSelfie: string;
+    onboardingTakeSelfieSub: string;
+    onboardingVerifying: string;
+    onboardingVerified: string;
+    onboardingVerifiedSub: string;
+    onboardingSetupProfile: string;
+    onboardingSetupProfileSub: string;
+    onboardingYourName: string;
+    onboardingNamePlaceholder: string;
+    onboardingChooseAvatar: string;
+    onboardingNext: string;
+    onboardingDone: string;
+    onboardingSkip: string;
+    onboardingMockPhotoTaken: string;
+    onboardingIdFormat: string;
+    onboardingInvalidId: string;
 }
 
 // ─── English ──────────────────────────────────────────────────────────────────
@@ -552,7 +644,98 @@ const en: Strings = {
     gameDescDimSumOrder: 'Arrange the dim sum in the correct order to train your executive skills!',
     gameDescTramRoute: 'Find the fastest tram route from Sheung Wan to Shau Kei Wan!',
     gameDescNewsWords: 'Complete today\'s news crossword to keep your language skills sharp!',
-    gameDescCalendarQuiz: 'Answer questions about today\'s date, day and season!',
+    gameDescCalendarQuiz: 'Answer 6 questions about today\'s date, day, city and time!',
+
+    // MoCA analysis tab
+    tabMoca: 'MoCA',
+    mocaTitle: 'Brain Report',
+    mocaSubtitle: 'MoCA-style analysis of your games',
+    mocaEstimatedScore: 'Estimated MoCA score',
+    mocaAreasMeasured: 'areas measured',
+    mocaPoints: 'pts',
+    mocaGamesPlayed: 'games played',
+    mocaProjectedNote: 'Score is projected to 30 from the areas you have played so far.',
+    mocaBandNormal: 'Looking good',
+    mocaBandNormalDesc: 'Your results are in the typical range. Keep playing every day!',
+    mocaBandMild: 'Keep training',
+    mocaBandMildDesc: 'Some areas could use more practice. Try the games marked below.',
+    mocaBandLow: 'Let\'s check in',
+    mocaBandLowDesc: 'Your scores are lower than usual. It may help to talk to a doctor or family member.',
+    mocaStrongest: 'Strongest',
+    mocaNeedsPractice: 'Needs practice',
+    mocaDomainBreakdown: 'Brain areas',
+    mocaNotTested: 'Not tested yet',
+    mocaPlays: 'plays',
+    mocaPlayToTest: 'Go to Games',
+    mocaGameComingSoon: 'Game coming soon',
+    mocaHistoryTitle: 'Score history',
+    mocaRecentTitle: 'Recent games',
+    mocaEmptyTitle: 'No games played yet',
+    mocaEmptyDesc: 'Play a few brain games and your report will appear here.',
+    mocaDisclaimer: 'This is an estimate based on game scores, not a medical diagnosis. For a real MoCA test, please see a doctor.',
+
+    // Calendar quiz (orientation)
+    calTitle: 'What Day Is It?',
+    calSubtitle: 'Orientation Game',
+    calHowToPlay: 'How to play?',
+    calStep1: '1️⃣  Mrs Chan will ask you 6 questions',
+    calStep2: '2️⃣  Tap the right answer about today',
+    calStep3: '3️⃣  Watch the calendar fill in!',
+    calRewardPreview: 'Complete to earn',
+    calStart: 'Start Game →',
+    calNpcName: 'Mrs Chan',
+    calProgress: 'Question {n} of {total}',
+    calQDate: 'What is the date today?',
+    calQMonth: 'What month is it?',
+    calQYear: 'What year is it?',
+    calQWeekday: 'What day of the week is it?',
+    calQCity: 'Which city are we in?',
+    calQTimeOfDay: 'Is it morning, afternoon or evening?',
+    calDateOption: '{n}',
+    calYearOption: '{n}',
+    calMonthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    calWeekdayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    calCityHongKong: 'Hong Kong',
+    calCityMacau: 'Macau',
+    calCityShenzhen: 'Shenzhen',
+    calCityGuangzhou: 'Guangzhou',
+    calTimeMorning: 'Morning',
+    calTimeAfternoon: 'Afternoon',
+    calTimeEvening: 'Evening',
+    calTimeNight: 'Late night',
+    calCorrect: '✓ Correct!',
+    calWrong: '✗ The answer is',
+
+    // Onboarding
+    onboardingWelcome: 'Imperial Garden',
+    onboardingTagline: 'Stay sharp, stay connected.',
+    onboardingGetStarted: 'Get Started →',
+    onboardingSelectLanguage: 'Choose your language',
+    onboardingSelectLanguageSub: 'You can change this later in Settings',
+    onboardingSelectRegion: 'Where do you live?',
+    onboardingSelectRegionSub: 'We will personalise your experience',
+    onboardingVerifyId: 'Verify your identity',
+    onboardingVerifyIdSub: 'Your ID is used to keep your account safe',
+    onboardingIdNumber: 'ID Number',
+    onboardingIdPlaceholder: 'Enter your ID number',
+    onboardingTakeIdPhoto: 'Take a photo of your ID card',
+    onboardingTakeIdPhotoSub: 'Place your ID card on a flat surface',
+    onboardingTakeSelfie: 'Take a selfie holding your ID',
+    onboardingTakeSelfieSub: 'Hold your ID next to your face',
+    onboardingVerifying: 'Verifying your identity...',
+    onboardingVerified: '✓ Identity Verified!',
+    onboardingVerifiedSub: 'Your account is now secure',
+    onboardingSetupProfile: 'Set up your profile',
+    onboardingSetupProfileSub: 'Tell us a bit about yourself',
+    onboardingYourName: 'Your name',
+    onboardingNamePlaceholder: 'Enter your name',
+    onboardingChooseAvatar: 'Choose your avatar',
+    onboardingNext: 'Next →',
+    onboardingDone: 'Enter the Garden →',
+    onboardingSkip: 'Skip for now',
+    onboardingMockPhotoTaken: '📸 Photo taken!',
+    onboardingIdFormat: 'Format',
+    onboardingInvalidId: 'Please enter a valid ID number',
 };
 
 // ─── Cantonese (Traditional Chinese) ─────────────────────────────────────────
@@ -827,7 +1010,98 @@ const zhHK: Strings = {
     gameDescDimSumOrder: '按照正確次序排列點心，訓練你嘅執行能力！',
     gameDescTramRoute: '搵出由上環去筲箕灣嘅最快路線！',
     gameDescNewsWords: '完成今日新聞嘅填字遊戲，保持語言能力！',
-    gameDescCalendarQuiz: '回答關於今日日期、星期同節氣嘅問題！',
+    gameDescCalendarQuiz: '回答 6 條關於今日日期、星期、城市同時間嘅問題！',
+
+    // MoCA analysis tab
+    tabMoca: '分析',
+    mocaTitle: '腦力報告',
+    mocaSubtitle: '根據你玩過嘅遊戲做 MoCA 分析',
+    mocaEstimatedScore: '估計 MoCA 分數',
+    mocaAreasMeasured: '個範疇已測試',
+    mocaPoints: '分',
+    mocaGamesPlayed: '局遊戲',
+    mocaProjectedNote: '分數係根據你已經玩過嘅範疇推算到 30 分。',
+    mocaBandNormal: '表現唔錯',
+    mocaBandNormalDesc: '你嘅結果喺正常範圍，繼續每日玩啦！',
+    mocaBandMild: '繼續練習',
+    mocaBandMildDesc: '有啲範疇可以多啲練習，試吓下面嘅遊戲。',
+    mocaBandLow: '留意一下',
+    mocaBandLowDesc: '你嘅分數比平時低，可以同醫生或者屋企人傾吓。',
+    mocaStrongest: '最強項',
+    mocaNeedsPractice: '要多練',
+    mocaDomainBreakdown: '腦力範疇',
+    mocaNotTested: '未測試',
+    mocaPlays: '次',
+    mocaPlayToTest: '去玩遊戲',
+    mocaGameComingSoon: '遊戲即將推出',
+    mocaHistoryTitle: '分數紀錄',
+    mocaRecentTitle: '最近玩過',
+    mocaEmptyTitle: '仲未玩過遊戲',
+    mocaEmptyDesc: '玩幾局腦力遊戲，你嘅報告就會喺度出現。',
+    mocaDisclaimer: '呢個係根據遊戲分數嘅估計，唔係醫學診斷。如需正式 MoCA 測試，請見醫生。',
+
+    // Calendar quiz (orientation)
+    calTitle: '今日係幾號？',
+    calSubtitle: '定向能力遊戲',
+    calHowToPlay: '點樣玩？',
+    calStep1: '1️⃣  陳師奶會問你 6 條問題',
+    calStep2: '2️⃣  揀啱今日嘅答案',
+    calStep3: '3️⃣  睇住月曆慢慢填滿！',
+    calRewardPreview: '完成可獲得',
+    calStart: '開始遊戲 →',
+    calNpcName: '陳師奶',
+    calProgress: '第 {n} 題（共 {total} 題）',
+    calQDate: '今日係幾號？',
+    calQMonth: '而家係幾月？',
+    calQYear: '今年係邊年？',
+    calQWeekday: '今日星期幾？',
+    calQCity: '我哋而家喺邊個城市？',
+    calQTimeOfDay: '而家係朝早、下晝定夜晚？',
+    calDateOption: '{n}號',
+    calYearOption: '{n}年',
+    calMonthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    calWeekdayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    calCityHongKong: '香港',
+    calCityMacau: '澳門',
+    calCityShenzhen: '深圳',
+    calCityGuangzhou: '廣州',
+    calTimeMorning: '朝早',
+    calTimeAfternoon: '下晝',
+    calTimeEvening: '夜晚',
+    calTimeNight: '深夜',
+    calCorrect: '✓ 啱晒！',
+    calWrong: '✗ 答案係',
+
+    // Onboarding
+    onboardingWelcome: '皇家花園',
+    onboardingTagline: '保持靈敏，保持聯繫。',
+    onboardingGetStarted: '開始 →',
+    onboardingSelectLanguage: '選擇你的語言',
+    onboardingSelectLanguageSub: '之後可以喺設定更改',
+    onboardingSelectRegion: '你住喺邊度？',
+    onboardingSelectRegionSub: '我們會根據你的位置個人化你的體驗',
+    onboardingVerifyId: '驗證你的身份',
+    onboardingVerifyIdSub: '你的身份證用嚟保障你的帳戶安全',
+    onboardingIdNumber: '身份證號碼',
+    onboardingIdPlaceholder: '輸入你的身份證號碼',
+    onboardingTakeIdPhoto: '拍攝你的身份證',
+    onboardingTakeIdPhotoSub: '將身份證放喺平坦的表面上',
+    onboardingTakeSelfie: '拿住身份證自拍',
+    onboardingTakeSelfieSub: '將身份證放喺面旁邊',
+    onboardingVerifying: '正在驗證你的身份...',
+    onboardingVerified: '✓ 身份驗證成功！',
+    onboardingVerifiedSub: '你的帳戶已經安全',
+    onboardingSetupProfile: '設定你的個人資料',
+    onboardingSetupProfileSub: '告訴我們一啲關於你的資料',
+    onboardingYourName: '你的名字',
+    onboardingNamePlaceholder: '輸入你的名字',
+    onboardingChooseAvatar: '選擇你的頭像',
+    onboardingNext: '下一步 →',
+    onboardingDone: '進入花園 →',
+    onboardingSkip: '暫時跳過',
+    onboardingMockPhotoTaken: '📸 相片已拍攝！',
+    onboardingIdFormat: '格式',
+    onboardingInvalidId: '請輸入有效的身份證號碼',
 };
 
 // ─── Simplified Chinese ───────────────────────────────────────────────────────
@@ -1101,7 +1375,459 @@ const zhCN: Strings = {
     gameDescDimSumOrder: '按照正确顺序排列点心，训练你的执行能力！',
     gameDescTramRoute: '找出从上环到筲箕湾的最快路线！',
     gameDescNewsWords: '完成今日新闻的填字游戏，保持语言能力！',
-    gameDescCalendarQuiz: '回答关于今日日期、星期和节气的问题！',
+    gameDescCalendarQuiz: '回答 6 个关于今天日期、星期、城市和时间的问题！',
+
+    // MoCA analysis tab
+    tabMoca: '分析',
+    mocaTitle: '脑力报告',
+    mocaSubtitle: '根据你玩过的游戏进行 MoCA 分析',
+    mocaEstimatedScore: '估计 MoCA 分数',
+    mocaAreasMeasured: '个范畴已测试',
+    mocaPoints: '分',
+    mocaGamesPlayed: '局游戏',
+    mocaProjectedNote: '分数是根据你已经玩过的范畴推算到 30 分。',
+    mocaBandNormal: '表现不错',
+    mocaBandNormalDesc: '你的结果在正常范围，继续每天玩吧！',
+    mocaBandMild: '继续练习',
+    mocaBandMildDesc: '有些范畴可以多练习，试试下面的游戏。',
+    mocaBandLow: '留意一下',
+    mocaBandLowDesc: '你的分数比平时低，可以和医生或家人聊聊。',
+    mocaStrongest: '最强项',
+    mocaNeedsPractice: '需要多练',
+    mocaDomainBreakdown: '脑力范畴',
+    mocaNotTested: '未测试',
+    mocaPlays: '次',
+    mocaPlayToTest: '去玩游戏',
+    mocaGameComingSoon: '游戏即将推出',
+    mocaHistoryTitle: '分数记录',
+    mocaRecentTitle: '最近玩过',
+    mocaEmptyTitle: '还没玩过游戏',
+    mocaEmptyDesc: '玩几局脑力游戏，你的报告就会在这里出现。',
+    mocaDisclaimer: '这是根据游戏分数的估计，不是医学诊断。如需正式 MoCA 测试，请看医生。',
+
+    // Calendar quiz (orientation)
+    calTitle: '今天几号？',
+    calSubtitle: '定向能力游戏',
+    calHowToPlay: '怎么玩？',
+    calStep1: '1️⃣  陈太太会问你 6 个问题',
+    calStep2: '2️⃣  选出今天的正确答案',
+    calStep3: '3️⃣  看着日历慢慢填满！',
+    calRewardPreview: '完成可获得',
+    calStart: '开始游戏 →',
+    calNpcName: '陈太太',
+    calProgress: '第 {n} 题（共 {total} 题）',
+    calQDate: '今天几号？',
+    calQMonth: '现在是几月？',
+    calQYear: '今年是哪一年？',
+    calQWeekday: '今天星期几？',
+    calQCity: '我们现在在哪个城市？',
+    calQTimeOfDay: '现在是早上、下午还是晚上？',
+    calDateOption: '{n}日',
+    calYearOption: '{n}年',
+    calMonthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    calWeekdayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    calCityHongKong: '香港',
+    calCityMacau: '澳门',
+    calCityShenzhen: '深圳',
+    calCityGuangzhou: '广州',
+    calTimeMorning: '早上',
+    calTimeAfternoon: '下午',
+    calTimeEvening: '晚上',
+    calTimeNight: '深夜',
+    calCorrect: '✓ 答对了！',
+    calWrong: '✗ 答案是',
+
+    // Onboarding
+    onboardingWelcome: '皇家花园',
+    onboardingTagline: '保持敏锐，保持联系。',
+    onboardingGetStarted: '开始 →',
+    onboardingSelectLanguage: '选择你的语言',
+    onboardingSelectLanguageSub: '之后可以在设置中更改',
+    onboardingSelectRegion: '你住在哪里？',
+    onboardingSelectRegionSub: '我们会根据你的位置个性化你的体验',
+    onboardingVerifyId: '验证你的身份',
+    onboardingVerifyIdSub: '你的身份证用于保障你的账户安全',
+    onboardingIdNumber: '身份证号码',
+    onboardingIdPlaceholder: '输入你的身份证号码',
+    onboardingTakeIdPhoto: '拍摄你的身份证',
+    onboardingTakeIdPhotoSub: '将身份证放在平坦的表面上',
+    onboardingTakeSelfie: '拿着身份证自拍',
+    onboardingTakeSelfieSub: '将身份证放在脸旁边',
+    onboardingVerifying: '正在验证你的身份...',
+    onboardingVerified: '✓ 身份验证成功！',
+    onboardingVerifiedSub: '你的账户已经安全',
+    onboardingSetupProfile: '设置你的个人资料',
+    onboardingSetupProfileSub: '告诉我们一些关于你的信息',
+    onboardingYourName: '你的名字',
+    onboardingNamePlaceholder: '输入你的名字',
+    onboardingChooseAvatar: '选择你的头像',
+    onboardingNext: '下一步 →',
+    onboardingDone: '进入花园 →',
+    onboardingSkip: '暂时跳过',
+    onboardingMockPhotoTaken: '📸 照片已拍摄！',
+    onboardingIdFormat: '格式',
+    onboardingInvalidId: '请输入有效的身份证号码',
+};
+
+const pt: Strings = {
+    // General
+    appName: 'Jardim Imperial',
+    loading: 'A carregar...',
+    back: '‹ Voltar',
+    close: '✕',
+    confirm: 'Confirmar',
+    cancel: 'Cancelar',
+    comingSoon: 'Em breve!',
+    level: 'Nível',
+    seconds: 'seg',
+    scoreUnit: 'pts',
+    zoneNotFound: 'Zona não encontrada 🤔',
+
+    // Tab bar
+    tabMap: 'Mapa',
+    tabHome: 'Minha Casa',
+    tabGames: 'Jogos',
+    tabFriends: 'Amigos',
+    tabSettings: 'Definições',
+
+    // Map screen
+    mapTitle: '🗺 Mapa de HK',
+    mapDailyQuest: '📋',
+    mapDailyQuestDesc: 'Missão de hoje: Comprar 5 coisas no mercado!',
+    mapZoneMarket: 'Mercado',
+    mapZoneCafe: 'Cha Chaan Teng',
+    mapZoneEstate: 'Bairro Residencial',
+    mapZonePark: 'Parque Vitória',
+    mapHarbour: 'Porto de Victoria',
+    mapEnterZone: 'Entrar',
+    mapActivities: 'O que pode fazer aqui?',
+
+    // Home screen
+    homeTitle: '\'s Casa Aconchegante',
+    homeLevel: '🏠 Nível',
+    homeFurniture: 'Mobília',
+    homeLocked: 'Bloqueado',
+    homeScore: 'Pontos',
+    homeMyRoom: 'O Meu Quarto',
+    homeHint: 'Complete jogos e missões para ganhar pontos e desbloquear mais mobília!',
+    homeDecorate: '🎨 Decorar a Minha Casa',
+    homeTabRoom: '🏠 O Meu Quarto',
+    homeTabLeaderboard: '🏆 Classificação',
+
+    // Games screen
+    gamesTitle: '🎮 Jogos',
+    gamesDailyChallenge: 'Desafio Diário',
+    gamesDailyChallengeDesc: 'Complete 3 jogos e ganhe 🪙 100 extra!',
+    gamesAllGames: 'Todos os Jogos',
+    gamesAllGamesSubtitle: 'Cada jogo treina uma habilidade cerebral diferente',
+    gamesUnlockHint: 'Complete mais jogos para desbloquear',
+    gamesBrainTip: 'Jogar jogos cerebrais regularmente ajuda a manter a função cognitiva!',
+    gamesDuration: 'Cerca de',
+    gamesLocked: 'Bloqueado',
+
+    // Game titles
+    gameTitleMarketMemory: 'Memória do Mercado',
+    gameTitleMahjongMatch: 'Jogo de Mahjong',
+    gameTitleDimSumOrder: 'Ordem do Dim Sum',
+    gameTitleTramRoute: 'Rota do Elétrico',
+    gameTitleNewsWords: 'Palavras das Notícias',
+    gameTitleCalendarQuiz: 'Quiz do Calendário',
+
+    // Game descriptions
+    gameDescMarketMemory: 'Lembre os itens do mercado e teste a sua memória em 5 rondas!',
+    gameDescMahjongMatch: 'Vire as peças e encontre todos os pares de mahjong.',
+    gameDescDimSumOrder: 'Lembre a ordem dos pratos de dim sum e selecione-os corretamente!',
+    gameDescTramRoute: 'Arranje as paragens do elétrico na ordem correta!',
+    gameDescNewsWords: 'Complete o puzzle de palavras cruzadas das notícias de hoje!',
+    gameDescCalendarQuiz: 'Responda a perguntas sobre a data e estação de hoje!',
+
+    // Market memory
+    marketMemoryTitle: 'Memória do Mercado',
+    marketMemorySubtitle: 'Jogo de Memória',
+    marketMemoryHowToPlay: 'Como jogar?',
+    marketMemoryStep1: '1️⃣  Observe os itens do mercado com atenção',
+    marketMemoryStep2: '2️⃣  Lembre-os — tem 5 segundos!',
+    marketMemoryStep3: '3️⃣  Selecione os que se lembra',
+    marketMemoryStep4: '4️⃣  Mais correto = mais pontos em 5 rondas!',
+    marketMemoryRewardPreview: 'Complete para ganhar',
+    marketMemoryStart: 'Começar →',
+    marketMemoryMemorisePrompt: 'Lembre estes itens!',
+    marketMemoryMemoriseSubPrompt: 'Lembre-os — será testado!',
+    marketMemoryTip: 'Tente dizer cada item em voz alta para ajudar a lembrar!',
+    marketMemoryHidden: 'Itens escondidos!',
+    marketMemoryHiddenSub: 'Agora vamos testar a sua memória...',
+    marketMemoryQuizPrompt: 'Quais itens se lembra?',
+    marketMemoryQuizSubPrompt: 'Toque nos itens que viu',
+    marketMemorySubmit: 'Submeter Respostas →',
+    marketMemorySelectFirst: 'Selecione itens primeiro...',
+
+    // Mahjong
+    mahjongTitle: 'Jogo de Mahjong',
+    mahjongSubtitle: 'Jogo de Atenção',
+    mahjongHowToPlay: 'Como jogar?',
+    mahjongStep1: '1️⃣  Todas as peças são mostradas brevemente',
+    mahjongStep2: '2️⃣  As peças viram para baixo',
+    mahjongStep3: '3️⃣  Toque em duas peças para as virar',
+    mahjongStep4: '4️⃣  Encontre todos os 8 pares — menos jogadas = melhor!',
+    mahjongRewardPreview: 'Complete para ganhar',
+    mahjongStart: 'Começar →',
+    mahjongPreviewPrompt: 'Lembre as peças!',
+    mahjongPreviewSub: 'Elas vão virar em breve...',
+    mahjongPlayPrompt: 'Encontre todos os pares!',
+    mahjongPlaySub: 'Toque em duas peças para as virar',
+    mahjongMoves: 'Jogadas',
+    mahjongTime: 'Tempo',
+    mahjongComplete: '🎊 Todos os pares encontrados!',
+    mahjongCompleteSub: 'Muito bem!',
+    mahjongBestMoves: 'Melhor possível: 8 jogadas',
+    mahjongTimeTaken: 'Tempo gasto',
+
+    // Dim sum
+    dimSumTitle: 'Ordem do Dim Sum',
+    dimSumSubtitle: 'Jogo de Função Executiva',
+    dimSumHowToPlay: 'Como jogar?',
+    dimSumStep1: '1️⃣  Lembre a ordem dos pratos mostrados',
+    dimSumStep2: '2️⃣  Eles desaparecem após alguns segundos',
+    dimSumStep3: '3️⃣  Toque nos pratos na ordem correta',
+    dimSumStep4: '4️⃣  Cuidado com pratos extra para confundir!',
+    dimSumRewardPreview: 'Complete para ganhar',
+    dimSumStart: 'Começar →',
+    dimSumRound: 'Ronda',
+    dimSumOf: 'de',
+    dimSumShowPrompt: 'Lembre a ordem!',
+    dimSumShowSub: 'Os pratos vão desaparecer em breve...',
+    dimSumQuizPrompt: 'Toque na ordem correta!',
+    dimSumQuizSub: 'Toque nos pratos na ordem que viu',
+    dimSumCorrectTap: '✓ Correto!',
+    dimSumWrongTap: '✗ Errado! Tente novamente',
+    dimSumRoundComplete: '🎉 Ronda completa!',
+    dimSumNextRound: 'Próxima Ronda →',
+    dimSumComplete: '🍡 Todas as rondas completas!',
+    dimSumCompleteSub: 'Tem boa memória para dim sum!',
+    dimSumTotalScore: 'Pontuação Total',
+    dimSumPerfect: 'Perfeito!',
+    dimSumAttempts: 'Tentativas',
+    dimSumProgress: 'Progresso',
+
+    // Tram route
+    tramTitle: 'Rota do Elétrico',
+    tramSubtitle: 'Jogo Visuoespacial',
+    tramHowToPlay: 'Como jogar?',
+    tramStep1: '1️⃣  Observe o mapa do elétrico',
+    tramStep2: '2️⃣  Arranje as paragens na ordem correta',
+    tramStep3: '3️⃣  Arraste as paragens para reordenar',
+    tramStep4: '4️⃣  5 rondas — fica mais difícil!',
+    tramRewardPreview: 'Complete para ganhar',
+    tramStart: 'Começar →',
+    tramRound: 'Ronda',
+    tramOf: 'de',
+    tramPrompt: 'Arranje as paragens em ordem!',
+    tramPromptSub: 'Arraste as paragens — de oeste para este',
+    tramConfirm: 'Confirmar Ordem →',
+    tramCorrect: '✓ Correto!',
+    tramWrong: '✗ Errado — tente novamente!',
+    tramShowAnswer: 'Ver Resposta',
+    tramNextRound: 'Próxima Ronda →',
+    tramComplete: '🚋 Todas as rondas completas!',
+    tramCompleteSub: 'Conhece bem as rotas do elétrico!',
+    tramTotalScore: 'Pontuação Total',
+    tramPerfect: 'Perfeito!',
+    tramAnswerWas: 'A ordem correta era:',
+
+    // Reward
+    rewardTitle: '🎉 Jogo Completo!',
+    rewardCorrect: 'Correto',
+    rewardWrong: 'Errado',
+    rewardCoins: 'Moedas',
+    rewardTotalCoins: 'Total de Moedas',
+    rewardMoCATitle: '🧠 Acompanhamento Cognitivo',
+    rewardMoCASubtitle: 'Baseado na Avaliação Cognitiva de Montreal (MoCA)',
+    rewardThisTime: 'Agora',
+    rewardLastTime: 'Antes',
+    rewardEncouragementHigh: 'Excelente memória! Continue assim — a prática diária é ótima para a saúde cerebral.',
+    rewardEncouragementMid: 'Muito bem! A memória melhora com prática regular.',
+    rewardEncouragementLow: 'Não desanime — continue a praticar e vai melhorar!',
+    rewardScoreLabelHigh: 'Excelente!',
+    rewardScoreLabelMid: 'Muito bem!',
+    rewardScoreLabelLow: 'Continue!',
+    rewardPlayAgain: '🔄 Jogar Novamente',
+    rewardBackToMap: 'Voltar ao Mapa 🗺️',
+    rewardGameDone: 'Jogo Completo',
+
+    // Zone
+    zoneNeighbours: 'Vizinhos',
+    zoneGames: 'Jogos Disponíveis',
+    zoneNowAt: 'está agora em',
+    zoneNoGames: 'Mais jogos em breve!',
+
+    // Zone descriptions
+    zoneMarketDesc: 'O mercado é o coração de Hong Kong — produtos frescos, peixe e carne, com vizinhos amigáveis a fazer compras todos os dias.',
+    zoneCafeDesc: 'O cha chaan teng é único de Hong Kong. Uma chávena de chá com leite e um pão com manteiga fazem parte da memória de todos.',
+    zoneEstateDesc: 'Os bairros residenciais públicos são o lar de muitos habitantes de Hong Kong, cheios de calor e espírito de vizinhança.',
+    zoneParkDesc: 'O Parque Vitória é um dos maiores parques de Hong Kong — um local favorito para exercício matinal, xadrez e encontrar amigos.',
+    zoneMarketActivities: ['🥬 Comprar legumes', '🐟 Comprar peixe', '🗣️ Conversar com vizinhos', '🛍️ Encontrar pechinchas'],
+    zoneCafeActivities: ['☕ Beber chá com leite', '🍞 Comer torrada', '📰 Ler o jornal', '💬 Conversar'],
+    zoneEstateActivities: ['🏠 Visitar vizinhos', '🛗 Apanhar o elevador', '🌿 Jardim', '📮 Ver o correio'],
+    zoneParkActivities: ['🌸 Exercício matinal', '🎭 Ver espetáculos', '♟️ Jogar xadrez', '👥 Encontrar amigos'],
+
+    // Friends
+    friendsTitle: '👥 Amigos',
+    friendsTabFriends: '👥 Amigos',
+    friendsTabEvents: '🎉 Eventos',
+    friendsOnline: '🟢 Online Agora',
+    friendsOffline: '⚪ Recentemente Online',
+    friendsAddFriend: '＋ Encontrar Novos Amigos',
+    friendsVisit: 'Visitar',
+    friendsQuest: 'Missão',
+    friendsNowHere: '🟢 Online agora',
+    friendsHoursAgo: 'atrás',
+    friendsEventsFull: 'Cheio',
+    friendsEventsJoin: 'Participar →',
+    friendsEventsPeople: 'pessoas',
+    friendsEventsUpcoming: 'Próximos Eventos',
+
+    // Settings
+    settingsTitle: '⚙️ Definições',
+    settingsLanguage: '🌐 Idioma',
+    settingsLanguageDesc: 'Português',
+    settingsAccount: '👤 Conta',
+    settingsAccountDesc: 'Perfil e verificação de identidade',
+    settingsAbout: 'ℹ️ Sobre',
+    settingsAboutDesc: 'Versão e informações',
+    settingsVersion: 'Versão 1.0.0',
+    settingsLanguagePickerTitle: 'Escolher Idioma',
+
+    // MoCA domains
+    domainMemory: 'Memória',
+    domainAttention: 'Atenção',
+    domainLanguage: 'Linguagem',
+    domainExecutive: 'Executivo',
+    domainVisuospatial: 'Visuoespacial',
+    domainOrientation: 'Orientação',
+
+    // Shop
+    shopUnlock: 'Desbloquear',
+    shopUnlockConfirm: 'Gastar moedas para desbloquear este item?',
+    shopUnlockSuccess: 'Desbloqueado! 🎉',
+    shopNotEnoughCoins: 'Moedas insuficientes!',
+    shopCoinsNeeded: 'moedas necessárias',
+    shopAlreadyUnlocked: 'Já desbloqueado',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 Classificação',
+    leaderboardWeekly: 'Classificação Semanal',
+    leaderboardRank: 'Classificação',
+    leaderboardPlayer: 'Jogador',
+    leaderboardCoins: 'Moedas',
+    leaderboardYou: 'Você',
+    leaderboardEmpty: 'Sem jogadores esta semana',
+
+    // Wager
+    wagerTitle: '🎰 Fazer uma Aposta?',
+    wagerSubtitle: 'Supere a média da comunidade para ganhar mais!',
+    wagerChooseAmount: 'Escolha o valor da aposta:',
+    wagerWinCondition: 'Condição de vitória: superar a pontuação média da comunidade',
+    wagerPayout: 'Pagamento 2.5x se ganhar',
+    wagerSkip: 'Saltar, só jogar',
+    wagerConfirm: 'Apostar →',
+    wagerWon: '🎉 Aposta Ganha!',
+    wagerLost: '😔 Aposta Perdida',
+    wagerWonDesc: 'Superou a média da comunidade!',
+    wagerLostDesc: 'Melhor sorte da próxima vez!',
+    wagerActive: '🎰 Aposta Ativa',
+    wagerCommunityAvg: 'Média da comunidade',
+    wagerInsufficientCoins: 'Moedas insuficientes para apostar',
+
+    // Onboarding
+    onboardingWelcome: 'Jardim Imperial',
+    onboardingTagline: 'Mantenha-se ativo, mantenha-se ligado.',
+    onboardingGetStarted: 'Começar →',
+    onboardingSelectLanguage: 'Escolha o seu idioma',
+    onboardingSelectLanguageSub: 'Pode alterar mais tarde nas Definições',
+    onboardingSelectRegion: 'Onde vive?',
+    onboardingSelectRegionSub: 'Vamos personalizar a sua experiência',
+    onboardingVerifyId: 'Verifique a sua identidade',
+    onboardingVerifyIdSub: 'O seu cartão de identidade é usado para manter a sua conta segura',
+    onboardingIdNumber: 'Número de Identificação',
+    onboardingIdPlaceholder: 'Introduza o seu número de identificação',
+    onboardingTakeIdPhoto: 'Fotografe o seu cartão de identidade',
+    onboardingTakeIdPhotoSub: 'Coloque o cartão numa superfície plana',
+    onboardingTakeSelfie: 'Tire uma selfie com o seu cartão',
+    onboardingTakeSelfieSub: 'Segure o cartão ao lado do seu rosto',
+    onboardingVerifying: 'A verificar a sua identidade...',
+    onboardingVerified: '✓ Identidade Verificada!',
+    onboardingVerifiedSub: 'A sua conta está agora segura',
+    onboardingSetupProfile: 'Configure o seu perfil',
+    onboardingSetupProfileSub: 'Conte-nos um pouco sobre si',
+    onboardingYourName: 'O seu nome',
+    onboardingNamePlaceholder: 'Introduza o seu nome',
+    onboardingChooseAvatar: 'Escolha o seu avatar',
+    onboardingNext: 'Seguinte →',
+    onboardingDone: 'Entrar no Jardim →',
+    onboardingSkip: 'Saltar por agora',
+    onboardingMockPhotoTaken: '📸 Fotografia tirada!',
+    onboardingIdFormat: 'Formato',
+    onboardingInvalidId: 'Por favor introduza um número de identificação válido',
+
+    // MoCA analysis tab
+    tabMoca: 'MoCA',
+    mocaTitle: 'Relatório Cerebral',
+    mocaSubtitle: 'Análise estilo MoCA dos seus jogos',
+    mocaEstimatedScore: 'Pontuação MoCA estimada',
+    mocaAreasMeasured: 'áreas medidas',
+    mocaPoints: 'pts',
+    mocaGamesPlayed: 'jogos',
+    mocaProjectedNote: 'A pontuação é projetada para 30 com base nas áreas que já jogou.',
+    mocaBandNormal: 'Boa forma',
+    mocaBandNormalDesc: 'Os seus resultados estão na faixa normal. Continue a jogar todos os dias!',
+    mocaBandMild: 'Continue a treinar',
+    mocaBandMildDesc: 'Algumas áreas precisam de mais prática. Experimente os jogos indicados abaixo.',
+    mocaBandLow: 'Vamos verificar',
+    mocaBandLowDesc: 'As suas pontuações estão abaixo do habitual. Pode ser útil falar com um médico ou familiar.',
+    mocaStrongest: 'Mais forte',
+    mocaNeedsPractice: 'Precisa de prática',
+    mocaDomainBreakdown: 'Áreas cerebrais',
+    mocaNotTested: 'Ainda não testado',
+    mocaPlays: 'jogadas',
+    mocaPlayToTest: 'Ir para Jogos',
+    mocaGameComingSoon: 'Jogo em breve',
+    mocaHistoryTitle: 'Histórico de pontuações',
+    mocaRecentTitle: 'Jogos recentes',
+    mocaEmptyTitle: 'Ainda não jogou nenhum jogo',
+    mocaEmptyDesc: 'Jogue alguns jogos cerebrais e o seu relatório aparecerá aqui.',
+    mocaDisclaimer: 'Esta é uma estimativa baseada em pontuações de jogos, não um diagnóstico médico. Para um teste MoCA real, consulte um médico.',
+
+    // Calendar quiz
+    calTitle: 'Que dia é hoje?',
+    calSubtitle: 'Jogo de Orientação',
+    calHowToPlay: 'Como jogar?',
+    calStep1: '1️⃣  A Sra. Chan vai fazer-lhe 6 perguntas',
+    calStep2: '2️⃣  Toque na resposta correta sobre hoje',
+    calStep3: '3️⃣  Veja o calendário a preencher-se!',
+    calRewardPreview: 'Complete para ganhar',
+    calStart: 'Começar →',
+    calNpcName: 'Sra. Chan',
+    calProgress: 'Pergunta {n} de {total}',
+    calQDate: 'Qual é a data de hoje?',
+    calQMonth: 'Que mês é este?',
+    calQYear: 'Em que ano estamos?',
+    calQWeekday: 'Que dia da semana é hoje?',
+    calQCity: 'Em que cidade estamos?',
+    calQTimeOfDay: 'É de manhã, tarde ou noite?',
+    calDateOption: 'dia {n}',
+    calYearOption: '{n}',
+    calMonthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    calWeekdayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    calCityHongKong: 'Hong Kong',
+    calCityMacau: 'Macau',
+    calCityShenzhen: 'Shenzhen',
+    calCityGuangzhou: 'Guangzhou',
+    calTimeMorning: 'Manhã',
+    calTimeAfternoon: 'Tarde',
+    calTimeEvening: 'Noite',
+    calTimeNight: 'Madrugada',
+    calCorrect: '✓ Correto!',
+    calWrong: '✗ A resposta é',
 };
 
 // ─── Strings map + hook ───────────────────────────────────────────────────────
@@ -1110,6 +1836,7 @@ export const strings: Record<Language, Strings> = {
   en,
   'zh-HK': zhHK,
   'zh-CN': zhCN,
+  pt
 };
 
 // Convenience hook — use this in every screen
@@ -1117,5 +1844,5 @@ export const strings: Record<Language, Strings> = {
 export const useStrings = () => {
   const { useLanguageStore } = require('@/store/language-store');
   const language = useLanguageStore((s: any) => s.language);
-  return strings[language as Language];
+  return strings[language as Language] ?? strings['zh-HK'];
 };

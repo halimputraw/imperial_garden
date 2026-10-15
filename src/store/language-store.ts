@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ─── Supported languages ──────────────────────────────────────────────────────
 
-export type Language = 'en' | 'zh-HK' | 'zh-CN';
+export type Language = 'en' | 'zh-HK' | 'zh-CN' | 'pt';
 
 export const LANGUAGE_OPTIONS: {
   code: Language;
@@ -29,6 +29,12 @@ export const LANGUAGE_OPTIONS: {
     label: '简体中文',
     sublabel: 'Simplified Chinese',
     flag: '🇨🇳',
+  },
+  {
+    code: 'pt',
+    label: 'Português',
+    sublabel: 'Portuguese',
+    flag: '🇵🇹',
   },
 ];
 
