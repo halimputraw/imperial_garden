@@ -274,6 +274,37 @@ export interface Strings {
     gameDescTramRoute: string;
     gameDescNewsWords: string;
     gameDescCalendarQuiz: string;
+
+    // ── Onboarding ──
+    onboardingWelcome: string;
+    onboardingTagline: string;
+    onboardingGetStarted: string;
+    onboardingSelectLanguage: string;
+    onboardingSelectLanguageSub: string;
+    onboardingSelectRegion: string;
+    onboardingSelectRegionSub: string;
+    onboardingVerifyId: string;
+    onboardingVerifyIdSub: string;
+    onboardingIdNumber: string;
+    onboardingIdPlaceholder: string;
+    onboardingTakeIdPhoto: string;
+    onboardingTakeIdPhotoSub: string;
+    onboardingTakeSelfie: string;
+    onboardingTakeSelfieSub: string;
+    onboardingVerifying: string;
+    onboardingVerified: string;
+    onboardingVerifiedSub: string;
+    onboardingSetupProfile: string;
+    onboardingSetupProfileSub: string;
+    onboardingYourName: string;
+    onboardingNamePlaceholder: string;
+    onboardingChooseAvatar: string;
+    onboardingNext: string;
+    onboardingDone: string;
+    onboardingSkip: string;
+    onboardingMockPhotoTaken: string;
+    onboardingIdFormat: string;
+    onboardingInvalidId: string;
 }
 
 // ─── English ──────────────────────────────────────────────────────────────────
@@ -553,6 +584,37 @@ const en: Strings = {
     gameDescTramRoute: 'Find the fastest tram route from Sheung Wan to Shau Kei Wan!',
     gameDescNewsWords: 'Complete today\'s news crossword to keep your language skills sharp!',
     gameDescCalendarQuiz: 'Answer questions about today\'s date, day and season!',
+
+    // Onboarding
+    onboardingWelcome: 'Imperial Garden',
+    onboardingTagline: 'Stay sharp, stay connected.',
+    onboardingGetStarted: 'Get Started →',
+    onboardingSelectLanguage: 'Choose your language',
+    onboardingSelectLanguageSub: 'You can change this later in Settings',
+    onboardingSelectRegion: 'Where do you live?',
+    onboardingSelectRegionSub: 'We will personalise your experience',
+    onboardingVerifyId: 'Verify your identity',
+    onboardingVerifyIdSub: 'Your ID is used to keep your account safe',
+    onboardingIdNumber: 'ID Number',
+    onboardingIdPlaceholder: 'Enter your ID number',
+    onboardingTakeIdPhoto: 'Take a photo of your ID card',
+    onboardingTakeIdPhotoSub: 'Place your ID card on a flat surface',
+    onboardingTakeSelfie: 'Take a selfie holding your ID',
+    onboardingTakeSelfieSub: 'Hold your ID next to your face',
+    onboardingVerifying: 'Verifying your identity...',
+    onboardingVerified: '✓ Identity Verified!',
+    onboardingVerifiedSub: 'Your account is now secure',
+    onboardingSetupProfile: 'Set up your profile',
+    onboardingSetupProfileSub: 'Tell us a bit about yourself',
+    onboardingYourName: 'Your name',
+    onboardingNamePlaceholder: 'Enter your name',
+    onboardingChooseAvatar: 'Choose your avatar',
+    onboardingNext: 'Next →',
+    onboardingDone: 'Enter the Garden →',
+    onboardingSkip: 'Skip for now',
+    onboardingMockPhotoTaken: '📸 Photo taken!',
+    onboardingIdFormat: 'Format',
+    onboardingInvalidId: 'Please enter a valid ID number',
 };
 
 // ─── Cantonese (Traditional Chinese) ─────────────────────────────────────────
@@ -828,6 +890,37 @@ const zhHK: Strings = {
     gameDescTramRoute: '搵出由上環去筲箕灣嘅最快路線！',
     gameDescNewsWords: '完成今日新聞嘅填字遊戲，保持語言能力！',
     gameDescCalendarQuiz: '回答關於今日日期、星期同節氣嘅問題！',
+
+    // Onboarding
+    onboardingWelcome: '皇家花園',
+    onboardingTagline: '保持靈敏，保持聯繫。',
+    onboardingGetStarted: '開始 →',
+    onboardingSelectLanguage: '選擇你的語言',
+    onboardingSelectLanguageSub: '之後可以喺設定更改',
+    onboardingSelectRegion: '你住喺邊度？',
+    onboardingSelectRegionSub: '我們會根據你的位置個人化你的體驗',
+    onboardingVerifyId: '驗證你的身份',
+    onboardingVerifyIdSub: '你的身份證用嚟保障你的帳戶安全',
+    onboardingIdNumber: '身份證號碼',
+    onboardingIdPlaceholder: '輸入你的身份證號碼',
+    onboardingTakeIdPhoto: '拍攝你的身份證',
+    onboardingTakeIdPhotoSub: '將身份證放喺平坦的表面上',
+    onboardingTakeSelfie: '拿住身份證自拍',
+    onboardingTakeSelfieSub: '將身份證放喺面旁邊',
+    onboardingVerifying: '正在驗證你的身份...',
+    onboardingVerified: '✓ 身份驗證成功！',
+    onboardingVerifiedSub: '你的帳戶已經安全',
+    onboardingSetupProfile: '設定你的個人資料',
+    onboardingSetupProfileSub: '告訴我們一啲關於你的資料',
+    onboardingYourName: '你的名字',
+    onboardingNamePlaceholder: '輸入你的名字',
+    onboardingChooseAvatar: '選擇你的頭像',
+    onboardingNext: '下一步 →',
+    onboardingDone: '進入花園 →',
+    onboardingSkip: '暫時跳過',
+    onboardingMockPhotoTaken: '📸 相片已拍攝！',
+    onboardingIdFormat: '格式',
+    onboardingInvalidId: '請輸入有效的身份證號碼',
 };
 
 // ─── Simplified Chinese ───────────────────────────────────────────────────────
@@ -1102,6 +1195,339 @@ const zhCN: Strings = {
     gameDescTramRoute: '找出从上环到筲箕湾的最快路线！',
     gameDescNewsWords: '完成今日新闻的填字游戏，保持语言能力！',
     gameDescCalendarQuiz: '回答关于今日日期、星期和节气的问题！',
+
+    // Onboarding
+    onboardingWelcome: '皇家花园',
+    onboardingTagline: '保持敏锐，保持联系。',
+    onboardingGetStarted: '开始 →',
+    onboardingSelectLanguage: '选择你的语言',
+    onboardingSelectLanguageSub: '之后可以在设置中更改',
+    onboardingSelectRegion: '你住在哪里？',
+    onboardingSelectRegionSub: '我们会根据你的位置个性化你的体验',
+    onboardingVerifyId: '验证你的身份',
+    onboardingVerifyIdSub: '你的身份证用于保障你的账户安全',
+    onboardingIdNumber: '身份证号码',
+    onboardingIdPlaceholder: '输入你的身份证号码',
+    onboardingTakeIdPhoto: '拍摄你的身份证',
+    onboardingTakeIdPhotoSub: '将身份证放在平坦的表面上',
+    onboardingTakeSelfie: '拿着身份证自拍',
+    onboardingTakeSelfieSub: '将身份证放在脸旁边',
+    onboardingVerifying: '正在验证你的身份...',
+    onboardingVerified: '✓ 身份验证成功！',
+    onboardingVerifiedSub: '你的账户已经安全',
+    onboardingSetupProfile: '设置你的个人资料',
+    onboardingSetupProfileSub: '告诉我们一些关于你的信息',
+    onboardingYourName: '你的名字',
+    onboardingNamePlaceholder: '输入你的名字',
+    onboardingChooseAvatar: '选择你的头像',
+    onboardingNext: '下一步 →',
+    onboardingDone: '进入花园 →',
+    onboardingSkip: '暂时跳过',
+    onboardingMockPhotoTaken: '📸 照片已拍摄！',
+    onboardingIdFormat: '格式',
+    onboardingInvalidId: '请输入有效的身份证号码',
+};
+
+const pt: Strings = {
+    // General
+    appName: 'Jardim Imperial',
+    loading: 'A carregar...',
+    back: '‹ Voltar',
+    close: '✕',
+    confirm: 'Confirmar',
+    cancel: 'Cancelar',
+    comingSoon: 'Em breve!',
+    level: 'Nível',
+    seconds: 'seg',
+    scoreUnit: 'pts',
+    zoneNotFound: 'Zona não encontrada 🤔',
+
+    // Tab bar
+    tabMap: 'Mapa',
+    tabHome: 'Minha Casa',
+    tabGames: 'Jogos',
+    tabFriends: 'Amigos',
+    tabSettings: 'Definições',
+
+    // Map screen
+    mapTitle: '🗺 Mapa de HK',
+    mapDailyQuest: '📋',
+    mapDailyQuestDesc: 'Missão de hoje: Comprar 5 coisas no mercado!',
+    mapZoneMarket: 'Mercado',
+    mapZoneCafe: 'Cha Chaan Teng',
+    mapZoneEstate: 'Bairro Residencial',
+    mapZonePark: 'Parque Vitória',
+    mapHarbour: 'Porto de Victoria',
+    mapEnterZone: 'Entrar',
+    mapActivities: 'O que pode fazer aqui?',
+
+    // Home screen
+    homeTitle: '\'s Casa Aconchegante',
+    homeLevel: '🏠 Nível',
+    homeFurniture: 'Mobília',
+    homeLocked: 'Bloqueado',
+    homeScore: 'Pontos',
+    homeMyRoom: 'O Meu Quarto',
+    homeHint: 'Complete jogos e missões para ganhar pontos e desbloquear mais mobília!',
+    homeDecorate: '🎨 Decorar a Minha Casa',
+    homeTabRoom: '🏠 O Meu Quarto',
+    homeTabLeaderboard: '🏆 Classificação',
+
+    // Games screen
+    gamesTitle: '🎮 Jogos',
+    gamesDailyChallenge: 'Desafio Diário',
+    gamesDailyChallengeDesc: 'Complete 3 jogos e ganhe 🪙 100 extra!',
+    gamesAllGames: 'Todos os Jogos',
+    gamesAllGamesSubtitle: 'Cada jogo treina uma habilidade cerebral diferente',
+    gamesUnlockHint: 'Complete mais jogos para desbloquear',
+    gamesBrainTip: 'Jogar jogos cerebrais regularmente ajuda a manter a função cognitiva!',
+    gamesDuration: 'Cerca de',
+    gamesLocked: 'Bloqueado',
+
+    // Game titles
+    gameTitleMarketMemory: 'Memória do Mercado',
+    gameTitleMahjongMatch: 'Jogo de Mahjong',
+    gameTitleDimSumOrder: 'Ordem do Dim Sum',
+    gameTitleTramRoute: 'Rota do Elétrico',
+    gameTitleNewsWords: 'Palavras das Notícias',
+    gameTitleCalendarQuiz: 'Quiz do Calendário',
+
+    // Game descriptions
+    gameDescMarketMemory: 'Lembre os itens do mercado e teste a sua memória em 5 rondas!',
+    gameDescMahjongMatch: 'Vire as peças e encontre todos os pares de mahjong.',
+    gameDescDimSumOrder: 'Lembre a ordem dos pratos de dim sum e selecione-os corretamente!',
+    gameDescTramRoute: 'Arranje as paragens do elétrico na ordem correta!',
+    gameDescNewsWords: 'Complete o puzzle de palavras cruzadas das notícias de hoje!',
+    gameDescCalendarQuiz: 'Responda a perguntas sobre a data e estação de hoje!',
+
+    // Market memory
+    marketMemoryTitle: 'Memória do Mercado',
+    marketMemorySubtitle: 'Jogo de Memória',
+    marketMemoryHowToPlay: 'Como jogar?',
+    marketMemoryStep1: '1️⃣  Observe os itens do mercado com atenção',
+    marketMemoryStep2: '2️⃣  Lembre-os — tem 5 segundos!',
+    marketMemoryStep3: '3️⃣  Selecione os que se lembra',
+    marketMemoryStep4: '4️⃣  Mais correto = mais pontos em 5 rondas!',
+    marketMemoryRewardPreview: 'Complete para ganhar',
+    marketMemoryStart: 'Começar →',
+    marketMemoryMemorisePrompt: 'Lembre estes itens!',
+    marketMemoryMemoriseSubPrompt: 'Lembre-os — será testado!',
+    marketMemoryTip: 'Tente dizer cada item em voz alta para ajudar a lembrar!',
+    marketMemoryHidden: 'Itens escondidos!',
+    marketMemoryHiddenSub: 'Agora vamos testar a sua memória...',
+    marketMemoryQuizPrompt: 'Quais itens se lembra?',
+    marketMemoryQuizSubPrompt: 'Toque nos itens que viu',
+    marketMemorySubmit: 'Submeter Respostas →',
+    marketMemorySelectFirst: 'Selecione itens primeiro...',
+
+    // Mahjong
+    mahjongTitle: 'Jogo de Mahjong',
+    mahjongSubtitle: 'Jogo de Atenção',
+    mahjongHowToPlay: 'Como jogar?',
+    mahjongStep1: '1️⃣  Todas as peças são mostradas brevemente',
+    mahjongStep2: '2️⃣  As peças viram para baixo',
+    mahjongStep3: '3️⃣  Toque em duas peças para as virar',
+    mahjongStep4: '4️⃣  Encontre todos os 8 pares — menos jogadas = melhor!',
+    mahjongRewardPreview: 'Complete para ganhar',
+    mahjongStart: 'Começar →',
+    mahjongPreviewPrompt: 'Lembre as peças!',
+    mahjongPreviewSub: 'Elas vão virar em breve...',
+    mahjongPlayPrompt: 'Encontre todos os pares!',
+    mahjongPlaySub: 'Toque em duas peças para as virar',
+    mahjongMoves: 'Jogadas',
+    mahjongTime: 'Tempo',
+    mahjongComplete: '🎊 Todos os pares encontrados!',
+    mahjongCompleteSub: 'Muito bem!',
+    mahjongBestMoves: 'Melhor possível: 8 jogadas',
+    mahjongTimeTaken: 'Tempo gasto',
+
+    // Dim sum
+    dimSumTitle: 'Ordem do Dim Sum',
+    dimSumSubtitle: 'Jogo de Função Executiva',
+    dimSumHowToPlay: 'Como jogar?',
+    dimSumStep1: '1️⃣  Lembre a ordem dos pratos mostrados',
+    dimSumStep2: '2️⃣  Eles desaparecem após alguns segundos',
+    dimSumStep3: '3️⃣  Toque nos pratos na ordem correta',
+    dimSumStep4: '4️⃣  Cuidado com pratos extra para confundir!',
+    dimSumRewardPreview: 'Complete para ganhar',
+    dimSumStart: 'Começar →',
+    dimSumRound: 'Ronda',
+    dimSumOf: 'de',
+    dimSumShowPrompt: 'Lembre a ordem!',
+    dimSumShowSub: 'Os pratos vão desaparecer em breve...',
+    dimSumQuizPrompt: 'Toque na ordem correta!',
+    dimSumQuizSub: 'Toque nos pratos na ordem que viu',
+    dimSumCorrectTap: '✓ Correto!',
+    dimSumWrongTap: '✗ Errado! Tente novamente',
+    dimSumRoundComplete: '🎉 Ronda completa!',
+    dimSumNextRound: 'Próxima Ronda →',
+    dimSumComplete: '🍡 Todas as rondas completas!',
+    dimSumCompleteSub: 'Tem boa memória para dim sum!',
+    dimSumTotalScore: 'Pontuação Total',
+    dimSumPerfect: 'Perfeito!',
+    dimSumAttempts: 'Tentativas',
+    dimSumProgress: 'Progresso',
+
+    // Tram route
+    tramTitle: 'Rota do Elétrico',
+    tramSubtitle: 'Jogo Visuoespacial',
+    tramHowToPlay: 'Como jogar?',
+    tramStep1: '1️⃣  Observe o mapa do elétrico',
+    tramStep2: '2️⃣  Arranje as paragens na ordem correta',
+    tramStep3: '3️⃣  Arraste as paragens para reordenar',
+    tramStep4: '4️⃣  5 rondas — fica mais difícil!',
+    tramRewardPreview: 'Complete para ganhar',
+    tramStart: 'Começar →',
+    tramRound: 'Ronda',
+    tramOf: 'de',
+    tramPrompt: 'Arranje as paragens em ordem!',
+    tramPromptSub: 'Arraste as paragens — de oeste para este',
+    tramConfirm: 'Confirmar Ordem →',
+    tramCorrect: '✓ Correto!',
+    tramWrong: '✗ Errado — tente novamente!',
+    tramShowAnswer: 'Ver Resposta',
+    tramNextRound: 'Próxima Ronda →',
+    tramComplete: '🚋 Todas as rondas completas!',
+    tramCompleteSub: 'Conhece bem as rotas do elétrico!',
+    tramTotalScore: 'Pontuação Total',
+    tramPerfect: 'Perfeito!',
+    tramAnswerWas: 'A ordem correta era:',
+
+    // Reward
+    rewardTitle: '🎉 Jogo Completo!',
+    rewardCorrect: 'Correto',
+    rewardWrong: 'Errado',
+    rewardCoins: 'Moedas',
+    rewardTotalCoins: 'Total de Moedas',
+    rewardMoCATitle: '🧠 Acompanhamento Cognitivo',
+    rewardMoCASubtitle: 'Baseado na Avaliação Cognitiva de Montreal (MoCA)',
+    rewardThisTime: 'Agora',
+    rewardLastTime: 'Antes',
+    rewardEncouragementHigh: 'Excelente memória! Continue assim — a prática diária é ótima para a saúde cerebral.',
+    rewardEncouragementMid: 'Muito bem! A memória melhora com prática regular.',
+    rewardEncouragementLow: 'Não desanime — continue a praticar e vai melhorar!',
+    rewardScoreLabelHigh: 'Excelente!',
+    rewardScoreLabelMid: 'Muito bem!',
+    rewardScoreLabelLow: 'Continue!',
+    rewardPlayAgain: '🔄 Jogar Novamente',
+    rewardBackToMap: 'Voltar ao Mapa 🗺️',
+    rewardGameDone: 'Jogo Completo',
+
+    // Zone
+    zoneNeighbours: 'Vizinhos',
+    zoneGames: 'Jogos Disponíveis',
+    zoneNowAt: 'está agora em',
+    zoneNoGames: 'Mais jogos em breve!',
+    // zoneNotFound: 'Zona não encontrada 🤔',
+
+    // Zone descriptions
+    zoneMarketDesc: 'O mercado é o coração de Hong Kong — produtos frescos, peixe e carne, com vizinhos amigáveis a fazer compras todos os dias.',
+    zoneCafeDesc: 'O cha chaan teng é único de Hong Kong. Uma chávena de chá com leite e um pão com manteiga fazem parte da memória de todos.',
+    zoneEstateDesc: 'Os bairros residenciais públicos são o lar de muitos habitantes de Hong Kong, cheios de calor e espírito de vizinhança.',
+    zoneParkDesc: 'O Parque Vitória é um dos maiores parques de Hong Kong — um local favorito para exercício matinal, xadrez e encontrar amigos.',
+    zoneMarketActivities: ['🥬 Comprar legumes', '🐟 Comprar peixe', '🗣️ Conversar com vizinhos', '🛍️ Encontrar pechinchas'],
+    zoneCafeActivities: ['☕ Beber chá com leite', '🍞 Comer torrada', '📰 Ler o jornal', '💬 Conversar'],
+    zoneEstateActivities: ['🏠 Visitar vizinhos', '🛗 Apanhar o elevador', '🌿 Jardim', '📮 Ver o correio'],
+    zoneParkActivities: ['🌸 Exercício matinal', '🎭 Ver espetáculos', '♟️ Jogar xadrez', '👥 Encontrar amigos'],
+
+    // Friends
+    friendsTitle: '👥 Amigos',
+    friendsTabFriends: '👥 Amigos',
+    friendsTabEvents: '🎉 Eventos',
+    friendsOnline: '🟢 Online Agora',
+    friendsOffline: '⚪ Recentemente Online',
+    friendsAddFriend: '＋ Encontrar Novos Amigos',
+    friendsVisit: 'Visitar',
+    friendsQuest: 'Missão',
+    friendsNowHere: '🟢 Online agora',
+    friendsHoursAgo: 'atrás',
+    friendsEventsFull: 'Cheio',
+    friendsEventsJoin: 'Participar →',
+    friendsEventsPeople: 'pessoas',
+    friendsEventsUpcoming: 'Próximos Eventos',
+
+    // Settings
+    settingsTitle: '⚙️ Definições',
+    settingsLanguage: '🌐 Idioma',
+    settingsLanguageDesc: 'Português',
+    settingsAccount: '👤 Conta',
+    settingsAccountDesc: 'Perfil e verificação de identidade',
+    settingsAbout: 'ℹ️ Sobre',
+    settingsAboutDesc: 'Versão e informações',
+    settingsVersion: 'Versão 1.0.0',
+    settingsLanguagePickerTitle: 'Escolher Idioma',
+
+    // MoCA domains
+    domainMemory: 'Memória',
+    domainAttention: 'Atenção',
+    domainLanguage: 'Linguagem',
+    domainExecutive: 'Executivo',
+    domainVisuospatial: 'Visuoespacial',
+    domainOrientation: 'Orientação',
+
+    // Shop
+    shopUnlock: 'Desbloquear',
+    shopUnlockConfirm: 'Gastar moedas para desbloquear este item?',
+    shopUnlockSuccess: 'Desbloqueado! 🎉',
+    shopNotEnoughCoins: 'Moedas insuficientes!',
+    shopCoinsNeeded: 'moedas necessárias',
+    shopAlreadyUnlocked: 'Já desbloqueado',
+
+    // Leaderboard
+    leaderboardTitle: '🏆 Classificação',
+    leaderboardWeekly: 'Classificação Semanal',
+    leaderboardRank: 'Classificação',
+    leaderboardPlayer: 'Jogador',
+    leaderboardCoins: 'Moedas',
+    leaderboardYou: 'Você',
+    leaderboardEmpty: 'Sem jogadores esta semana',
+
+    // Wager
+    wagerTitle: '🎰 Fazer uma Aposta?',
+    wagerSubtitle: 'Supere a média da comunidade para ganhar mais!',
+    wagerChooseAmount: 'Escolha o valor da aposta:',
+    wagerWinCondition: 'Condição de vitória: superar a pontuação média da comunidade',
+    wagerPayout: 'Pagamento 2.5x se ganhar',
+    wagerSkip: 'Saltar, só jogar',
+    wagerConfirm: 'Apostar →',
+    wagerWon: '🎉 Aposta Ganha!',
+    wagerLost: '😔 Aposta Perdida',
+    wagerWonDesc: 'Superou a média da comunidade!',
+    wagerLostDesc: 'Melhor sorte da próxima vez!',
+    wagerActive: '🎰 Aposta Ativa',
+    wagerCommunityAvg: 'Média da comunidade',
+    wagerInsufficientCoins: 'Moedas insuficientes para apostar',
+
+    // Onboarding
+    onboardingWelcome: 'Jardim Imperial',
+    onboardingTagline: 'Mantenha-se ativo, mantenha-se ligado.',
+    onboardingGetStarted: 'Começar →',
+    onboardingSelectLanguage: 'Escolha o seu idioma',
+    onboardingSelectLanguageSub: 'Pode alterar mais tarde nas Definições',
+    onboardingSelectRegion: 'Onde vive?',
+    onboardingSelectRegionSub: 'Vamos personalizar a sua experiência',
+    onboardingVerifyId: 'Verifique a sua identidade',
+    onboardingVerifyIdSub: 'O seu cartão de identidade é usado para manter a sua conta segura',
+    onboardingIdNumber: 'Número de Identificação',
+    onboardingIdPlaceholder: 'Introduza o seu número de identificação',
+    onboardingTakeIdPhoto: 'Fotografe o seu cartão de identidade',
+    onboardingTakeIdPhotoSub: 'Coloque o cartão numa superfície plana',
+    onboardingTakeSelfie: 'Tire uma selfie com o seu cartão',
+    onboardingTakeSelfieSub: 'Segure o cartão ao lado do seu rosto',
+    onboardingVerifying: 'A verificar a sua identidade...',
+    onboardingVerified: '✓ Identidade Verificada!',
+    onboardingVerifiedSub: 'A sua conta está agora segura',
+    onboardingSetupProfile: 'Configure o seu perfil',
+    onboardingSetupProfileSub: 'Conte-nos um pouco sobre si',
+    onboardingYourName: 'O seu nome',
+    onboardingNamePlaceholder: 'Introduza o seu nome',
+    onboardingChooseAvatar: 'Escolha o seu avatar',
+    onboardingNext: 'Seguinte →',
+    onboardingDone: 'Entrar no Jardim →',
+    onboardingSkip: 'Saltar por agora',
+    onboardingMockPhotoTaken: '📸 Fotografia tirada!',
+    onboardingIdFormat: 'Formato',
+    onboardingInvalidId: 'Por favor introduza um número de identificação válido',
 };
 
 // ─── Strings map + hook ───────────────────────────────────────────────────────
@@ -1110,6 +1536,7 @@ export const strings: Record<Language, Strings> = {
   en,
   'zh-HK': zhHK,
   'zh-CN': zhCN,
+  pt
 };
 
 // Convenience hook — use this in every screen
@@ -1117,5 +1544,5 @@ export const strings: Record<Language, Strings> = {
 export const useStrings = () => {
   const { useLanguageStore } = require('@/store/language-store');
   const language = useLanguageStore((s: any) => s.language);
-  return strings[language as Language];
+  return strings[language as Language] ?? strings['zh-HK'];
 };

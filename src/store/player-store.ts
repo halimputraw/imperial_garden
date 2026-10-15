@@ -74,6 +74,8 @@ export interface PlayerState {
   mocaHistory: MoCASession[];
 
   // ── Actions ──────────────────────────────────────────────────────────────
+  setName: (name: string) => void;
+  setAvatar: (avatar: string) => void;
   addCoins: (amount: number) => void;
   recordMoCASession: (session: Omit<MoCASession, 'playedAt'>) => void;
   getLastDomainSession: (domain: MoCADomain) => MoCASession | null;
@@ -107,6 +109,9 @@ export const usePlayerStore = create<PlayerState>()(
       ],
 
       // ── Actions ──────────────────────────────────────────────────────────
+
+      setName: (name) => set({ name }),
+      setAvatar: (avatar) => set({ avatar }),
 
       addCoins: (amount) => {
         set((state) => ({

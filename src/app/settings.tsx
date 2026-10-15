@@ -16,6 +16,7 @@ import {
 } from '@/store/language-store';
 import { strings } from '@/i18n/strings';
 import { usePlayerStore } from '@/store/player-store';
+import { useOnboardingStore } from '@/store/onboarding-store';
 
 // ─── Language picker modal ────────────────────────────────────────────────────
 
@@ -177,6 +178,8 @@ function SettingsSection({
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function SettingsScreen() {
+  const resetOnboarding = useOnboardingStore((s) => s.resetOnboarding);
+
   const language = useLanguageStore((s) => s.language);
   const setLanguage = useLanguageStore((s) => s.setLanguage);
   const t = strings[language];
@@ -239,6 +242,16 @@ export default function SettingsScreen() {
             onPress={() => {
               // TODO: navigate to HKID registration
             }}
+          />
+        </SettingsSection>
+
+        {/* ── Reset Onboarding ── */}
+        <SettingsSection>
+          <SettingsRow
+            emoji="🔄"
+            title="Reset Onboarding"
+            subtitle="Demo only — restart the onboarding flow"
+            onPress={resetOnboarding}
           />
         </SettingsSection>
 
