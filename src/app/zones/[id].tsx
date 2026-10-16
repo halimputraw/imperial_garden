@@ -11,7 +11,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { usePlayerStore } from '@/store/player-store';
 import { useStrings } from '@/i18n/strings';
-
+import { useDailyProgress } from '@/store/daily-store';
 // ─── Zone static data ─────────────────────────────────────────────────────────
 
 interface ZoneGame {
@@ -146,9 +146,11 @@ function NPCCard({
 
 function ZoneGameCard({
   game,
+  playedToday,
   onPress,
 }: {
   game: ZoneGame;
+  playedToday: boolean;
   onPress: (game: ZoneGame) => void;
 }) {
   const t = useStrings();
@@ -156,9 +158,11 @@ function ZoneGameCard({
     <Pressable
       style={({ pressed }) => [
         styles.gameCard,
-        pressed && styles.gameCardPressed,
+        playedToday && { opacity: 0.6 },
+        pressed && !playedToday && styles.gameCardPressed,
       ]}
       onPress={() => onPress(game)}
+      disabled={playedToday}
       accessible
       accessibilityRole="button"
       accessibilityLabel={`${t.zoneGames} ${game.titleCantonese}`}
@@ -176,16 +180,24 @@ function ZoneGameCard({
             <Text style={styles.domainText}>{game.domain}</Text>
           </View>
           <Text style={styles.gameDuration}>
-            ⏱ {t.gamesDuration} {game.durationSeconds} {t.seconds}
+            {playedToday
+              ? t.gamesComeBackTomorrow
+              : `⏱ ${t.gamesDuration} ${game.durationSeconds} ${t.seconds}`}
           </Text>
         </View>
       </View>
 
       {/* Right reward */}
       <View style={styles.gameReward}>
-        <Text style={styles.coinEmoji}>🪙</Text>
-        <Text style={styles.coinAmount}>+{game.coins}</Text>
-        <Text style={styles.playArrow}>›</Text>
+        {playedToday ? (
+          <Text style={styles.coinEmoji}>✅</Text>
+        ) : (
+          <>
+            <Text style={styles.coinEmoji}>🪙</Text>
+            <Text style={styles.coinAmount}>+{game.coins}</Text>
+            <Text style={styles.playArrow}>›</Text>
+          </>
+        )}
       </View>
     </Pressable>
   );
@@ -216,7 +228,7 @@ export default function ZoneScreen() {
   const coins = usePlayerStore((s) => s.coins);
   const name = usePlayerStore((s) => s.name);
   const avatar = usePlayerStore((s) => s.avatar);
-
+  const { isPlayedToday } = useDailyProgress();
   // Fallback if unknown zone id
   if (!zone) {
     return (
@@ -227,6 +239,7 @@ export default function ZoneScreen() {
   }
 
   const handleGamePress = (game: ZoneGame) => {
+    if (isPlayedToday(game.id)) return; // once per day
     router.push(game.route as any);
   };
 
@@ -296,6 +309,7 @@ export default function ZoneScreen() {
               <ZoneGameCard
                 key={game.id}
                 game={game}
+                playedToday={isPlayedToday(game.id)}   // ← add
                 onPress={handleGamePress}
               />
             ))}

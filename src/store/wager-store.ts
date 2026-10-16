@@ -30,6 +30,7 @@ export const COMMUNITY_AVG_SCORES: Record<string, number> = {
   'tram-route':     52,  // moderate visuospatial
   'dim-sum-order':  58,  // moderate executive function
   'calendar-quiz':  83, 
+  'news-words':  70, 
 };
 
 // ─── Store ────────────────────────────────────────────────────────────────────
