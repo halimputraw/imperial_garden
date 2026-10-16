@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDailyStore, DAILY_BONUS } from '@/store/daily-store';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -128,6 +129,11 @@ export const usePlayerStore = create<PlayerState>()(
         set((state) => ({
           mocaHistory: [full, ...state.mocaHistory],
         }));
+        // Daily Challenge — mark this game done today, pay bonus at 3 games
+        const { bonusEarned } = useDailyStore.getState().markCompleted(session.gameId);
+        if (bonusEarned) {
+          get().addCoins(DAILY_BONUS);
+        }
       },
 
       getLastDomainSession: (domain) => {

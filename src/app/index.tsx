@@ -24,6 +24,7 @@ function TopBar() {
   const avatar = usePlayerStore((s) => s.avatar);
   const coins = usePlayerStore((s) => s.coins);
   const level = usePlayerStore((s) => s.level);
+  const router = useRouter();
   return (
     <View style={styles.topBar}>
       {/* Player info — left side */}
@@ -38,9 +39,19 @@ function TopBar() {
       </View>
 
       {/* Coin count — right side */}
-      <View style={styles.coinBadge}>
-        <Text style={styles.coinEmoji}>🪙</Text>
-        <Text style={styles.coinCount}>{coins}</Text>
+      <View style={styles.topBarRight}>
+        <Pressable
+          onPress={() => router.push('/quest-calendar' as any)}
+          style={({ pressed }) => [styles.calendarButton, pressed && { opacity: 0.6 }]}
+          accessibilityRole="button"
+          accessibilityLabel={t.questCalTitle}
+        >
+          <Text style={styles.calendarEmoji}>📅</Text>
+        </Pressable>
+        <View style={styles.coinBadge}>
+          <Text style={styles.coinEmoji}>🪙</Text>
+          <Text style={styles.coinCount}>{coins}</Text>
+        </View>
       </View>
     </View>
   );
@@ -262,6 +273,24 @@ const styles = StyleSheet.create({
     fontSize: FontSize.tiny,
     color: Colors.textSecondary,
     fontWeight: '600',
+  },
+    topBarRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  calendarButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.surfaceDark,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  calendarEmoji: {
+    fontSize: 22,
   },
   coinBadge: {
     flexDirection: 'row',

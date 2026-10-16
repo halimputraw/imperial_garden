@@ -65,7 +65,7 @@ const DOMAIN_HAS_GAME: Record<MoCADomain, boolean> = {
   attention: true,
   executive: true,
   visuospatial: true,
-  language: false,
+  language: true,
   orientation: true,
 };
 

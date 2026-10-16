@@ -48,6 +48,18 @@ export interface Strings {
     gamesTitle: string;
     gamesDailyChallenge: string;
     gamesDailyChallengeDesc: string;
+    gamesDailyChallengeDone: string;
+    gamesPlayedToday: string;
+    gamesComeBackTomorrow: string;
+    rewardDailyBonus: string;
+    questCalTitle: string;
+    questCalStreak: string;
+    questCalDaysActive: string;
+    questCalTotalQuests: string;
+    questCalQuestsDone: string;
+    questCalBonus: string;
+    questCalNoQuests: string;
+    questWeekdayShort: string[];
     gamesAllGames: string;
     gamesAllGamesSubtitle: string;
     gamesUnlockHint: string;
@@ -336,6 +348,21 @@ export interface Strings {
     calCorrect: string;
     calWrong: string;
 
+    // ── News words (language) ──
+    newsTitle: string;
+    newsSubtitle: string;
+    newsHowToPlay: string;
+    newsStep1: string;
+    newsStep2: string;
+    newsStep3: string;
+    newsRewardPreview: string;
+    newsStart: string;
+    newsPaperName: string;
+    newsProgress: string;
+    newsPrompt: string;
+    newsCorrect: string;
+    newsWrong: string;
+
     // ── Onboarding ──
     onboardingWelcome: string;
     onboardingTagline: string;
@@ -453,6 +480,18 @@ const en: Strings = {
     gamesTitle: '🎮 Games',
     gamesDailyChallenge: 'Daily Challenge',
     gamesDailyChallengeDesc: 'Complete 3 games to earn bonus 🪙 100!',
+    gamesDailyChallengeDone: 'Done! Bonus 🪙 100 earned today 🎉',
+    gamesPlayedToday: 'Done today',
+    gamesComeBackTomorrow: 'Come back tomorrow to play again!',
+    rewardDailyBonus: 'Daily Challenge complete! +🪙 100 bonus',
+    questCalTitle: 'Quest Calendar',
+    questCalStreak: 'day streak',
+    questCalDaysActive: 'active days',
+    questCalTotalQuests: 'quests this month',
+    questCalQuestsDone: '{n} quests done',
+    questCalBonus: '⭐ Daily Challenge complete',
+    questCalNoQuests: 'No quests done this day',
+    questWeekdayShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     gamesAllGames: 'All Games',
     gamesAllGamesSubtitle: 'Each game trains a different brain skill',
     gamesUnlockHint: 'Complete more games to unlock',
@@ -706,6 +745,23 @@ const en: Strings = {
     calCorrect: '✓ Correct!',
     calWrong: '✗ The answer is',
 
+    
+    // News words (language)
+    newsTitle: 'Morning Paper',
+    newsSubtitle: 'Language Game',
+    newsHowToPlay: 'How to play?',
+    newsStep1: '1️⃣  Read the newspaper headline',
+    newsStep2: '2️⃣  One word is missing',
+    newsStep3: '3️⃣  Tap the word that fits best!',
+    newsRewardPreview: 'Complete to earn',
+    newsStart: 'Read the Paper →',
+    newsPaperName: 'Morning Post',
+    newsProgress: 'Headline {n} of {total}',
+    newsPrompt: 'Which word fits the headline?',
+    newsCorrect: '✓ Correct!',
+    newsWrong: '✗ The answer is',
+
+
     // Onboarding
     onboardingWelcome: 'Imperial Garden',
     onboardingTagline: 'Stay sharp, stay connected.',
@@ -822,6 +878,18 @@ const zhHK: Strings = {
     gamesTitle: '🎮 遊戲',
     gamesDailyChallenge: '今日挑戰',
     gamesDailyChallengeDesc: '完成 3 個遊戲，獲得額外 🪙 100！',
+    gamesDailyChallengeDone: '完成！今日已獲得額外 🪙 100 🎉',
+    gamesPlayedToday: '今日已玩',
+    gamesComeBackTomorrow: '聽日再嚟玩啦！',
+    rewardDailyBonus: '今日挑戰完成！額外 +🪙 100',
+    questCalTitle: '任務日曆',
+    questCalStreak: '連續日數',
+    questCalDaysActive: '本月活躍日',
+    questCalTotalQuests: '本月任務',
+    questCalQuestsDone: '完成咗 {n} 個任務',
+    questCalBonus: '⭐ 今日挑戰完成',
+    questCalNoQuests: '呢日冇完成任務',
+    questWeekdayShort: ['日', '一', '二', '三', '四', '五', '六'],
     gamesAllGames: '所有遊戲',
     gamesAllGamesSubtitle: '每個遊戲訓練唔同嘅腦部能力',
     gamesUnlockHint: '完成更多遊戲解鎖',
@@ -1072,6 +1140,22 @@ const zhHK: Strings = {
     calCorrect: '✓ 啱晒！',
     calWrong: '✗ 答案係',
 
+
+    // News words (language)
+    newsTitle: '晨早睇報紙',
+    newsSubtitle: '語言能力遊戲',
+    newsHowToPlay: '點樣玩？',
+    newsStep1: '1️⃣  睇吓報紙嘅頭條',
+    newsStep2: '2️⃣  標題漏咗一個字詞',
+    newsStep3: '3️⃣  揀出最啱嘅字詞！',
+    newsRewardPreview: '完成可獲得',
+    newsStart: '打開報紙 →',
+    newsPaperName: '晨早新聞',
+    newsProgress: '第 {n} 則（共 {total} 則）',
+    newsPrompt: '邊個字詞啱呢個標題？',
+    newsCorrect: '✓ 啱晒！',
+    newsWrong: '✗ 答案係',
+
     // Onboarding
     onboardingWelcome: '皇家花園',
     onboardingTagline: '保持靈敏，保持聯繫。',
@@ -1188,6 +1272,18 @@ const zhCN: Strings = {
     gamesTitle: '🎮 游戏',
     gamesDailyChallenge: '今日挑战',
     gamesDailyChallengeDesc: '完成 3 个游戏，获得额外 🪙 100！',
+    gamesDailyChallengeDone: '完成！今天已获得额外 🪙 100 🎉',
+    gamesPlayedToday: '今天已玩',
+    gamesComeBackTomorrow: '明天再来玩吧！',
+    rewardDailyBonus: '今日挑战完成！额外 +🪙 100',
+    questCalTitle: '任务日历',
+    questCalStreak: '连续天数',
+    questCalDaysActive: '本月活跃天',
+    questCalTotalQuests: '本月任务',
+    questCalQuestsDone: '完成了 {n} 个任务',
+    questCalBonus: '⭐ 今日挑战完成',
+    questCalNoQuests: '这天没有完成任务',
+    questWeekdayShort: ['日', '一', '二', '三', '四', '五', '六'],
     gamesAllGames: '所有游戏',
     gamesAllGamesSubtitle: '每个游戏训练不同的大脑能力',
     gamesUnlockHint: '完成更多游戏解锁',
@@ -1437,6 +1533,22 @@ const zhCN: Strings = {
     calCorrect: '✓ 答对了！',
     calWrong: '✗ 答案是',
 
+
+    // News words (language)
+    newsTitle: '晨早读报纸',
+    newsSubtitle: '语言能力游戏',
+    newsHowToPlay: '怎么玩？',
+    newsStep1: '1️⃣  看看报纸的头条',
+    newsStep2: '2️⃣  标题少了一个词语',
+    newsStep3: '3️⃣  选出最合适的词语！',
+    newsRewardPreview: '完成可获得',
+    newsStart: '打开报纸 →',
+    newsPaperName: '晨报',
+    newsProgress: '第 {n} 则（共 {total} 则）',
+    newsPrompt: '哪个词语适合这个标题？',
+    newsCorrect: '✓ 答对了！',
+    newsWrong: '✗ 答案是',
+
     // Onboarding
     onboardingWelcome: '皇家花园',
     onboardingTagline: '保持敏锐，保持联系。',
@@ -1518,6 +1630,18 @@ const pt: Strings = {
     gamesTitle: '🎮 Jogos',
     gamesDailyChallenge: 'Desafio Diário',
     gamesDailyChallengeDesc: 'Complete 3 jogos e ganhe 🪙 100 extra!',
+    gamesDailyChallengeDone: 'Concluído! Ganhou 🪙 100 extra hoje 🎉',
+    gamesPlayedToday: 'Feito hoje',
+    gamesComeBackTomorrow: 'Volte amanhã para jogar de novo!',
+    rewardDailyBonus: 'Desafio Diário concluído! +🪙 100 extra',
+    questCalTitle: 'Calendário de Missões',
+    questCalStreak: 'dias seguidos',
+    questCalDaysActive: 'dias ativos',
+    questCalTotalQuests: 'missões este mês',
+    questCalQuestsDone: '{n} missões concluídas',
+    questCalBonus: '⭐ Desafio Diário concluído',
+    questCalNoQuests: 'Nenhuma missão neste dia',
+    questWeekdayShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
     gamesAllGames: 'Todos os Jogos',
     gamesAllGamesSubtitle: 'Cada jogo treina uma habilidade cerebral diferente',
     gamesUnlockHint: 'Complete mais jogos para desbloquear',
@@ -1828,6 +1952,22 @@ const pt: Strings = {
     calTimeNight: 'Madrugada',
     calCorrect: '✓ Correto!',
     calWrong: '✗ A resposta é',
+
+
+    // News words (language)
+    newsTitle: 'Jornal da Manhã',
+    newsSubtitle: 'Jogo de Linguagem',
+    newsHowToPlay: 'Como jogar?',
+    newsStep1: '1️⃣  Leia o título do jornal',
+    newsStep2: '2️⃣  Falta uma palavra',
+    newsStep3: '3️⃣  Toque na palavra certa!',
+    newsRewardPreview: 'Complete para ganhar',
+    newsStart: 'Abrir o Jornal →',
+    newsPaperName: 'Diário da Manhã',
+    newsProgress: 'Título {n} de {total}',
+    newsPrompt: 'Que palavra completa o título?',
+    newsCorrect: '✓ Correto!',
+    newsWrong: '✗ A resposta é',
 };
 
 // ─── Strings map + hook ───────────────────────────────────────────────────────

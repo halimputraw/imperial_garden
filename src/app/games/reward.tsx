@@ -17,6 +17,7 @@ import {
 } from '@/store/player-store';
 import { useStrings } from '@/i18n/strings';
 import { useWagerStore } from '@/store/wager-store';
+import { useDailyProgress, DAILY_TARGET } from '@/store/daily-store';
 
 // ─── Coin shower animation ────────────────────────────────────────────────────
 
@@ -282,6 +283,8 @@ export default function RewardScreen() {
   const gameTitle = params.gameTitle ?? t.rewardGameDone;
 
   const coins = usePlayerStore((s) => s.coins);
+  const { completedCount, totalCompleted, bonusClaimed } = useDailyProgress();
+  const justEarnedBonus = bonusClaimed && totalCompleted === DAILY_TARGET;
   const getDomainTrend = usePlayerStore((s) => s.getDomainTrend);
   const trend = getDomainTrend(domain);
 
@@ -325,16 +328,7 @@ export default function RewardScreen() {
     router.replace('/');
   };
 
-  const handlePlayAgain = () => {
-    const PLAY_AGAIN_ROUTES: Partial<Record<MoCADomain, string>> = {
-      memory:       '/games/market-memory',
-      attention:    '/games/mahjong-match',
-      executive:    '/games/dim-sum-order',
-      visuospatial: '/games/tram-route',
-      orientation:  '/games/calendar-quiz',
-    };
-    router.replace((PLAY_AGAIN_ROUTES[domain] ?? '/games/market-memory') as any);
-  };
+  
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -491,17 +485,34 @@ export default function RewardScreen() {
 
           {/* ── Action buttons ── */}
           <View style={styles.buttonGroup}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.playAgainButton,
-                pressed && { backgroundColor: Colors.surfaceDark },
-              ]}
-              onPress={handlePlayAgain}
-              accessibilityRole="button"
-              accessibilityLabel={t.rewardPlayAgain}
-            >
-              <Text style={styles.playAgainText}>{t.rewardPlayAgain}</Text>
-            </Pressable>
+                        {/* Daily Challenge progress (replaces Play Again — 1 play per day) */}
+            <View style={[styles.dailyCard, justEarnedBonus && styles.dailyCardDone]}>
+              <View style={styles.dailyCardHeader}>
+                <Text style={styles.dailyCardTitle}>🌟 {t.gamesDailyChallenge}</Text>
+                <Text style={styles.dailyCardCount}>
+                  {completedCount} / {DAILY_TARGET}
+                </Text>
+              </View>
+              <View style={styles.dailyCardPills}>
+                {Array.from({ length: DAILY_TARGET }, (_, i) => (
+                  <View
+                    key={i}
+                    style={[
+                      styles.dailyCardPill,
+                      { backgroundColor: i < completedCount ? Colors.gold : Colors.surfaceDark },
+                    ]}
+                  />
+                ))}
+              </View>
+              <Text style={styles.dailyCardText}>
+                {justEarnedBonus
+                  ? t.rewardDailyBonus
+                  : bonusClaimed
+                  ? t.gamesDailyChallengeDone
+                  : t.gamesDailyChallengeDesc}
+              </Text>
+              <Text style={styles.dailyCardNote}>✅ {t.gamesComeBackTomorrow}</Text>
+            </View>
 
             <Pressable
               style={({ pressed }) => [
@@ -772,7 +783,51 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     lineHeight: 28,
   },
-
+    dailyCard: {
+    backgroundColor: Colors.surface,
+    borderRadius: Spacing.three,
+    borderWidth: 2,
+    borderColor: Colors.gold,
+    padding: Spacing.four,
+    gap: Spacing.two,
+  },
+  dailyCardDone: {
+    backgroundColor: `${Colors.gold}33`,
+    borderWidth: 3,
+  },
+  dailyCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  dailyCardTitle: {
+    fontSize: FontSize.body,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  dailyCardCount: {
+    fontSize: FontSize.body,
+    fontWeight: '900',
+    color: Colors.gold,
+  },
+  dailyCardPills: {
+    flexDirection: 'row',
+    gap: Spacing.two,
+  },
+  dailyCardPill: {
+    flex: 1,
+    height: 14,
+    borderRadius: 7,
+  },
+  dailyCardText: {
+    fontSize: FontSize.small,
+    color: Colors.textPrimary,
+    fontWeight: '600',
+  },
+  dailyCardNote: {
+    fontSize: FontSize.tiny,
+    color: Colors.textSecondary,
+  },
   // ── Buttons ──
   buttonGroup: {
     gap: Spacing.three,

@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { WagerPopup } from '@/components/games/wager-popup';
 import { useWagerStore, WagerAmount } from '@/store/wager-store';
 import { usePlayerStore } from '@/store/player-store';
+import { useDailyProgress, DAILY_TARGET } from '@/store/daily-store';
 
 interface Game {
   id: string;
@@ -87,7 +88,7 @@ const getGames = (t: ReturnType<typeof useStrings>): Game[] => [
     domainColor: Colors.gold,
     difficulty: 3,
     coins: 50,
-    unlocked: false,
+    unlocked: true,
   },
   {
     id: 'calendar-quiz',
@@ -125,17 +126,19 @@ function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
 
 interface GameCardProps {
   game: Game;
+  playedToday: boolean;
   onPress: (game: Game) => void;
 }
 
-function GameCard({ game, onPress }: GameCardProps) {
+function GameCard({ game, playedToday, onPress }: GameCardProps) {
   const t = useStrings();
+  const playable = game.unlocked && !playedToday;
   return (
     <Pressable
       style={({ pressed }) => [
         styles.card,
-        !game.unlocked && styles.cardLocked,
-        pressed && game.unlocked && styles.cardPressed,
+        !playable && styles.cardLocked,
+        pressed && playable && styles.cardPressed,
       ]}
       onPress={() => onPress(game)} 
       accessible
@@ -145,7 +148,7 @@ function GameCard({ game, onPress }: GameCardProps) {
           ? `${game.titleCantonese} ${game.descriptionCantonese}`
           : `${game.titleCantonese} ${t.gamesLocked}`
       }
-      disabled={!game.unlocked}
+      disabled={!playable}
     >
       {/* Left — emoji + domain badge */}
       <View style={styles.cardLeft}>
@@ -188,14 +191,23 @@ function GameCard({ game, onPress }: GameCardProps) {
           ]}
           numberOfLines={2}
         >
-          {game.unlocked ? game.descriptionCantonese : t.gamesUnlockHint}
+          {!game.unlocked
+            ? t.gamesUnlockHint
+            : playedToday
+            ? t.gamesComeBackTomorrow
+            : game.descriptionCantonese}
         </Text>
         <DifficultyDots level={game.difficulty} />
       </View>
 
       {/* Right — coin reward */}
       <View style={styles.cardRight}>
-        {game.unlocked ? (
+        {playedToday ? (
+          <>
+            <Text style={styles.lockEmoji}>✅</Text>
+            <Text style={styles.playedTodayText}>{t.gamesPlayedToday}</Text>
+          </>
+        ) : game.unlocked ? (
           <>
             <Text style={styles.coinEmoji}>🪙</Text>
             <Text style={styles.coinReward}>+{game.coins}</Text>
@@ -211,7 +223,13 @@ function GameCard({ game, onPress }: GameCardProps) {
 
 // ─── Daily challenge banner ───────────────────────────────────────────────────
 
-function DailyChallenge() {
+function DailyChallenge({
+  completedCount,
+  bonusClaimed,
+}: {
+  completedCount: number;
+  bonusClaimed: boolean;
+}) {
   const t = useStrings();
   return (
     <View style={styles.dailyBanner}>
@@ -219,17 +237,19 @@ function DailyChallenge() {
         <Text style={styles.dailyEmoji}>🌟</Text>
         <View style={{ flex: 1 }}>
           <Text style={styles.dailyTitle}>{t.gamesDailyChallenge}</Text>
-          <Text style={styles.dailyDesc}>{t.gamesDailyChallengeDesc}</Text>
+          <Text style={styles.dailyDesc}>
+            {bonusClaimed ? t.gamesDailyChallengeDone : t.gamesDailyChallengeDesc}
+          </Text>
         </View>
       </View>
       {/* Progress pills */}
       <View style={styles.dailyProgress}>
-        {[1, 2, 3].map((i) => (
+        {Array.from({ length: DAILY_TARGET }, (_, i) => i + 1).map((i) => (
           <View
             key={i}
             style={[
               styles.progressPill,
-              { backgroundColor: Colors.surfaceDark },
+              { backgroundColor: i <= completedCount ? Colors.gold : Colors.surfaceDark },
             ]}
           />
         ))}
@@ -247,7 +267,7 @@ export default function GamesScreen() {
   const placeWager = useWagerStore((s) => s.placeWager);
   const cancelWager = useWagerStore((s) => s.cancelWager);
   const coins = usePlayerStore((s) => s.coins);
-
+  const { completedCount, bonusClaimed, isPlayedToday } = useDailyProgress();
   const [wagerVisible, setWagerVisible] = useState(false);
   const [pendingGame, setPendingGame] = useState<Game | null>(null);
 
@@ -257,10 +277,12 @@ export default function GamesScreen() {
     'tram-route':     '/games/tram-route',
     'dim-sum-order':  '/games/dim-sum-order',
     'calendar-quiz':  '/games/calendar-quiz',
+    'news-words':     '/games/news-words', 
   };
 
   const handleGamePress = (game: Game) => {
     if (!game.unlocked) return;
+    if (isPlayedToday(game.id)) return;
     const route = GAME_ROUTES[game.id];
     if (!route) return;
     // Show wager popup before navigating
@@ -300,7 +322,7 @@ export default function GamesScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Daily challenge */}
-        <DailyChallenge />
+        <DailyChallenge completedCount={completedCount} bonusClaimed={bonusClaimed} />
 
         {/* Section label */}
         <Text style={styles.sectionTitle}>{t.gamesAllGames}</Text>
@@ -312,6 +334,7 @@ export default function GamesScreen() {
             <GameCard
               key={game.id}
               game={game}
+              playedToday={isPlayedToday(game.id)}
               onPress={handleGamePress}
             />
           ))}
@@ -543,7 +566,12 @@ const styles = StyleSheet.create({
   lockEmoji: {
     fontSize: 22,
   },
-
+  playedTodayText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.success,
+    textAlign: 'center',
+  },
   // ── Footer ──
   footerNote: {
     flexDirection: 'row',
