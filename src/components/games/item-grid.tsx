@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   Animated,
+  Image
 } from 'react-native';
 import { Colors, FontSize, Spacing, TouchTarget } from '@/constants/theme';
 
@@ -36,9 +37,28 @@ interface ItemCardProps {
   onPress?: (item: MarketItem) => void;
 }
 
+const ITEM_IMAGES: Record<string, any> = {
+  cabbage:     require('../../../assets/market/cabbage.png'),
+  fish:        require('../../../assets/market/fish.png'),
+  chicken:     require('../../../assets/market/chicken.png'),
+  egg:         require('../../../assets/market/egg.png'),
+  corn:        require('../../../assets/market/corn.png'),
+  carrot:      require('../../../assets/market/carrot.png'),
+  potato:      require('../../../assets/market/potato.png'),
+  onion:       require('../../../assets/market/onion.png'),
+  broccoli:    require('../../../assets/market/broccoli.png'),
+  mushroom:    require('../../../assets/market/mushroom.png'),
+  tofu:        require('../../../assets/market/tofu.png'),
+  shrimp:      require('../../../assets/market/shrimp.png'),
+  pork:        require('../../../assets/market/pork.png'),
+  lemon:       require('../../../assets/market/lemon.png'),
+  sweetpotato: require('../../../assets/market/sweet-potato.png'),
+};
+
 function ItemCard({ item, mode, isSelected, onPress }: ItemCardProps) {
   const scaleAnim = React.useRef(new Animated.Value(1)).current;
   const shakeAnim = React.useRef(new Animated.Value(0)).current;
+  const imgSource = ITEM_IMAGES[item.id];
 
   const handlePressIn = useCallback(() => {
     if (mode !== 'quiz') return;
@@ -79,7 +99,11 @@ function ItemCard({ item, mode, isSelected, onPress }: ItemCardProps) {
   if (mode === 'memorise') {
     return (
       <View style={styles.memoriseCard}>
-        <Text style={styles.itemEmoji}>{item.emoji}</Text>
+        {imgSource ? (
+          <Image source={imgSource} style={{ width: 56, height: 56 }} resizeMode="contain" />
+        ) : (
+          <Text style={styles.itemEmoji}>{item.emoji}</Text>
+        )}
         <Text style={styles.itemLabel} numberOfLines={1}>
           {item.labelCantonese}
         </Text>
@@ -117,7 +141,11 @@ function ItemCard({ item, mode, isSelected, onPress }: ItemCardProps) {
           </View>
         )}
 
-        <Text style={styles.itemEmoji}>{item.emoji}</Text>
+        {imgSource ? (
+          <Image source={imgSource} style={{ width: 56, height: 56 }} resizeMode="contain" />
+        ) : (
+          <Text style={styles.itemEmoji}>{item.emoji}</Text>
+        )}
         <Text
           style={[
             styles.itemLabel,
