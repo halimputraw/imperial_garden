@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   Animated,
+  Image
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -39,6 +40,21 @@ const ALL_DISHES: Dish[] = [
   { id: 'tripe',     emoji: '🫀', nameCantonese: '牛雜',   nameEnglish: 'Beef Tripe',   color: '#CD853F' },
   { id: 'mango-pudding',emoji:'🟧',nameCantonese:'芒果布甸',nameEnglish:'Mango Pudding', color: '#FFA500' },
 ];
+
+const DISH_IMAGES: Record<string, any> = {
+  'har-gau':       require('../../../assets/dimsum/har-gau.png'),
+  'siu-mai':       require('../../../assets/dimsum/siu-mai.png'),
+  'cheung-fun':    require('../../../assets/dimsum/cheung-fun.png'),
+  'lo-mai-gai':    require('../../../assets/dimsum/lo-mai-gai.png'),
+  'char-siu-bao':  require('../../../assets/dimsum/char-siu-bao.png'),
+  'egg-tart':      require('../../../assets/dimsum/egg-tart.png'),
+  'turnip-cake':   require('../../../assets/dimsum/turnip-cake.png'),
+  'taro-dump':     require('../../../assets/dimsum/taro-dump.png'),
+  'spring-roll':   require('../../../assets/dimsum/spring-roll.png'),
+  'custard-bun':   require('../../../assets/dimsum/custard-bun.png'),
+  'tripe':         require('../../../assets/dimsum/tripe.png'),
+  'mango-pudding': require('../../../assets/dimsum/mango-pudding.png'),
+};
 
 const COIN_REWARD = 35;
 
@@ -184,7 +200,16 @@ function DishCard({ dish, mode, tapOrder, onPress }: DishCardProps) {
           </View>
         )}
 
-        <Text style={styles.dishEmoji}>{dish.emoji}</Text>
+        {DISH_IMAGES[dish.id] ? (
+          <Image
+            source={DISH_IMAGES[dish.id]}
+            style={{ width: 56, height: 56 }}
+            resizeMode="contain"
+          />
+        ) : (
+          <Text style={styles.dishEmoji}>{dish.emoji}</Text>
+        )}
+        
         <Text
           style={[styles.dishName, { color: textColor }]}
           numberOfLines={1}

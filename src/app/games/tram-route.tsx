@@ -240,6 +240,10 @@ function RoundScreen({
   const [showCorrect, setShowCorrect] = useState(false);
   const [containerWidth, setContainerWidth] = useState(300);
 
+  const scrollRef = useRef<ScrollView>(null);
+  const [scrollX, setScrollX] = useState(0);
+  const [scrollMax, setScrollMax] = useState(999);
+
   const handleLayout = useCallback((e: LayoutChangeEvent) => {
     setContainerWidth(e.nativeEvent.layout.width);
   }, []);
@@ -357,26 +361,50 @@ function RoundScreen({
       </View>
 
       {/* Draggable stops */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        scrollEnabled={true}
-        onLayout={handleLayout}
-        contentContainerStyle={styles.stopsContainer}
-      >
-        {userStops.map((stop, index) => (
-          <DraggableStop
-            key={stop.id}
-            stop={stop}
-            index={index}
-            status={stopStatuses[stop.id] ?? 'default'}
-            onDragEnd={handleDragEnd}
-            totalStops={userStops.length}
-            containerWidth={containerWidth}
-            chipWidth={chipWidth}
-          />
-        ))}
-      </ScrollView>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={true}
+          onLayout={handleLayout}
+          onScroll={(e) => {
+            const { contentOffset, layoutMeasurement, contentSize } = e.nativeEvent;
+            setScrollX(contentOffset.x);
+            setScrollMax(contentSize.width - layoutMeasurement.width);
+          }}
+          scrollEventThrottle={16}
+          ref={scrollRef}
+          contentContainerStyle={styles.stopsContainer}
+        >
+          {userStops.map((stop, index) => (
+            <DraggableStop
+              key={stop.id}
+              stop={stop}
+              index={index}
+              status={stopStatuses[stop.id] ?? 'default'}
+              onDragEnd={handleDragEnd}
+              totalStops={userStops.length}
+              containerWidth={containerWidth}
+              chipWidth={chipWidth}
+            />
+          ))}
+        </ScrollView>
+        {/* Scroll hint arrows */}
+        <View style={styles.scrollHints}>
+          <Pressable
+            onPress={() => scrollRef.current?.scrollTo({ x: 0, animated: true })}
+            style={[styles.scrollArrow, scrollX <= 0 && styles.scrollArrowHidden]}
+          >
+            <Text style={styles.scrollArrowText}>‹ 左</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
+            style={[styles.scrollArrow, scrollX >= scrollMax - 2 && styles.scrollArrowHidden]}
+          >
+            <Text style={styles.scrollArrowText}>右 ›</Text>
+          </Pressable>
+        </View>
+      </View>
 
       {/* Feedback banner */}
       <FeedbackBanner
@@ -924,4 +952,24 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     opacity: 0.9,
   },
+  scrollHints: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.two,
+    marginTop: 2,
+  },
+  scrollArrow: {
+    paddingVertical: Spacing.one,
+    paddingHorizontal: Spacing.two,
+    backgroundColor: Colors.surfaceDark,
+    borderRadius: Spacing.two,
+  },
+  scrollArrowHidden: {
+    opacity: 0,
+  },
+  scrollArrowText: {
+    fontSize: FontSize.small,
+    fontWeight: '800',
+    color: Colors.primary,
+  }
 });
