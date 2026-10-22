@@ -11,7 +11,7 @@ export interface MoCASession {
   score: number;
   correctCount: number;
   totalCount: number;
-  playedAt: number;     // ← changed from Date to number (timestamp)
+  playedAt: number;
 }
 
 export type MoCADomain =
@@ -74,10 +74,14 @@ export interface PlayerState {
   // MoCA history — newest first
   mocaHistory: MoCASession[];
 
+  // Furniture
+  unlockedFurniture: string[];
+
   // ── Actions ──────────────────────────────────────────────────────────────
   setName: (name: string) => void;
   setAvatar: (avatar: string) => void;
   addCoins: (amount: number) => void;
+  unlockFurniture: (id: string) => void;
   recordMoCASession: (session: Omit<MoCASession, 'playedAt'>) => void;
   getLastDomainSession: (domain: MoCADomain) => MoCASession | null;
   getDomainTrend: (domain: MoCADomain) => {
@@ -105,9 +109,10 @@ export const usePlayerStore = create<PlayerState>()(
           score: 60,
           correctCount: 3,
           totalCount: 5,
-          playedAt: Date.now() - 1000 * 60 * 60 * 24, // ← timestamp now
+          playedAt: Date.now() - 1000 * 60 * 60 * 24,
         },
       ],
+      unlockedFurniture: ['painting', 'clock'],
 
       // ── Actions ──────────────────────────────────────────────────────────
 
@@ -121,15 +126,20 @@ export const usePlayerStore = create<PlayerState>()(
         }));
       },
 
+      unlockFurniture: (id) => set((state) => ({
+        unlockedFurniture: state.unlockedFurniture.includes(id)
+          ? state.unlockedFurniture
+          : [...state.unlockedFurniture, id],
+      })),
+
       recordMoCASession: (session) => {
         const full: MoCASession = {
           ...session,
-          playedAt: Date.now(), // ← timestamp now
+          playedAt: Date.now(),
         };
         set((state) => ({
           mocaHistory: [full, ...state.mocaHistory],
         }));
-        // Daily Challenge — mark this game done today, pay bonus at 3 games
         const { bonusEarned } = useDailyStore.getState().markCompleted(session.gameId);
         if (bonusEarned) {
           get().addCoins(DAILY_BONUS);
@@ -174,15 +184,15 @@ export const usePlayerStore = create<PlayerState>()(
       },
     }),
     {
-      name: 'player-storage',           // key in AsyncStorage
+      name: 'player-storage',
       storage: createJSONStorage(() => AsyncStorage),
-      // Only persist data fields, not functions
       partialize: (state) => ({
         name: state.name,
         avatar: state.avatar,
         level: state.level,
         coins: state.coins,
         mocaHistory: state.mocaHistory,
+        unlockedFurniture: state.unlockedFurniture,
       }),
     }
   )

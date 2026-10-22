@@ -7,6 +7,9 @@ import {
   StyleSheet,
   LayoutChangeEvent,
   Animated,
+  ImageBackground,
+  Image,
+  Pressable
 } from 'react-native';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { NeighbourhoodZone, Zone, ZoneId } from './neighbourhood-zone';
@@ -86,25 +89,92 @@ interface Decoration {
   size: number;
 }
 
+interface MapElement {
+  source: any;
+  xPct: number;
+  yPct: number;
+  widthPct: number;  // % of map width
+  heightPct: number; // % of map height
+}
+
+interface MapNode {
+  id: string;
+  locationName: string;
+  locationEnglish: string;
+  imageSource: any;
+  levelSource: any;
+  xPct: number;
+  yPct: number;
+  widthPct: number;
+  heightPct: number;
+  levelXPct: number;  // level badge position
+  levelYPct: number;
+  levelWidthPct: number;
+  levelHeightPct: number;
+}
+
 const DECORATIONS: Decoration[] = [
-  { emoji: '🏮', xPct: 47, yPct: 20, size: 20 },  // lantern between zones (center)
-  { emoji: '⛵', xPct: 20, yPct: 82, size: 18 },   // boat in harbour
-  { emoji: '⛵', xPct: 60, yPct: 86, size: 16 },   // another boat
-  { emoji: '🌸', xPct: 46, yPct: 52, size: 16 },   // flower between bottom zones
-  { emoji: '🏮', xPct: 47, yPct: 58, size: 14 },   // lantern
   { emoji: '☁️',  xPct: 30, yPct: 2,  size: 20 },  // cloud top
   { emoji: '☁️',  xPct: 65, yPct: 1,  size: 16 },  // cloud top right
+];
+
+const MAP_ELEMENTS: MapElement[] = [
+  { source: require('../../../assets/map/elements/tree1.png'),  xPct: -30, yPct: 55, widthPct: 150, heightPct: 15 },
+  { source: require('../../../assets/map/elements/char.png'),   xPct: 28,  yPct: 75, widthPct: 25,  heightPct: 23 },
+  { source: require('../../../assets/map/elements/rocks.png'),  xPct: 7,   yPct: 30, widthPct: 23,  heightPct: 20 },
+];
+
+const MAP_NODES: MapNode[] = [
+  {
+    id: 'temple',
+    locationName: '侯王廟',
+    locationEnglish: 'Visit Hau Wong Temple',
+    imageSource:  require('../../../assets/map/elements/temple.png'),
+    levelSource:  require('../../../assets/map/elements/level1.png'),
+    xPct: -3,  yPct: 53,  widthPct: 50,  heightPct: 65,
+    levelXPct: 5, levelYPct: 65, levelWidthPct: 30, levelHeightPct: 15,
+  },
+  {
+    id: 'chachanteng',
+    locationName: '金華冰廳',
+    locationEnglish: 'Visit Kam Wah Cafe, Mong Kok',
+    imageSource:  require('../../../assets/map/elements/chachanteng.png'),
+    levelSource:  require('../../../assets/map/elements/level2.png'),
+    xPct: 45, yPct: 53, widthPct: 35, heightPct: 30,
+    levelXPct: 43, levelYPct: 53, levelWidthPct: 40, levelHeightPct: 17,
+  },
+  {
+    id: 'mtr',
+    locationName: '油麻地地鐵站',
+    locationEnglish: 'Visit Yau Ma Tei MTR Station',
+    imageSource:  require('../../../assets/map/elements/mtr-station.png'),
+    levelSource:  require('../../../assets/map/elements/level3.png'),
+    xPct: 40, yPct: 33, widthPct: 35, heightPct: 25,
+    levelXPct: 41, levelYPct: 33, levelWidthPct: 30, levelHeightPct: 15,
+  },
+  {
+    id: 'fountain',
+    locationName: '星光大道',
+    locationEnglish: 'Visit Avenue of Stars',
+    imageSource:  require('../../../assets/map/elements/fountain.png'),
+    levelSource:  require('../../../assets/map/elements/level4.png'),
+    xPct: 58, yPct: 26, widthPct: 30, heightPct: 13,
+    levelXPct: 58, levelYPct: 23, levelWidthPct: 30, levelHeightPct: 10,
+  },
 ];
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 interface PixelMapProps {
   onZonePress: (zone: Zone) => void;
+  onNodePress: (node: MapNode) => void;
 }
+
+export type { MapNode };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function PixelMap({ onZonePress }: PixelMapProps) {
+export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
   const t = useStrings();
   const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
   const [selectedZoneId, setSelectedZoneId] = useState<ZoneId | null>(null);
@@ -147,26 +217,35 @@ export function PixelMap({ onZonePress }: PixelMapProps) {
     [onZonePress]
   );
 
+  const nodeScales = React.useRef<Record<string, Animated.Value>>(
+    Object.fromEntries(MAP_NODES.map(n => [n.id, new Animated.Value(1)]))
+  ).current;
+
+  const handleNodePressIn = useCallback((id: string) => {
+    Animated.spring(nodeScales[id], {
+      toValue: 1.15,
+      useNativeDriver: true,
+      speed: 30,
+      bounciness: 12,
+    }).start();
+  }, [nodeScales]);
+
+  const handleNodePressOut = useCallback((id: string) => {
+    Animated.spring(nodeScales[id], {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 20,
+      bounciness: 8,
+    }).start();
+  }, [nodeScales]);
+
   return (
-    <View style={styles.container} onLayout={handleLayout}>
-
-      {/* ── Sky strip ───────────────────────────────────────────────────── */}
-      <View style={styles.sky} />
-
-      {/* ── Ground / map body ───────────────────────────────────────────── */}
-      <View style={styles.ground} />
-
-      {/* ── Harbour water (bottom strip) ────────────────────────────────── */}
-      <Animated.View style={[styles.harbour, { opacity: waveOpacity }]}>
-        <Text style={styles.harbourLabel}>{t.mapHarbour}</Text>
-      </Animated.View>
-
-      {/* ── Road grid (simple cross) ─────────────────────────────────────── */}
-      {/* Vertical road */}
-      <View style={[styles.road, styles.roadVertical]} />
-      {/* Horizontal road */}
-      <View style={[styles.road, styles.roadHorizontal]} />
-
+    <ImageBackground
+      source={require('../../../assets/map/background.png')}
+      style={styles.container}
+      resizeMode="cover"
+      onLayout={handleLayout}
+    >
       {/* ── Decorations ─────────────────────────────────────────────────── */}
       {mapSize.width > 0 &&
         DECORATIONS.map((d, i) => (
@@ -186,28 +265,81 @@ export function PixelMap({ onZonePress }: PixelMapProps) {
           </Text>
         ))}
 
-      {/* ── Neighbourhood zones ──────────────────────────────────────────── */}
+      {/* ── Clickable location nodes ─────────────────────────────────────── */}
       {mapSize.width > 0 &&
-        ZONES.map((zone) => (
-          <NeighbourhoodZone
-            key={zone.id}
-            zone={zone}
-            mapWidth={mapSize.width}
-            mapHeight={mapSize.height}
-            onPress={handleZonePress}
-            isSelected={selectedZoneId === zone.id}
+        MAP_NODES.map((node) => (
+          <React.Fragment key={node.id}>
+            {/* Main building image — bouncy */}
+            <Pressable
+              onPress={() => onNodePress(node)}
+              onPressIn={() => handleNodePressIn(node.id)}
+              onPressOut={() => handleNodePressOut(node.id)}
+              style={{
+                position: 'absolute',
+                left:   (node.xPct      / 100) * mapSize.width,
+                top:    (node.yPct      / 100) * mapSize.height,
+                width:  (node.widthPct  / 100) * mapSize.width,
+                height: (node.heightPct / 100) * mapSize.height,
+              }}
+            >
+              <Animated.Image
+                source={node.imageSource}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  transform: [{ scale: nodeScales[node.id] }],
+                }}
+                resizeMode="contain"
+              />
+            </Pressable>
+            {/* Level badge — same bounce */}
+            <Pressable
+              onPress={() => onNodePress(node)}
+              onPressIn={() => handleNodePressIn(node.id)}
+              onPressOut={() => handleNodePressOut(node.id)}
+              style={{
+                position: 'absolute',
+                left:   (node.levelXPct      / 100) * mapSize.width,
+                top:    (node.levelYPct      / 100) * mapSize.height,
+                width:  (node.levelWidthPct  / 100) * mapSize.width,
+                height: (node.levelHeightPct / 100) * mapSize.height,
+              }}
+            >
+              <Animated.Image
+                source={node.levelSource}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  transform: [{ scale: nodeScales[node.id] }],
+                }}
+                resizeMode="contain"
+              />
+            </Pressable>
+          </React.Fragment>
+      ))}
+
+      {/* ── Non-clickable map elements (tree, char, rocks) ───────────────── */}
+      {mapSize.width > 0 &&
+        MAP_ELEMENTS.map((el, i) => (
+          <Image
+            key={i}
+            source={el.source}
+            style={{
+              position: 'absolute',
+              left:   (el.xPct   / 100) * mapSize.width,
+              top:    (el.yPct   / 100) * mapSize.height,
+              width:  (el.widthPct  / 100) * mapSize.width,
+              height: (el.heightPct / 100) * mapSize.height,
+            }}
+            resizeMode="contain"
           />
         ))}
-
-      {/* ── Pixel grid overlay (subtle) ──────────────────────────────────── */}
-      {/* Gives the map a very faint grid texture for pixel art feel */}
-      <View style={styles.pixelGridOverlay} pointerEvents="none" />
 
       {/* ── Map title badge ──────────────────────────────────────────────── */}
       <View style={styles.mapTitleBadge}>
         <Text style={styles.mapTitleText}>{t.mapTitle}</Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
