@@ -59,6 +59,29 @@ const FURNITURE_IMAGES: Record<string, any> = {
   lamp:      require('../../assets/furniture/lamp.png'), 
 };
 
+function FurnitureIcon({ item, size }: { item: FurnitureItem; size: number }) {
+  const src = FURNITURE_IMAGES[item.id];
+  return (
+    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
+      {src ? (
+        <Image source={src} style={{ width: size, height: size }} resizeMode="contain" />
+      ) : (
+        <Text style={{ fontSize: size * 0.75 }}>{item.emoji}</Text>
+      )}
+    </View>
+  );
+}
+
+const GHOST_SLOTS: Record<string, { xPct: number; yPct: number }> = {
+  window:  { xPct: 16, yPct: 17 },
+  sofa:    { xPct: 18, yPct: 52 },
+  lamp:    { xPct: 42, yPct: 52 },
+  cabinet: { xPct: 66, yPct: 52 },
+  plant:   { xPct: 18, yPct: 80 },
+  tv:      { xPct: 42, yPct: 80 },
+  cat:     { xPct: 66, yPct: 80 },
+};
+
 const INITIALLY_UNLOCKED: string[] = ['painting', 'clock'];
 const COIN_REWARD = 20;
 
@@ -152,7 +175,7 @@ function Room({ unlockedIds }: RoomProps) {
 
       {/* ── Furniture items ── */}
       {roomSize.width > 0 && FURNITURE_ITEMS.map((item) => {
-        const isUnlocked = unlockedIds.has(item.id);
+        if (!unlockedIds.has(item.id)) return null;
         const pos = getPosition(item);
         const { width, height } = getSize(item);
         const imgSource = FURNITURE_IMAGES[item.id];
@@ -170,26 +193,47 @@ function Room({ unlockedIds }: RoomProps) {
               },
             ]}
           >
-            {isUnlocked && imgSource ? (
+            {imgSource ? (
               // ── Real PNG sprite ──
               <Image
                 source={imgSource}
                 style={{ width, height }}
                 resizeMode="contain"
               />
-            ) : isUnlocked ? (
+            ) : (
               // ── Fallback emoji if PNG not ready yet ──
               <Text style={{ fontSize: width * 0.6 }}>{item.emoji}</Text>
-            ) : (
-              // ── Locked ghost placeholder ──
-              <View style={[styles.ghostItem, { width, height }]}>
-                <Text style={styles.ghostEmoji}>＋</Text>
-                <Text style={styles.furniturePriceLabel}>🪙{item.price}</Text>
-              </View>
             )}
           </View>
         );
       })}
+
+      {/* ── Locked ghost placeholder ── */}
+      {roomSize.width > 0 && FURNITURE_ITEMS
+        .filter((item) => !unlockedIds.has(item.id))
+        .map((item) => {
+          const slot = GHOST_SLOTS[item.id];
+          if (!slot) return null;
+          const size = Math.max(34, roomSize.width * 0.11);
+          return (
+            <View
+              key={`ghost-${item.id}`}
+              pointerEvents="none"
+              style={[
+                styles.ghostItem,
+                {
+                  left: (slot.xPct / 100) * roomSize.width - size / 2,
+                  top: (slot.yPct / 100) * roomSize.height - size / 2,
+                  width: size,
+                  height: size,
+                },
+              ]}
+            >
+              <Text style={styles.ghostEmoji}>＋</Text>
+              <Text style={styles.furniturePriceLabel}>🪙{item.price}</Text>
+            </View>
+          );
+        })}
     </View>
   );
 }
@@ -280,7 +324,7 @@ function ShopOverlay({
         {/* Confirm banner */}
         {confirmItem && (
           <View style={styles.confirmBanner}>
-            <Text style={styles.confirmEmoji}>{confirmItem.emoji}</Text>
+            <FurnitureIcon item={confirmItem} size={40} />
             <View style={styles.confirmInfo}>
               <Text style={styles.confirmName}>{confirmItem.label}</Text>
               <Text style={styles.confirmPrice}>🪙 {confirmItem.price} {t.shopCoinsNeeded}</Text>
@@ -346,7 +390,7 @@ function ShopOverlay({
                           : `${item.label} ${item.price} 積分`
                       }
                     >
-                      <Text style={styles.shopItemEmoji}>{item.emoji}</Text>
+                      <FurnitureIcon item={item} size={44} />
                       <Text style={[
                         styles.shopItemName,
                         isUnlocked && styles.shopItemNameUnlocked,
@@ -851,8 +895,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
   ghostItem: {
-    width: 36,
-    height: 36,
+    position: 'absolute',
     borderRadius: Spacing.two,
     borderWidth: 2,
     borderColor: Colors.surfaceDark,
