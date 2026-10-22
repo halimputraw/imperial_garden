@@ -16,6 +16,7 @@ import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { usePlayerStore } from '@/store/player-store';
 import { useWagerStore } from '@/store/wager-store';
 import { useStrings } from '@/i18n/strings';
+import { Image } from 'react-native';
 
 // ─── Furniture definitions ────────────────────────────────────────────────────
 
@@ -34,17 +35,52 @@ interface FurnitureItem {
 
 const FURNITURE_ITEMS: FurnitureItem[] = [
   // Wall zone items (top 40% of room)
-  { id: 'painting', emoji: '🖼️',  label: '畫',   price: 30,  level: 1, zone: 'wall',  xPct: 10, yPct: 15 },
-  { id: 'clock',    emoji: '🕰️',  label: '時鐘', price: 30,  level: 1, zone: 'wall',  xPct: 50, yPct: 10 },
-  { id: 'window',   emoji: '🪟',  label: '窗',   price: 30,  level: 1, zone: 'wall',  xPct: 75, yPct: 12 },
+  { id: 'painting', emoji: '🖼️',  label: '畫',   price: 30,  level: 1, zone: 'wall',  xPct: 26, yPct: 15 },
+  { id: 'clock',    emoji: '🕰️',  label: '時鐘', price: 30,  level: 1, zone: 'wall',  xPct: 48, yPct: 20 },
+  { id: 'window',   emoji: '🪟',  label: '窗',   price: 30,  level: 1, zone: 'wall',  xPct: 10, yPct: -2 },
   // Floor zone items (bottom 60% of room)
-  { id: 'tv',       emoji: '📺',  label: '電視', price: 50,  level: 2, zone: 'floor', xPct: 5,  yPct: 10 },
-  { id: 'sofa',     emoji: '🛋️',  label: '梳化', price: 60,  level: 2, zone: 'floor', xPct: 38, yPct: 8  },
-  { id: 'cabinet',  emoji: '🗄️',  label: '櫃',   price: 60,  level: 2, zone: 'floor', xPct: 72, yPct: 10 },
-  { id: 'plant',    emoji: '🪴',  label: '植物', price: 80,  level: 3, zone: 'floor', xPct: 5,  yPct: 55 },
-  { id: 'cat',      emoji: '🐱',  label: '貓咪', price: 100, level: 3, zone: 'floor', xPct: 42, yPct: 58 },
-  { id: 'lamp',     emoji: '🪔',  label: '燈',   price: 120, level: 3, zone: 'floor', xPct: 78, yPct: 52 },
+  { id: 'sofa',     emoji: '🛋️',  label: '梳化', price: 50,  level: 2, zone: 'floor', xPct: -13, yPct: -87 },
+  { id: 'tv',       emoji: '📺',  label: '電視', price: 60,  level: 2, zone: 'floor', xPct: -7,  yPct: -50 },
+  { id: 'cabinet',  emoji: '🗄️',  label: '櫃',   price: 60,  level: 2, zone: 'floor', xPct: 27, yPct: -115 },
+  { id: 'plant',    emoji: '🪴',  label: '植物', price: 80,  level: 3, zone: 'floor', xPct: 0,  yPct: 15 },
+  { id: 'cat',      emoji: '🐱',  label: '貓咪', price: 100, level: 3, zone: 'floor', xPct: 51, yPct: -48 },
+  { id: 'lamp',     emoji: '🪔',  label: '燈',   price: 120, level: 3, zone: 'floor', xPct: 23, yPct: -112 },
 ];
+
+const FURNITURE_IMAGES: Record<string, any> = {
+  painting:  require('../../assets/furniture/painting.png'),
+  clock:     require('../../assets/furniture/clock.png'),
+  // window:    require('../../assets/furniture/window.png'),
+  tv:        require('../../assets/furniture/tv-cabinet.png'),
+  sofa:      require('../../assets/furniture/sofa.png'),
+  cabinet:   require('../../assets/furniture/cabinet.png'),
+  // plant:     require('../assets/furniture/plant.png'),   // placeholder until you have it
+  cat:       require('../../assets/furniture/cat.png'),
+  lamp:      require('../../assets/furniture/lamp.png'), 
+};
+
+function FurnitureIcon({ item, size }: { item: FurnitureItem; size: number }) {
+  const src = FURNITURE_IMAGES[item.id];
+  return (
+    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
+      {src ? (
+        <Image source={src} style={{ width: size, height: size }} resizeMode="contain" />
+      ) : (
+        <Text style={{ fontSize: size * 0.75 }}>{item.emoji}</Text>
+      )}
+    </View>
+  );
+}
+
+const GHOST_SLOTS: Record<string, { xPct: number; yPct: number }> = {
+  window:  { xPct: 16, yPct: 17 },
+  sofa:    { xPct: 18, yPct: 52 },
+  lamp:    { xPct: 42, yPct: 52 },
+  cabinet: { xPct: 66, yPct: 52 },
+  plant:   { xPct: 18, yPct: 80 },
+  tv:      { xPct: 42, yPct: 80 },
+  cat:     { xPct: 66, yPct: 80 },
+};
 
 const INITIALLY_UNLOCKED: string[] = ['painting', 'clock'];
 const COIN_REWARD = 20;
@@ -78,8 +114,8 @@ function Room({ unlockedIds }: RoomProps) {
     setRoomSize({ width, height });
   }, []);
 
-  const wallHeight = roomSize.height * 0.42;
-  const floorHeight = roomSize.height * 0.58;
+  const wallHeight = roomSize.height * 0.65;
+  const floorHeight = roomSize.height * 0.35; 
 
   const getPosition = (item: FurnitureItem) => {
     if (item.zone === 'wall') {
@@ -95,33 +131,54 @@ function Room({ unlockedIds }: RoomProps) {
     }
   };
 
+  // Size each item depending on zone
+  const getSize = (item: FurnitureItem) => {
+    const sizes: Record<string, { w: number; h: number }> = {
+      window:   { w: 0.25, h: 0.38 }, // was 0.22, 0.28
+      painting: { w: 0.33, h: 0.34 }, // was 0.16, 0.22
+      clock:    { w: 0.78, h: 0.58 }, // was 0.14, 0.38
+      tv:       { w: 0.72, h: 0.44 }, // was 0.32, 0.20
+      sofa:     { w: 0.80, h: 0.47 }, // was 0.30, 0.22
+      cabinet:  { w: 0.78, h: 0.62 }, // was 0.20, 0.24
+      plant:    { w: 0.26, h: 0.24 }, // was 0.12, 0.18
+      cat:      { w: 0.58, h: 0.58 }, // was 0.12, 0.14
+      lamp:     { w: 0.68, h: 0.68 }, // was 0.10, 0.20
+    };
+    const s = sizes[item.id] ?? { w: 0.14, h: 0.18 };
+    return {
+      width:  s.w * roomSize.width,
+      height: s.h * roomSize.height,
+    };
+  };
+
   return (
     <View style={styles.room} onLayout={handleLayout}>
-      {/* ── Wall ── */}
+      {/* ── Warm wall ── */}
       <View style={[styles.roomWall, { height: wallHeight }]}>
-        {/* Wallpaper pattern dots */}
         <View style={styles.wallpaperRow}>
           {Array.from({ length: 8 }).map((_, i) => (
             <Text key={i} style={styles.wallpaperDot}>✦</Text>
           ))}
         </View>
-        {/* Skirting board */}
         <View style={styles.skirtingBoard} />
       </View>
 
-      {/* ── Floor ── */}
+      {/* ── Warm wood floor ── */}
       <View style={[styles.roomFloor, { height: floorHeight }]}>
-        {/* Floor planks — horizontal lines */}
         {Array.from({ length: 5 }).map((_, i) => (
           <View key={i} style={[styles.floorPlank, { top: `${i * 20}%` as any }]} />
         ))}
       </View>
 
+      {/* ── Window light glow ── */}
+      <View style={styles.windowLight} />
+
       {/* ── Furniture items ── */}
       {roomSize.width > 0 && FURNITURE_ITEMS.map((item) => {
-        const isUnlocked = unlockedIds.has(item.id);
+        if (!unlockedIds.has(item.id)) return null;
         const pos = getPosition(item);
-        const itemSize = item.zone === 'wall' ? 44 : 52;
+        const { width, height } = getSize(item);
+        const imgSource = FURNITURE_IMAGES[item.id];
 
         return (
           <View
@@ -131,30 +188,52 @@ function Room({ unlockedIds }: RoomProps) {
               {
                 left: pos.left,
                 top: pos.top,
-                width: itemSize,
-                height: itemSize + 16,
+                width,
+                height,
               },
             ]}
           >
-            {isUnlocked ? (
-              <>
-                <Text style={{ fontSize: itemSize * 0.7 }}>{item.emoji}</Text>
-                <Text style={styles.furnitureLabel}>{item.label}</Text>
-              </>
+            {imgSource ? (
+              // ── Real PNG sprite ──
+              <Image
+                source={imgSource}
+                style={{ width, height }}
+                resizeMode="contain"
+              />
             ) : (
-              <>
-                <View style={styles.ghostItem}>
-                  <Text style={styles.ghostEmoji}>＋</Text>
-                </View>
-                <Text style={styles.furniturePriceLabel}>🪙{item.price}</Text>
-              </>
+              // ── Fallback emoji if PNG not ready yet ──
+              <Text style={{ fontSize: width * 0.6 }}>{item.emoji}</Text>
             )}
           </View>
         );
       })}
 
-      {/* ── Window light effect ── */}
-      <View style={styles.windowLight} />
+      {/* ── Locked ghost placeholder ── */}
+      {roomSize.width > 0 && FURNITURE_ITEMS
+        .filter((item) => !unlockedIds.has(item.id))
+        .map((item) => {
+          const slot = GHOST_SLOTS[item.id];
+          if (!slot) return null;
+          const size = Math.max(34, roomSize.width * 0.11);
+          return (
+            <View
+              key={`ghost-${item.id}`}
+              pointerEvents="none"
+              style={[
+                styles.ghostItem,
+                {
+                  left: (slot.xPct / 100) * roomSize.width - size / 2,
+                  top: (slot.yPct / 100) * roomSize.height - size / 2,
+                  width: size,
+                  height: size,
+                },
+              ]}
+            >
+              <Text style={styles.ghostEmoji}>＋</Text>
+              <Text style={styles.furniturePriceLabel}>🪙{item.price}</Text>
+            </View>
+          );
+        })}
     </View>
   );
 }
@@ -245,7 +324,7 @@ function ShopOverlay({
         {/* Confirm banner */}
         {confirmItem && (
           <View style={styles.confirmBanner}>
-            <Text style={styles.confirmEmoji}>{confirmItem.emoji}</Text>
+            <FurnitureIcon item={confirmItem} size={40} />
             <View style={styles.confirmInfo}>
               <Text style={styles.confirmName}>{confirmItem.label}</Text>
               <Text style={styles.confirmPrice}>🪙 {confirmItem.price} {t.shopCoinsNeeded}</Text>
@@ -311,7 +390,7 @@ function ShopOverlay({
                           : `${item.label} ${item.price} 積分`
                       }
                     >
-                      <Text style={styles.shopItemEmoji}>{item.emoji}</Text>
+                      <FurnitureIcon item={item} size={44} />
                       <Text style={[
                         styles.shopItemName,
                         isUnlocked && styles.shopItemNameUnlocked,
@@ -442,11 +521,11 @@ export default function HomeScreen() {
   const coins = usePlayerStore((s) => s.coins);
   const level = usePlayerStore((s) => s.level);
   const addCoins = usePlayerStore((s) => s.addCoins);
+  const unlockedFurniture = usePlayerStore((s) => s.unlockedFurniture);
+  const unlockFurniture = usePlayerStore((s) => s.unlockFurniture);
+  const unlockedIds = new Set(unlockedFurniture);
 
   const [activeTab, setActiveTab] = useState<'room' | 'leaderboard'>('room');
-  const [unlockedIds, setUnlockedIds] = useState<Set<string>>(
-    new Set(INITIALLY_UNLOCKED)
-  );
   const [shopVisible, setShopVisible] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -456,11 +535,11 @@ export default function HomeScreen() {
   const handleBuy = useCallback((item: FurnitureItem) => {
     if (coins < item.price) return;
     addCoins(-item.price);
-    setUnlockedIds((prev) => new Set([...prev, item.id]));
+    unlockFurniture(item.id); 
     setShopVisible(false);
     setSuccessMessage(`${item.emoji} ${item.label} ${t.shopUnlockSuccess}`);
     setTimeout(() => setSuccessMessage(null), 2500);
-  }, [coins, addCoins, t]);
+  }, [coins, addCoins, unlockFurniture, t]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -816,8 +895,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
   ghostItem: {
-    width: 36,
-    height: 36,
+    position: 'absolute',
     borderRadius: Spacing.two,
     borderWidth: 2,
     borderColor: Colors.surfaceDark,
