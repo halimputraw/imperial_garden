@@ -9,11 +9,13 @@ import {
   Animated,
   ImageBackground,
   Image,
-  Pressable
+  Pressable,
+  Easing
 } from 'react-native';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { NeighbourhoodZone, Zone, ZoneId } from './neighbourhood-zone';
 import { useStrings } from '@/i18n/strings';
+import { usePlayerStore } from '@/store/player-store';
 
 // ─── Zone Definitions ─────────────────────────────────────────────────────────
 // All positions are % of map canvas — scales to any screen size
@@ -26,57 +28,6 @@ import { useStrings } from '@/i18n/strings';
 //       (bottom-left)        (bottom-right)
 //
 // Water strip runs along the bottom (harbour)
-
-const ZONES: Zone[] = [
-  {
-    id: 'park',
-    labelCantonese: '維多利亞公園',
-    labelEnglish: 'Victoria Park',
-    emoji: '🌳',
-    color: Colors.zonePark,
-    borderColor: '#3A7A52',
-    xPct: 5,
-    yPct: 8,
-    widthPct: 40,
-    heightPct: 30,
-  },
-  {
-    id: 'estate',
-    labelCantonese: '公共屋邨',
-    labelEnglish: 'Housing Estate',
-    emoji: '🏢',
-    color: Colors.zoneEstate,
-    borderColor: '#5A7A9C',
-    xPct: 53,
-    yPct: 8,
-    widthPct: 42,
-    heightPct: 30,
-  },
-  {
-    id: 'market',
-    labelCantonese: '街市',
-    labelEnglish: 'Wet Market',
-    emoji: '🥬',
-    color: Colors.zoneMarket,
-    borderColor: '#4A8A4A',
-    xPct: 5,
-    yPct: 46,
-    widthPct: 40,
-    heightPct: 30,
-  },
-  {
-    id: 'cafe',
-    labelCantonese: '茶餐廳',
-    labelEnglish: 'Cha Chaan Teng',
-    emoji: '🍵',
-    color: Colors.zoneCafe,
-    borderColor: '#9A5A20',
-    xPct: 53,
-    yPct: 46,
-    widthPct: 42,
-    heightPct: 30,
-  },
-];
 
 // ─── Decorative pixel elements ────────────────────────────────────────────────
 // Small fixed decorations placed on the map for visual warmth
@@ -120,7 +71,7 @@ const DECORATIONS: Decoration[] = [
 
 const MAP_ELEMENTS: MapElement[] = [
   { source: require('../../../assets/map/elements/tree1.png'),  xPct: -30, yPct: 55, widthPct: 150, heightPct: 15 },
-  { source: require('../../../assets/map/elements/char.png'),   xPct: 28,  yPct: 75, widthPct: 25,  heightPct: 23 },
+  // { source: require('../../../assets/map/elements/char.png'),   xPct: 28,  yPct: 75, widthPct: 25,  heightPct: 23 },
   { source: require('../../../assets/map/elements/rocks.png'),  xPct: 7,   yPct: 30, widthPct: 23,  heightPct: 20 },
 ];
 
@@ -172,12 +123,55 @@ interface PixelMapProps {
 
 export type { MapNode };
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
+const NODE_ORDER = ['temple', 'chachanteng', 'mtr', 'fountain'];
+
+// Char position per level (index = level - 1)
+const CHAR_POSITIONS = [
+  { xPct: 28, yPct: 75, widthPct: 25, heightPct: 23 }, // level 1
+  { xPct: 68, yPct: 56, widthPct: 25, heightPct: 23 }, // level 2
+  { xPct: 68, yPct: 32, widthPct: 20, heightPct: 23 }, // level 3
+  { xPct: 73, yPct: 28, widthPct: 17, heightPct: 14 }, // level 4
+];
+const CHAR_SOURCE = require('../../../assets/map/elements/char.png');
+
+// ─── Component ────────────────────────────────────────────────────────────────
 export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
   const t = useStrings();
   const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
   const [selectedZoneId, setSelectedZoneId] = useState<ZoneId | null>(null);
+
+  const completedNodes = usePlayerStore((s) => s.completedNodes);
+
+  const isUnlocked = useCallback((nodeId: string) => {
+    const idx = NODE_ORDER.indexOf(nodeId);
+    if (idx === 0) return true;
+    return completedNodes.includes(NODE_ORDER[idx - 1]);
+  }, [completedNodes]);
+
+  // First level not yet completed = where the char stands. All done → stay on last.
+  const currentLevelIdx = (() => {
+    const idx = NODE_ORDER.findIndex((id) => !completedNodes.includes(id));
+    return idx === -1 ? NODE_ORDER.length - 1 : idx;
+  })();
+
+  const charProgress = React.useRef(new Animated.Value(currentLevelIdx)).current;
+  React.useEffect(() => {
+    Animated.timing(charProgress, {
+      toValue: currentLevelIdx,
+      duration: 900,
+      delay: 400, // lets the verify sheet close first
+      easing: Easing.inOut(Easing.cubic),
+      useNativeDriver: false, // left/top/width/height can't use the native driver
+    }).start();
+  }, [currentLevelIdx, charProgress]);
+
+  const inputRange = CHAR_POSITIONS.map((_, i) => i);
+  const pct = (key: 'xPct' | 'yPct' | 'widthPct' | 'heightPct') =>
+    charProgress.interpolate({
+      inputRange,
+      outputRange: CHAR_POSITIONS.map((p) => `${p[key]}%`),
+    });
 
   // Subtle idle animation for the harbour water
   const waveAnim = React.useRef(new Animated.Value(0)).current;
@@ -222,21 +216,11 @@ export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
   ).current;
 
   const handleNodePressIn = useCallback((id: string) => {
-    Animated.spring(nodeScales[id], {
-      toValue: 1.15,
-      useNativeDriver: true,
-      speed: 30,
-      bounciness: 12,
-    }).start();
+    Animated.spring(nodeScales[id], { toValue: 1.15, useNativeDriver: true, speed: 30, bounciness: 12 }).start();
   }, [nodeScales]);
 
   const handleNodePressOut = useCallback((id: string) => {
-    Animated.spring(nodeScales[id], {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 20,
-      bounciness: 8,
-    }).start();
+    Animated.spring(nodeScales[id], { toValue: 1, useNativeDriver: true, speed: 20, bounciness: 8 }).start();
   }, [nodeScales]);
 
   return (
@@ -265,59 +249,6 @@ export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
           </Text>
         ))}
 
-      {/* ── Clickable location nodes ─────────────────────────────────────── */}
-      {mapSize.width > 0 &&
-        MAP_NODES.map((node) => (
-          <React.Fragment key={node.id}>
-            {/* Main building image — bouncy */}
-            <Pressable
-              onPress={() => onNodePress(node)}
-              onPressIn={() => handleNodePressIn(node.id)}
-              onPressOut={() => handleNodePressOut(node.id)}
-              style={{
-                position: 'absolute',
-                left:   (node.xPct      / 100) * mapSize.width,
-                top:    (node.yPct      / 100) * mapSize.height,
-                width:  (node.widthPct  / 100) * mapSize.width,
-                height: (node.heightPct / 100) * mapSize.height,
-              }}
-            >
-              <Animated.Image
-                source={node.imageSource}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  transform: [{ scale: nodeScales[node.id] }],
-                }}
-                resizeMode="contain"
-              />
-            </Pressable>
-            {/* Level badge — same bounce */}
-            <Pressable
-              onPress={() => onNodePress(node)}
-              onPressIn={() => handleNodePressIn(node.id)}
-              onPressOut={() => handleNodePressOut(node.id)}
-              style={{
-                position: 'absolute',
-                left:   (node.levelXPct      / 100) * mapSize.width,
-                top:    (node.levelYPct      / 100) * mapSize.height,
-                width:  (node.levelWidthPct  / 100) * mapSize.width,
-                height: (node.levelHeightPct / 100) * mapSize.height,
-              }}
-            >
-              <Animated.Image
-                source={node.levelSource}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  transform: [{ scale: nodeScales[node.id] }],
-                }}
-                resizeMode="contain"
-              />
-            </Pressable>
-          </React.Fragment>
-      ))}
-
       {/* ── Non-clickable map elements (tree, char, rocks) ───────────────── */}
       {mapSize.width > 0 &&
         MAP_ELEMENTS.map((el, i) => (
@@ -334,6 +265,67 @@ export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
             resizeMode="contain"
           />
         ))}
+
+      {/* ── Clickable location nodes ─────────────────────────────────────── */}
+      {mapSize.width > 0 &&
+      MAP_NODES.map((node) => {
+        const unlocked = isUnlocked(node.id);
+        return (
+          <React.Fragment key={node.id}>
+            <Pressable
+              onPress={unlocked ? () => onNodePress(node) : undefined}
+              onPressIn={unlocked ? () => handleNodePressIn(node.id) : undefined}
+              onPressOut={unlocked ? () => handleNodePressOut(node.id) : undefined}
+              style={{
+                position: 'absolute',
+                left:   (node.xPct      / 100) * mapSize.width,
+                top:    (node.yPct      / 100) * mapSize.height,
+                width:  (node.widthPct  / 100) * mapSize.width,
+                height: (node.heightPct / 100) * mapSize.height,
+              }}
+            >
+              <Animated.Image
+                source={node.imageSource}
+                style={{ width: '100%', height: '100%', transform: [{ scale: unlocked ? nodeScales[node.id] : 1 }], opacity: unlocked ? 1 : 0.35, tintColor: unlocked ? undefined : '#888888' }}
+                resizeMode="contain"
+              />
+            </Pressable>
+            <Pressable
+              onPress={unlocked ? () => onNodePress(node) : undefined}
+              onPressIn={unlocked ? () => handleNodePressIn(node.id) : undefined}
+              onPressOut={unlocked ? () => handleNodePressOut(node.id) : undefined}
+              style={{
+                position: 'absolute',
+                left:   (node.levelXPct      / 100) * mapSize.width,
+                top:    (node.levelYPct      / 100) * mapSize.height,
+                width:  (node.levelWidthPct  / 100) * mapSize.width,
+                height: (node.levelHeightPct / 100) * mapSize.height,
+              }}
+            >
+              <Animated.Image
+                source={node.levelSource}
+                style={{ width: '100%', height: '100%', transform: [{ scale: unlocked ? nodeScales[node.id] : 1 }], opacity: unlocked ? 1 : 0.35, tintColor: unlocked ? undefined : '#888888' }}
+                resizeMode="contain"
+              />
+            </Pressable>
+          </React.Fragment>
+        );
+      })}
+
+      {/* ── Character: walks to the current level ── */}
+      {mapSize.width > 0 && (
+        <Animated.Image
+          source={CHAR_SOURCE}
+          resizeMode="contain"
+          style={{
+            position: 'absolute',
+            left:   pct('xPct'),
+            top:    pct('yPct'),
+            width:  pct('widthPct'),
+            height: pct('heightPct'),
+          }}
+        />
+      )}
 
       {/* ── Map title badge ──────────────────────────────────────────────── */}
       <View style={styles.mapTitleBadge}>

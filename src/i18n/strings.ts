@@ -393,6 +393,25 @@ export interface Strings {
     onboardingMockPhotoTaken: string;
     onboardingIdFormat: string;
     onboardingInvalidId: string;
+
+    // ── Map location nodes ──
+    nodeTempleName: string;
+    nodeTempleVisit: string;
+    nodeCafeName: string;
+    nodeCafeVisit: string;
+    nodeMtrName: string;
+    nodeMtrVisit: string;
+    nodeFountainName: string;
+    nodeFountainVisit: string;
+    nodeVerifyDesc: string;
+    nodeVerifyButton: string;
+    nodeVerifying: string;
+    nodeVerifyingSub: string;
+    nodeVerified: string;
+    nodeVerifiedSub: string;
+    nodeVerifiedButton: string;
+    nodeCompletedDesc: string;
+    nodeCompletedButton: string;
 }
 
 // ─── English ──────────────────────────────────────────────────────────────────
@@ -792,6 +811,25 @@ const en: Strings = {
     onboardingMockPhotoTaken: '📸 Photo taken!',
     onboardingIdFormat: 'Format',
     onboardingInvalidId: 'Please enter a valid ID number',
+
+    // Map location nodes
+    nodeTempleName: 'Hau Wong Temple',
+    nodeTempleVisit: 'Visit Hau Wong Temple',
+    nodeCafeName: 'Kam Wah Cafe',
+    nodeCafeVisit: 'Visit Kam Wah Cafe, Mong Kok',
+    nodeMtrName: 'Yau Ma Tei MTR Station',
+    nodeMtrVisit: 'Visit Yau Ma Tei MTR Station',
+    nodeFountainName: 'Avenue of Stars',
+    nodeFountainVisit: 'Visit Avenue of Stars',
+    nodeVerifyDesc: 'Been here already? Tap "Verify Location" to confirm and earn 🪙 200!',
+    nodeVerifyButton: '📍 Verify Location',
+    nodeVerifying: 'Verifying location…',
+    nodeVerifyingSub: 'Please wait a moment',
+    nodeVerified: 'Visit confirmed!',
+    nodeVerifiedSub: 'Location verified',
+    nodeVerifiedButton: 'Great!',
+    nodeCompletedDesc: 'You have already completed this location. Well done! ✅',
+    nodeCompletedButton: '✓ Completed',
 };
 
 // ─── Cantonese (Traditional Chinese) ─────────────────────────────────────────
@@ -1186,6 +1224,25 @@ const zhHK: Strings = {
     onboardingMockPhotoTaken: '📸 相片已拍攝！',
     onboardingIdFormat: '格式',
     onboardingInvalidId: '請輸入有效的身份證號碼',
+
+    // Map location nodes
+    nodeTempleName: '侯王廟',
+    nodeTempleVisit: '去侯王廟參觀',
+    nodeCafeName: '金華冰廳',
+    nodeCafeVisit: '去旺角金華冰廳',
+    nodeMtrName: '油麻地地鐵站',
+    nodeMtrVisit: '去油麻地地鐵站',
+    nodeFountainName: '星光大道',
+    nodeFountainVisit: '去星光大道',
+    nodeVerifyDesc: '頭先去咗呢個地方？撳「確認到訪」嚟核實你嘅位置，攞取 🪙 200 獎勵！',
+    nodeVerifyButton: '📍 確認到訪',
+    nodeVerifying: '正在核實位置…',
+    nodeVerifyingSub: '請稍等一陣',
+    nodeVerified: '到訪確認！',
+    nodeVerifiedSub: '位置已核實',
+    nodeVerifiedButton: '太好了！',
+    nodeCompletedDesc: '你已經完成咗呢個地點，做得好！✅',
+    nodeCompletedButton: '✓ 已完成',
 };
 
 // ─── Simplified Chinese ───────────────────────────────────────────────────────
@@ -1579,6 +1636,25 @@ const zhCN: Strings = {
     onboardingMockPhotoTaken: '📸 照片已拍摄！',
     onboardingIdFormat: '格式',
     onboardingInvalidId: '请输入有效的身份证号码',
+
+    // Map location nodes
+    nodeTempleName: '侯王庙',
+    nodeTempleVisit: '参观侯王庙',
+    nodeCafeName: '金华冰厅',
+    nodeCafeVisit: '前往旺角金华冰厅',
+    nodeMtrName: '油麻地地铁站',
+    nodeMtrVisit: '前往油麻地地铁站',
+    nodeFountainName: '星光大道',
+    nodeFountainVisit: '前往星光大道',
+    nodeVerifyDesc: '刚去过这个地方吗？点击「确认到访」核实您的位置，领取 🪙 200 奖励！',
+    nodeVerifyButton: '📍 确认到访',
+    nodeVerifying: '正在核实位置…',
+    nodeVerifyingSub: '请稍等片刻',
+    nodeVerified: '到访已确认！',
+    nodeVerifiedSub: '位置已核实',
+    nodeVerifiedButton: '太好了！',
+    nodeCompletedDesc: '您已经完成了这个地点，做得好！✅',
+    nodeCompletedButton: '✓ 已完成',
 };
 
 const pt: Strings = {
@@ -1968,6 +2044,25 @@ const pt: Strings = {
     newsPrompt: 'Que palavra completa o título?',
     newsCorrect: '✓ Correto!',
     newsWrong: '✗ A resposta é',
+
+    // Map location nodes
+    nodeTempleName: 'Templo Hau Wong',
+    nodeTempleVisit: 'Visitar o Templo Hau Wong',
+    nodeCafeName: 'Café Kam Wah',
+    nodeCafeVisit: 'Visitar o Café Kam Wah, Mong Kok',
+    nodeMtrName: 'Estação MTR de Yau Ma Tei',
+    nodeMtrVisit: 'Visitar a Estação MTR de Yau Ma Tei',
+    nodeFountainName: 'Avenida das Estrelas',
+    nodeFountainVisit: 'Visitar a Avenida das Estrelas',
+    nodeVerifyDesc: 'Já esteve neste local? Toque em "Confirmar visita" para verificar a sua posição e ganhar 🪙 200!',
+    nodeVerifyButton: '📍 Confirmar visita',
+    nodeVerifying: 'A verificar localização…',
+    nodeVerifyingSub: 'Aguarde um momento',
+    nodeVerified: 'Visita confirmada!',
+    nodeVerifiedSub: 'Localização verificada',
+    nodeVerifiedButton: 'Ótimo!',
+    nodeCompletedDesc: 'Já concluiu este local. Muito bem! ✅',
+    nodeCompletedButton: '✓ Concluído',
 };
 
 // ─── Strings map + hook ───────────────────────────────────────────────────────

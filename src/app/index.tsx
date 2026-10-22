@@ -15,6 +15,7 @@ import { PixelMap } from '@/components/map/pixel-map';
 import { Zone } from '@/components/map/neighbourhood-zone';
 import { useStrings } from '@/i18n/strings';
 import { usePlayerStore } from '@/store/player-store';
+import type { MapNode } from '@/components/map/pixel-map';
 
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
@@ -171,6 +172,153 @@ function ZoneSheet({ zone, visible, onClose, onEnter }: ZoneSheetProps) {
   );
 }
 
+// ─── Node bottom sheet ────────────────────────────────────────────────────────
+
+type VerifyState = 'idle' | 'verifying' | 'verified';
+
+function NodeSheet({ node, visible, onClose }: {
+  node: MapNode | null;
+  visible: boolean;
+  onClose: () => void;
+}) {
+  const t = useStrings();
+  const addCoins = usePlayerStore((s) => s.addCoins);
+  const completeNode = usePlayerStore((s) => s.completeNode);
+  const [verifyState, setVerifyState] = useState<VerifyState>('idle');
+  const slideAnim = React.useRef(new Animated.Value(300)).current;
+  const tickAnim  = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    if (visible) {
+      setVerifyState('idle');
+      tickAnim.setValue(0);
+      Animated.spring(slideAnim, {
+        toValue: 0, useNativeDriver: true, speed: 20, bounciness: 4,
+      }).start();
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 300, duration: 200, useNativeDriver: true,
+      }).start();
+    }
+  }, [visible]);
+
+  const handleVerify = useCallback(() => {
+    setVerifyState('verifying');
+    setTimeout(() => {
+      setVerifyState('verified');
+      addCoins(200);
+      if (node) completeNode(node.id);
+      Animated.spring(tickAnim, {
+        toValue: 1, useNativeDriver: true, speed: 8, bounciness: 12,
+      }).start();
+    }, 2000);
+  }, [addCoins, completeNode, node, tickAnim]);
+
+  const completedNodes = usePlayerStore((s) => s.completedNodes);
+
+  if (!node) return null;
+
+  const nodeText: Record<string, { name: string; visit: string }> = {
+    temple:      { name: t.nodeTempleName,   visit: t.nodeTempleVisit },
+    chachanteng: { name: t.nodeCafeName,     visit: t.nodeCafeVisit },
+    mtr:         { name: t.nodeMtrName,      visit: t.nodeMtrVisit },
+    fountain:    { name: t.nodeFountainName, visit: t.nodeFountainVisit },
+  };
+  const text = nodeText[node.id];
+
+  const alreadyCompleted = completedNodes.includes(node.id);
+
+  return (
+    <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
+      <Pressable style={styles.backdrop} onPress={verifyState === 'idle' ? onClose : undefined} />
+      <Animated.View style={[styles.sheet, { transform: [{ translateY: slideAnim }] }]}>
+        <View style={styles.sheetHandle} />
+        <View style={styles.sheetHeader}>
+          <Text style={styles.sheetEmoji}>📍</Text>
+          <View style={styles.sheetTitleBlock}>
+            <Text style={styles.sheetTitle}>{text.name}</Text>
+            <Text style={styles.sheetSubtitle}>{text.visit}</Text>
+          </View>
+          {verifyState === 'idle' && (
+            <Pressable
+              onPress={onClose}
+              style={styles.closeButton}
+              accessibilityLabel={t.close}
+              accessibilityRole="button"
+            >
+              <Text style={styles.closeButtonText}>✕</Text>
+            </Pressable>
+          )}
+        </View>
+
+        {verifyState === 'idle' && (
+          <>
+            <Text style={styles.sheetDescription}>
+              {alreadyCompleted ? t.nodeCompletedDesc : t.nodeVerifyDesc}
+            </Text>
+            <Pressable
+              disabled={alreadyCompleted}
+              style={({ pressed }) => [
+                styles.enterButton,
+                alreadyCompleted
+                  ? { backgroundColor: Colors.surfaceDark, borderBottomColor: Colors.surfaceDark }
+                  : { backgroundColor: pressed ? Colors.primaryDark : Colors.primary },
+              ]}
+              onPress={handleVerify}
+              accessibilityState={{ disabled: alreadyCompleted }}
+            >
+              <Text
+                style={[
+                  styles.enterButtonText,
+                  alreadyCompleted && { color: Colors.textSecondary },
+                ]}
+              >
+                {alreadyCompleted ? t.nodeCompletedButton : t.nodeVerifyButton}
+              </Text>
+            </Pressable>
+          </>
+        )}
+
+        {verifyState === 'verifying' && (
+          <View style={{ alignItems: 'center', paddingVertical: 40, gap: Spacing.two }}>
+            <Text style={{ fontSize: 48 }}>🔍</Text>
+            <Text style={styles.sheetTitle}>{t.nodeVerifying}</Text>
+            <Text style={styles.sheetSubtitle}>{t.nodeVerifyingSub}</Text>
+          </View>
+        )}
+
+        {verifyState === 'verified' && (
+          <View style={{ alignItems: 'center', paddingVertical: Spacing.four, gap: Spacing.two }}>
+            <Animated.Text style={{ fontSize: 56, transform: [{ scale: tickAnim }] }}>✅</Animated.Text>
+            <Text style={styles.sheetTitle}>{t.nodeVerified}</Text>
+            <Text style={styles.sheetSubtitle}>{t.nodeVerifiedSub}</Text>
+            <View style={{
+              backgroundColor: Colors.gold,
+              paddingHorizontal: Spacing.six,
+              paddingVertical: Spacing.two,
+              borderRadius: Spacing.three,
+              borderBottomWidth: 3,
+              borderBottomColor: '#B8860B',
+              marginTop: Spacing.one,
+            }}>
+              <Text style={{ fontSize: FontSize.title, fontWeight: '800', color: Colors.textPrimary }}>🪙 +200</Text>
+            </View>
+            <Pressable
+              style={({ pressed }) => [
+                styles.enterButton,
+                { backgroundColor: pressed ? Colors.primaryDark : Colors.primary, marginTop: Spacing.two, alignSelf: 'stretch' },
+              ]}
+              onPress={onClose}
+            >
+              <Text style={styles.enterButtonText}>{t.nodeVerifiedButton}</Text>
+            </Pressable>
+          </View>
+        )}
+      </Animated.View>
+    </Modal>
+  );
+}
+
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export default function MapScreen() {
@@ -178,6 +326,14 @@ export default function MapScreen() {
   const router = useRouter();
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
   const [sheetVisible, setSheetVisible] = useState(false);
+
+  const [selectedNode, setSelectedNode] = useState<MapNode | null>(null);
+  const [nodeSheetVisible, setNodeSheetVisible] = useState(false);
+
+  const handleNodePress = useCallback((node: MapNode) => {
+    setSelectedNode(node);
+    setNodeSheetVisible(true);
+  }, []);
 
   const handleZonePress = useCallback((zone: Zone) => {
     setSelectedZone(zone);
@@ -210,7 +366,7 @@ export default function MapScreen() {
 
       {/* Main pixel map — takes all remaining space */}
       <View style={styles.mapContainer}>
-        <PixelMap onZonePress={handleZonePress} />
+        <PixelMap onZonePress={handleZonePress} onNodePress={handleNodePress} />
       </View>
 
       {/* Zone detail bottom sheet */}
@@ -219,6 +375,12 @@ export default function MapScreen() {
         visible={sheetVisible}
         onClose={handleSheetClose}
         onEnter={handleEnterZone}
+      />
+
+      <NodeSheet
+        node={selectedNode}
+        visible={nodeSheetVisible}
+        onClose={() => setNodeSheetVisible(false)}
       />
     </SafeAreaView>
   );

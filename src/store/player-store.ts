@@ -77,6 +77,8 @@ export interface PlayerState {
   // Furniture
   unlockedFurniture: string[];
 
+  completedNodes: string[];
+
   // ── Actions ──────────────────────────────────────────────────────────────
   setName: (name: string) => void;
   setAvatar: (avatar: string) => void;
@@ -89,6 +91,7 @@ export interface PlayerState {
     previous: MoCASession | null;
   };
   getOverallMoCAScore: () => number | null;
+  completeNode: (id: string) => void;
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -114,6 +117,8 @@ export const usePlayerStore = create<PlayerState>()(
       ],
       unlockedFurniture: ['painting', 'clock'],
 
+      completedNodes: [],
+
       // ── Actions ──────────────────────────────────────────────────────────
 
       setName: (name) => set({ name }),
@@ -130,6 +135,12 @@ export const usePlayerStore = create<PlayerState>()(
         unlockedFurniture: state.unlockedFurniture.includes(id)
           ? state.unlockedFurniture
           : [...state.unlockedFurniture, id],
+      })),
+
+      completeNode: (id) => set((state) => ({
+        completedNodes: state.completedNodes.includes(id)
+          ? state.completedNodes
+          : [...state.completedNodes, id],
       })),
 
       recordMoCASession: (session) => {
@@ -193,6 +204,7 @@ export const usePlayerStore = create<PlayerState>()(
         coins: state.coins,
         mocaHistory: state.mocaHistory,
         unlockedFurniture: state.unlockedFurniture,
+        completedNodes: state.completedNodes,
       }),
     }
   )
