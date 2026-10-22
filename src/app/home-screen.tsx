@@ -42,9 +42,9 @@ const FURNITURE_ITEMS: FurnitureItem[] = [
   { id: 'sofa',     emoji: '🛋️',  label: '梳化', price: 50,  level: 2, zone: 'floor', xPct: -13, yPct: -87 },
   { id: 'tv',       emoji: '📺',  label: '電視', price: 60,  level: 2, zone: 'floor', xPct: -7,  yPct: -50 },
   { id: 'cabinet',  emoji: '🗄️',  label: '櫃',   price: 60,  level: 2, zone: 'floor', xPct: 27, yPct: -115 },
-  { id: 'plant',    emoji: '🪴',  label: '植物', price: 80,  level: 3, zone: 'floor', xPct: 5,  yPct: 45 },
-  { id: 'cat',      emoji: '🐱',  label: '貓咪', price: 100, level: 3, zone: 'floor', xPct: 36, yPct: -48 },
-  { id: 'lamp',     emoji: '🪔',  label: '燈',   price: 120, level: 3, zone: 'floor', xPct: 78, yPct: 42 },
+  { id: 'plant',    emoji: '🪴',  label: '植物', price: 80,  level: 3, zone: 'floor', xPct: 0,  yPct: 15 },
+  { id: 'cat',      emoji: '🐱',  label: '貓咪', price: 100, level: 3, zone: 'floor', xPct: 51, yPct: -48 },
+  { id: 'lamp',     emoji: '🪔',  label: '燈',   price: 120, level: 3, zone: 'floor', xPct: 23, yPct: -112 },
 ];
 
 const FURNITURE_IMAGES: Record<string, any> = {
@@ -56,7 +56,7 @@ const FURNITURE_IMAGES: Record<string, any> = {
   cabinet:   require('../../assets/furniture/cabinet.png'),
   // plant:     require('../assets/furniture/plant.png'),   // placeholder until you have it
   cat:       require('../../assets/furniture/cat.png'),
-  // lamp:      require('../assets/furniture/lamp.png'),    // placeholder until you have it
+  lamp:      require('../../assets/furniture/lamp.png'), 
 };
 
 const INITIALLY_UNLOCKED: string[] = ['painting', 'clock'];
@@ -117,9 +117,9 @@ function Room({ unlockedIds }: RoomProps) {
       tv:       { w: 0.72, h: 0.44 }, // was 0.32, 0.20
       sofa:     { w: 0.80, h: 0.47 }, // was 0.30, 0.22
       cabinet:  { w: 0.78, h: 0.62 }, // was 0.20, 0.24
-      plant:    { w: 0.16, h: 0.24 }, // was 0.12, 0.18
+      plant:    { w: 0.26, h: 0.24 }, // was 0.12, 0.18
       cat:      { w: 0.58, h: 0.58 }, // was 0.12, 0.14
-      lamp:     { w: 0.14, h: 0.28 }, // was 0.10, 0.20
+      lamp:     { w: 0.68, h: 0.68 }, // was 0.10, 0.20
     };
     const s = sizes[item.id] ?? { w: 0.14, h: 0.18 };
     return {
