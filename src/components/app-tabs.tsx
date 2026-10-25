@@ -164,7 +164,6 @@ function CustomTabBar({
   navigation: any;
 }) {
   const insets = useSafeAreaInsets();
-
   return (
     <View
       style={[

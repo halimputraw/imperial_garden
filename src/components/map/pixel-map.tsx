@@ -134,11 +134,16 @@ const CHAR_POSITIONS = [
   { xPct: 73, yPct: 28, widthPct: 17, heightPct: 14 }, // level 4
 ];
 const CHAR_SOURCE = require('../../../assets/map/elements/char.png');
+const MAP_RATIO = 940 / 1672;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
   const t = useStrings();
-  const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
+  const [avail, setAvail] = useState({ width: 0, height: 0 });
+
+  // Biggest map that fits the available space without cropping the picture
+  const mapWidth = Math.min(avail.width, avail.height * MAP_RATIO);
+  const mapSize = { width: mapWidth, height: mapWidth / MAP_RATIO };
   const [selectedZoneId, setSelectedZoneId] = useState<ZoneId | null>(null);
 
   const completedNodes = usePlayerStore((s) => s.completedNodes);
@@ -200,7 +205,7 @@ export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
 
   const handleLayout = useCallback((e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
-    setMapSize({ width, height });
+    setAvail({ width, height });
   }, []);
 
   const handleZonePress = useCallback(
@@ -224,11 +229,13 @@ export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
   }, [nodeScales]);
 
   return (
+    <View style={styles.outer} onLayout={handleLayout}>
+    {mapSize.width > 0 && (
     <ImageBackground
       source={require('../../../assets/map/background.png')}
-      style={styles.container}
-      resizeMode="cover"
-      onLayout={handleLayout}
+      style={[styles.container, { width: mapSize.width, height: mapSize.height }]}
+      imageStyle={{ width: '100%', height: '100%' }}
+      resizeMode="stretch"
     >
       {/* ── Decorations ─────────────────────────────────────────────────── */}
       {mapSize.width > 0 &&
@@ -332,14 +339,20 @@ export function PixelMap({ onZonePress, onNodePress  }: PixelMapProps) {
         <Text style={styles.mapTitleText}>{t.mapTitle}</Text>
       </View>
     </ImageBackground>
+    )}
+    </View>
   );
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-  container: {
+  outer: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  container: {
     backgroundColor: Colors.mapBg,
     borderRadius: Spacing.four,
     overflow: 'hidden',
